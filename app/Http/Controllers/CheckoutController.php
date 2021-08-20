@@ -78,7 +78,7 @@ class CheckoutController extends Controller
         $customer = DB::table('tbl_customer')->where('customer_id', $customer_id)->first();
         $shipping = DB::table('tbl_shipping')->where('shipping_id', $shipping_id)->first();
         $order_details_product = DB::table('tbl_order_details')->join('tbl_product', 'tbl_product.product_id', '=', 'tbl_order_details.product_id')->where('order_id', $orderId)->get();
-        return view('admin.view_order')->with('order_details_product', $order_details_product)->with('order_status', $order_status)->with('customer', $customer)->with('shipping', $shipping);
+        return view('admin.view_order')->with('order_details_product', $order_details_product)->with('order_status', $order_status)->with('customer', $customer)->with('shipping', $shipping)->with('getorder', $getorder);
     }
     public function order_place(Request $request)
     {
@@ -94,7 +94,8 @@ class CheckoutController extends Controller
         $order_data['customer_id'] = Session::get('customer_id');
         $order_data['shipping_id'] = Session::get('shipping_id');
         $order_data['payment_id'] = $payment_id;
-        $order_data['order_total'] = Cart::total();
+        $order_data['order_total'] = Cart::totalFloat() / 1.21;
+        $order_data['coupon_total'] = Session::get('total_coupon',0);
         $date_now = date('Y-m-d H:i:s');
         $order_data['order_date'] = $date_now;
         $order_data['order_status'] = 'Đang chờ xử lý';
@@ -114,6 +115,7 @@ class CheckoutController extends Controller
             echo 'Thanh toán thẻ ATM';
         } elseif ($data['payment_method'] == 2) {
             Cart::destroy();
+            Session::forget('total_coupon');
             $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_id', 'desc')->get();
             $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
             return view('pages.checkout.thankyou')->with('category', $cate_product)->with('brand', $brand_product);

@@ -67,6 +67,13 @@ Route::post('/save-cart', 'CartController@save_cart');
 Route::get('/show-cart', 'CartController@show_cart');
 Route::get('/delete-to-cart/{rowId}', 'CartController@delete_to_cart');
 
+//Coupon
+Route::post('/check-coupon', 'CartController@check_coupon');
+Route::get('/unset-coupon', 'CouponController@unset_coupon');
+Route::get('/insert-coupon', 'CouponController@insert_coupon');
+Route::get('/delete-coupon/{coupon_id}', 'CouponController@delete_coupon');
+Route::get('/list-coupon', 'CouponController@list_coupon');
+Route::post('/insert-coupon-code', 'CouponController@insert_coupon_code');
 //Checkout
 Route::get('/login-checkout', 'CheckoutController@login_checkout');
 Route::get('/logout-checkout', 'CheckoutController@logout_checkout');

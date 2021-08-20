@@ -87,23 +87,19 @@
     <!--features_items-->
     <h2 class="title text-center">Sản phẩm nổi bật</h2>
     @foreach($hot_product as $key => $product)
-
     <div class="col-sm-4">
-        <div class="product-image-wrapper">
-            <div class="single-products">
-                <div class="productinfo text-center">
-                    <a href="{{URL::to('/product-detail/'.$product->product_id)}}">
+        <a href="{{URL::to('/product-detail/'.$product->product_id)}}">
+            <div class="product-image-wrapper">
+                <div class="single-products">
+                    <div class="productinfo text-center">
                         <img src="{{URL::to('public/uploads/product/'.$product->product_image)}}" alt="shoe picture"
                             width="300px" height="250px" />
                         <h2>{{number_format($product->product_price).' '.'VNĐ'}}</h2>
                         <p class="tensp">{{$product->product_name}}</p>
-                    </a>
-                    <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm vào giỏ
-                        hàng</a>
+                    </div>
                 </div>
             </div>
-        </div>
-
+        </a>
     </div>
     @endforeach
 </div>
@@ -117,26 +113,22 @@
             <div class="item active">
                 @foreach($new_product as $key => $product)
                 <div class="col-sm-4">
-                    <div class="product-image-wrapper">
-                        <div class="single-products">
-                            <div class="productinfo text-center">
-                                <a href="{{URL::to('/product-detail/'.$product->product_id)}}">
+                    <a href="{{URL::to('/product-detail/'.$product->product_id)}}">
+                        <div class="product-image-wrapper">
+                            <div class="single-products">
+                                <div class="productinfo text-center">
                                     <img src="{{URL::to('public/uploads/product/'.$product->product_image)}}"
                                         alt="shoe picture" width="300px" height="250px" />
                                     <h2>{{number_format($product->product_price).' '.'VNĐ'}}</h2>
                                     <p class="tensp">{{$product->product_name}}</p>
-                                </a>
-                                <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm
-                                    vào giỏ hàng</a>
+                                </div>
                             </div>
-
                         </div>
-                    </div>
+                    </a>
                 </div>
                 @endforeach
             </div>
         </div>
-
     </div>
 </div>
 <!--/recommended_items-->

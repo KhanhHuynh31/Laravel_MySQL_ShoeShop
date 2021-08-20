@@ -57,23 +57,20 @@
     <h2 class="title text-center">{{$br->brand_name}}</h2>
     @endforeach
     @foreach($brand_by_id as $key => $product)
-    <a href="{{URL::to('/product-detail/'.$product->product_id)}}">
-        <div class="col-sm-4">
+    <div class="col-sm-4">
+        <a href="{{URL::to('/product-detail/'.$product->product_id)}}">
             <div class="product-image-wrapper">
-
                 <div class="single-products">
                     <div class="productinfo text-center">
-                        <img src="{{URL::to('public/uploads/product/'.$product->product_image)}}" alt="" />
+                        <img src="{{URL::to('public/uploads/product/'.$product->product_image)}}" alt="shoe picture"
+                            width="300px" height="250px" />
                         <h2>{{number_format($product->product_price).' '.'VNĐ'}}</h2>
-                        <p>{{$product->product_name}}</p>
-                        <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Thêm giỏ
-                            hàng</a>
+                        <p class="tensp">{{$product->product_name}}</p>
                     </div>
-
                 </div>
             </div>
-        </div>
-    </a>
+        </a>
+    </div>
     @endforeach
 </div>
 <!--features_items-->
