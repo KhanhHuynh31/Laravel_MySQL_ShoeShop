@@ -32,6 +32,18 @@ class CouponController extends Controller
         Session::put('message', 'Xóa mã giảm giá thành công');
         return Redirect::to('list-coupon');
     }
+    public function unactive_coupon_product($coupon_id)
+    {
+        DB::table('tbl_coupon')->where('coupon_id', $coupon_id)->update(['coupon_status' => 0]);
+        Session::put('message', 'Không kích hoạt coupon thành công');
+        return Redirect::to('list-coupon');
+    }
+    public function active_coupon_product($coupon_id)
+    {
+        DB::table('tbl_coupon')->where('coupon_id', $coupon_id)->update(['coupon_status' => 1]);
+        Session::put('message', 'Kích hoạt coupon thành công');
+        return Redirect::to('list-coupon');
+    }
     public function list_coupon()
     {
         $today = Carbon::now('Asia/Ho_Chi_Minh')->format('d/m/Y');

@@ -9,10 +9,6 @@
                 <li class="active">Thanh toán giỏ hàng</li>
             </ol>
         </div>
-
-        <div class="register-req">
-            <p>Làm ơn đăng ký hoặc đăng nhập để thanh toán giỏ hàng và xem lại lịch sử mua hàng</p>
-        </div>
         <!--/register-req-->
 
         <div class="shopper-informations">

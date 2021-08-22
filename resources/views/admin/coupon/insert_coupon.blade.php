@@ -41,7 +41,6 @@
                         <div class="form-group">
                             <label for="exampleInputPassword1">Tính năng mã</label>
                             <select name="coupon_condition" class="form-control input-sm m-bot15">
-                                <option value="0">----Chọn-----</option>
                                 <option value="1">Giảm theo phần trăm</option>
                                 <option value="2">Giảm theo tiền</option>
 

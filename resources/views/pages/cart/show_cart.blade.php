@@ -11,7 +11,6 @@
         <div class="table-responsive cart_info">
             <?php
 				$content = Cart::content();
-
 				?>
             <table class="table table-condensed">
                 <thead>
@@ -75,7 +74,7 @@
 
 <section id="do_action">
     <div class="container">
-
+        @if (Cart::totalFloat()!=0)
         <div class="row">
             <div class="col-sm-6">
                 <div class="total_area">
@@ -139,8 +138,6 @@
 
 
                     </ul>
-
-                    {{-- 	<a class="btn btn-default update" href="">Update</a> --}}
                     <?php
                                    $customer_id = Session::get('customer_id');
                                    if($customer_id!=NULL){
@@ -160,6 +157,10 @@
             </div>
 
         </div>
+        @else
+        <p>Bạn chưa mua hàng</p>
+        @endif
+
     </div>
 </section>
 <!--/#do_action-->

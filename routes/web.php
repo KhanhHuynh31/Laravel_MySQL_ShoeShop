@@ -74,6 +74,8 @@ Route::get('/insert-coupon', 'CouponController@insert_coupon');
 Route::get('/delete-coupon/{coupon_id}', 'CouponController@delete_coupon');
 Route::get('/list-coupon', 'CouponController@list_coupon');
 Route::post('/insert-coupon-code', 'CouponController@insert_coupon_code');
+Route::get('/unactive-coupon-product/{coupon_id}', 'CouponController@unactive_coupon_product');
+Route::get('/active-coupon-product/{coupon_id}', 'CouponController@active_coupon_product');
 //Checkout
 Route::get('/login-checkout', 'CheckoutController@login_checkout');
 Route::get('/logout-checkout', 'CheckoutController@logout_checkout');
