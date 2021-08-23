@@ -89,3 +89,10 @@ Route::post('/save-checkout-customer', 'CheckoutController@save_checkout_custome
 //Order
 Route::get('/manage-order', 'CheckoutController@manage_order');
 Route::get('/view-order/{orderId}', 'CheckoutController@view_order');
+
+//Delivery
+Route::get('/delivery','DeliveryController@delivery');
+Route::post('/select-delivery','DeliveryController@select_delivery');
+Route::post('/insert-delivery','DeliveryController@insert_delivery');
+Route::post('/select-feeship','DeliveryController@select_feeship');
+Route::post('/update-delivery','DeliveryController@update_delivery');
