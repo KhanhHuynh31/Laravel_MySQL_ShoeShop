@@ -61,6 +61,9 @@ Route::get('/active-product/{product_id}', 'ProductController@active_product');
 Route::post('/save-product', 'ProductController@save_product');
 Route::post('/update-product/{product_id}', 'ProductController@update_product');
 
+Route::post('/export-csv','ProductController@export_csv');
+Route::post('/import-csv','ProductController@import_csv');
+
 //Cart
 Route::post('/update-cart-quantity', 'CartController@update_cart_quantity');
 Route::post('/save-cart', 'CartController@save_cart');

@@ -7,12 +7,16 @@
         </div>
         <div class="row w3-res-tb">
             <div class="col-sm-5 m-b-xs">
-                <select class="input-sm form-control w-sm inline v-middle">
-                    <option value="0">Bulk action</option>
-                    <option value="1">Delete selected</option>
-                    <option value="2">Bulk edit</option>
-                    <option value="3">Export</option>
-                </select>
+
+                <form action="{{url('import-csv')}}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" name="file" accept=".xlsx"><br>
+                    <input type="submit" value="Import CSV" name="import_csv" class="btn btn-warning">
+                </form>
+                <form action="{{url('export-csv')}}" method="POST">
+                    @csrf
+                    <input type="submit" value="Export CSV" name="export_csv" class="btn btn-success">
+                </form>
                 <button class="btn btn-sm btn-default">Apply</button>
             </div>
             <div class="col-sm-4">

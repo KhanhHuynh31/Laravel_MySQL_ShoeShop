@@ -35,8 +35,8 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Mô tả sản phẩm</label>
-                            <textarea style="resize: none" rows="8" class="form-control" name="product_desc"
-                                id="editor" required=""></textarea>
+                            <textarea style="resize: none" rows="8" class="form-control" name="product_desc" id="editor"
+                                required=""></textarea>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Danh mục sản phẩm</label>
@@ -67,6 +67,7 @@
 
                         <button type="submit" name="add_product" class="btn btn-info">Thêm sản phẩm</button>
                     </form>
+                    <hr>
                 </div>
 
             </div>

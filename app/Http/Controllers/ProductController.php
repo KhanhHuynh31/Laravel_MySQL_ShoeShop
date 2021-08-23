@@ -7,6 +7,9 @@ use DB;
 use Session;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
+use App\Imports\ProductImport;
+use App\Exports\ProductExport;
+use Excel;
 
 session_start();
 class ProductController extends Controller
@@ -127,6 +130,18 @@ class ProductController extends Controller
         Session::put('message', 'Xóa sản phẩm thành công');
         return Redirect::to('all-product');
     }
+    public function export_csv()
+    {
+        return Excel::download(new ProductExport, 'product.xlsx');
+    }
+
+    public function import_csv(Request $request)
+    {
+        $path = $request->file('file')->getRealPath();
+        Excel::import(new ProductImport, $path);
+        return back();
+    }
+
     //End Admin Page
     public function show_product_detail($product_id)
     {
