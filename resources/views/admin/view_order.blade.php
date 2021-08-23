@@ -164,10 +164,13 @@
             <p>Giá gốc: {{number_format($total->order_total).' '.'VNĐ'}}</p>
             <p>Phí ship: {{number_format($total->order_fee).' '.'VNĐ'}}</p>
             @if( $total->coupon_total != 0)
-            <p>Giảm từ Coupon: {{number_format($total->order_total - $total->coupon_total).' '.'VNĐ'}} </p>
+                <p>Giảm từ Coupon: {{number_format($total->order_total - $total->coupon_total).' '.'VNĐ'}} </p>
+                <hr>
+                <p>Tổng tiền: {{number_format($total->coupon_total+$total->order_fee).' '.'VNĐ'}}</p>
+            @else
+                <hr>
+                <p>Tổng tiền: {{number_format($total->order_total+$total->order_fee).' '.'VNĐ'}}</p>
             @endif
-            <hr>
-            <p>Tổng tiền: {{number_format($total->order_total-$total->coupon_total+$total->order_fee).' '.'VNĐ'}}</p>
             @endforeach
         </div>
         <a target="_blank" href="{{url('/print-order/'.$order->order_id)}}">In hoá đơn</a>

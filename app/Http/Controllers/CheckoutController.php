@@ -229,69 +229,45 @@ class CheckoutController extends Controller
 			font-family: DejaVu Sans;
 		}
 		.table-styling{
-			border:1px solid #000;
+			border: none;
+            border-collapse: collapse;
+            text-align: left;
+            width: 100%;
 		}
+
 		.table-styling tbody tr td{
-			border:1px solid #000;
+			border:none;
+            text-align: left;
 		}
+        .date{
+            float:right;
+        }
 		</style>
-		<h1><centerCông ty TNHH một thành viên ABCD</center></h1>
-		<h4><center>Độc lập - Tự do - Hạnh phúc</center></h4>
-		<p>Người đặt hàng</p>
-		<table class="table-styling">
-		<thead>
-		<tr>
-		<th>Tên khách đặt</th>
-		<th>Số điện thoại</th>
-		<th>Email</th>
-		</tr>
-		</thead>
-		<tbody>';
+		<h2><center>- Cửa hàng The Shoe Shop - </center></h2>
+		<h3><center>Hoá đơn mua hàng</center></h3>
+        <label>Mã hoá đơn: ' . $order_id . ' </label>
+        <label class="date">' . $ord->order_date . ' </label>
+		<p><b>Người đặt hàng</b></p>
+	';
 
         $output .= '
-		<tr>
-		<td>' . $customer->customer_name . '</td>
-		<td>' . $customer->customer_phone . '</td>
-		<td>' . $customer->customer_email . '</td>
 
-		</tr>';
-
-
+		<label>Tên: ' . $customer->customer_name . '</label>
+		<label> | ĐT: ' . $customer->customer_phone . '</label>
+		<label> | Email: ' . $customer->customer_email . '</label>
+        ';
         $output .= '
-		</tbody>
+        <p><b>Người nhận hàng</b></p>
 
-		</table>
-
-		<p>Ship hàng tới</p>
-		<table class="table-styling">
-		<thead>
-		<tr>
-		<th>Tên người nhận</th>
-		<th>Địa chỉ</th>
-		<th>Sdt</th>
-		<th>Email</th>
-		<th>Ghi chú</th>
-		</tr>
-		</thead>
-		<tbody>';
-
+		<label>Tên: ' . $shipping->shipping_name . '</label>
+        <label> | ĐT ' . $shipping->shipping_phone . '</label>
+		<label> | Email: ' . $shipping->shipping_email . '</label>
+		<p>Địa chỉ: ' . $shipping->shipping_address . '</p>
+		<p>Ghi chú: ' . $shipping->shipping_notes . '</p>
+        ';
         $output .= '
-		<tr>
-		<td>' . $shipping->shipping_name . '</td>
-		<td>' . $shipping->shipping_address . '</td>
-		<td>' . $shipping->shipping_phone . '</td>
-		<td>' . $shipping->shipping_email . '</td>
-		<td>' . $shipping->shipping_notes . '</td>
-
-		</tr>';
-
-
-        $output .= '
-		</tbody>
-
-		</table>
-
-		<p>Đơn hàng đặt</p>
+        <hr>
+		<h3>Chi tiết đơn hàng</h3>
 		<table class="table-styling">
 		<thead>
 		<tr>
@@ -314,31 +290,33 @@ class CheckoutController extends Controller
             $output .= '
 			<tr>
 			<td>' . $order_details->product_name . '</td>
-			<td>' . $order_details->product_quantity . '</td>
-			<td>' . number_format($order_details->product_price, 0, ',', '.') . 'đ' . '</td>
-			<td>' . number_format($subtotal, 0, ',', '.') . 'đ' . '</td>
+			<td><center>' . $order_details->product_quantity . '</center></td>
+			<td><center>' . number_format($order_details->product_price, 0, ',', '.') . ' VNĐ' . '</center></td>
+			<td><center>' . number_format($subtotal, 0, ',', '.') . ' VNĐ' . '</center></td>
 
 			</tr>';
         }
 
         $output .= '<tr>
 		<td colspan="2">
-
-		<p>Giá gốc:' . number_format($ord->order_total, 0, ',', '.') . 'đ' . '</p>
-            <p>Phí ship:' . number_format($ord->order_fee, 0, ',', '.') . 'đ' . '</p>';
+        <br>
+		<p>Giá gốc:' . number_format($ord->order_total, 0, ',', '.') . ' VNĐ' . '</p>
+           ';
         if ($ord->coupon_total != 0) {
-            '<p>Giảm từ Coupon:' . number_format($ord->order_total - $ord->coupon_total, 0, ',', '.') . 'đ' . '</p>';
+            $output .= '<p>Giảm từ Coupon:' . number_format($ord->order_total - $ord->coupon_total, 0, ',', '.') . ' VNĐ' . '</p>
+            <p>Phí ship:' . number_format($ord->order_fee, 0, ',', '.') . ' VNĐ' . '</p>
+            <hr>
+            <p>Tổng tiền:' . number_format($ord->coupon_total + $ord->order_fee, 0, ',', '.') . ' VNĐ' . '</p>';
+        } else {
+            $output .= ' <p>Phí ship:' . number_format($ord->order_fee, 0, ',', '.') . ' VNĐ' . '</p>
+            <hr>
+            <p>Tổng tiền:' . number_format($ord->order_total + $ord->order_fee, 0, ',', '.') . ' VNĐ' . '</p>';
         }
         $output .= '
-            <hr>
-            <p>Tổng tiền:' . number_format($ord->order_total - $ord->coupon_total + $ord->order_fee, 0, ',', '.') . 'đ' . '</p>
-		</td>
-		</tr>';
-
-        $output .= '
+        </td>
+		</tr>
 		</tbody>
 		</table>
-		<p>Ký tên</p>
 		<table>
 		<thead>
 		<tr>
