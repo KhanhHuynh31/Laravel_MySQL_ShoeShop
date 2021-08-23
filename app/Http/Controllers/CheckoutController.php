@@ -8,6 +8,11 @@ use Session;
 use Cart;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
+use App\Models\City;
+use App\Models\Province;
+use App\Models\Wards;
+use App\Models\Feeship;
+use PDF;
 
 session_start();
 
@@ -44,7 +49,8 @@ class CheckoutController extends Controller
     {
         $customer_id = Session::get('customer_id');
         $customer = DB::table('tbl_customer')->where('customer_id', $customer_id)->first();
-        return view('pages.checkout.show_checkout')->with('customer', $customer);
+        $city = City::orderby('matp', 'ASC')->get();
+        return view('pages.checkout.show_checkout')->with('customer', $customer)->with('city', $city);
     }
     public function save_checkout_customer(Request $request)
     {
@@ -66,7 +72,12 @@ class CheckoutController extends Controller
 
         return view('pages.checkout.payment');
     }
-
+    public function del_order(Request $request, $order_code)
+    {
+        $order = DB::table('tbl_order')->where('order_id', $order_code)->delete();
+        Session::put('message', 'Xóa đơn hàng thành công');
+        return redirect()->back();
+    }
     public function view_order($orderId)
     {
         $getorder = DB::table('tbl_order')->where('order_id', $orderId)->get();
@@ -95,7 +106,8 @@ class CheckoutController extends Controller
         $order_data['shipping_id'] = Session::get('shipping_id');
         $order_data['payment_id'] = $payment_id;
         $order_data['order_total'] = Cart::totalFloat() / 1.21;
-        $order_data['coupon_total'] = Session::get('total_coupon',0);
+        $order_data['coupon_total'] = Session::get('total_coupon', 0);
+        $order_data['order_fee'] = Session::get('fee', 0);
         $date_now = date('Y-m-d H:i:s');
         $order_data['order_date'] = $date_now;
         $order_data['order_status'] = 'Đang chờ xử lý';
@@ -121,6 +133,46 @@ class CheckoutController extends Controller
             return view('pages.checkout.thankyou')->with('category', $cate_product)->with('brand', $brand_product);
         } else {
             echo 'Thẻ ghi nợ';
+        }
+    }
+    public function select_delivery_home(Request $request)
+    {
+        $data = $request->all();
+        if ($data['action']) {
+            $output = '';
+            if ($data['action'] == "city") {
+                $select_province = Province::where('matp', $data['ma_id'])->orderby('maqh', 'ASC')->get();
+                $output .= '<option>---Chọn quận huyện---</option>';
+                foreach ($select_province as $key => $province) {
+                    $output .= '<option value="' . $province->maqh . '">' . $province->name_quanhuyen . '</option>';
+                }
+            } else {
+                $select_wards = Wards::where('maqh', $data['ma_id'])->orderby('xaid', 'ASC')->get();
+                $output .= '<option>---Chọn xã phường---</option>';
+                foreach ($select_wards as $key => $ward) {
+                    $output .= '<option value="' . $ward->xaid . '">' . $ward->name_xaphuong . '</option>';
+                }
+            }
+            echo $output;
+        }
+    }
+    public function calculate_fee(Request $request)
+    {
+        $data = $request->all();
+        if ($data['matp']) {
+            $feeship = Feeship::where('fee_matp', $data['matp'])->where('fee_maqh', $data['maqh'])->where('fee_xaph', $data['xaid'])->get();
+            if ($feeship) {
+                $count_feeship = $feeship->count();
+                if ($count_feeship > 0) {
+                    foreach ($feeship as $key => $fee) {
+                        Session::put('fee', $fee->fee_feeship);
+                        Session::save();
+                    }
+                } else {
+                    Session::put('fee', 25000);
+                    Session::save();
+                }
+            }
         }
     }
     public function logout_checkout()
@@ -152,5 +204,154 @@ class CheckoutController extends Controller
             ->orderby('tbl_order.order_id', 'desc')->get();
         $manager_order  = view('admin.manage_order')->with('all_order', $all_order);
         return view('admin_layout')->with('admin.manage_order', $manager_order);
+    }
+    public function print_order($order_id)
+    {
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->loadHTML($this->print_order_convert($order_id));
+
+        return $pdf->stream();
+    }
+    public function print_order_convert($order_id)
+    {
+        $getorder = DB::table('tbl_order')->where('order_id', $order_id)->get();
+        foreach ($getorder as $key => $ord) {
+            $customer_id = $ord->customer_id;
+            $shipping_id = $ord->shipping_id;
+            $order_status = $ord->order_status;
+        }
+        $customer = DB::table('tbl_customer')->where('customer_id', $customer_id)->first();
+        $shipping = DB::table('tbl_shipping')->where('shipping_id', $shipping_id)->first();
+        $order_details_product = DB::table('tbl_order_details')->join('tbl_product', 'tbl_product.product_id', '=', 'tbl_order_details.product_id')->where('order_id', $order_id)->get();
+        $output = '';
+
+        $output .= '<style>body{
+			font-family: DejaVu Sans;
+		}
+		.table-styling{
+			border:1px solid #000;
+		}
+		.table-styling tbody tr td{
+			border:1px solid #000;
+		}
+		</style>
+		<h1><centerCông ty TNHH một thành viên ABCD</center></h1>
+		<h4><center>Độc lập - Tự do - Hạnh phúc</center></h4>
+		<p>Người đặt hàng</p>
+		<table class="table-styling">
+		<thead>
+		<tr>
+		<th>Tên khách đặt</th>
+		<th>Số điện thoại</th>
+		<th>Email</th>
+		</tr>
+		</thead>
+		<tbody>';
+
+        $output .= '
+		<tr>
+		<td>' . $customer->customer_name . '</td>
+		<td>' . $customer->customer_phone . '</td>
+		<td>' . $customer->customer_email . '</td>
+
+		</tr>';
+
+
+        $output .= '
+		</tbody>
+
+		</table>
+
+		<p>Ship hàng tới</p>
+		<table class="table-styling">
+		<thead>
+		<tr>
+		<th>Tên người nhận</th>
+		<th>Địa chỉ</th>
+		<th>Sdt</th>
+		<th>Email</th>
+		<th>Ghi chú</th>
+		</tr>
+		</thead>
+		<tbody>';
+
+        $output .= '
+		<tr>
+		<td>' . $shipping->shipping_name . '</td>
+		<td>' . $shipping->shipping_address . '</td>
+		<td>' . $shipping->shipping_phone . '</td>
+		<td>' . $shipping->shipping_email . '</td>
+		<td>' . $shipping->shipping_notes . '</td>
+
+		</tr>';
+
+
+        $output .= '
+		</tbody>
+
+		</table>
+
+		<p>Đơn hàng đặt</p>
+		<table class="table-styling">
+		<thead>
+		<tr>
+		<th>Tên sản phẩm</th>
+
+		<th>Số lượng</th>
+		<th>Giá sản phẩm</th>
+		<th>Thành tiền</th>
+		</tr>
+		</thead>
+		<tbody>';
+
+        $total = 0;
+
+        foreach ($order_details_product as $key => $order_details) {
+
+            $subtotal = $order_details->product_price * $order_details->product_quantity;
+            $total += $subtotal;
+
+            $output .= '
+			<tr>
+			<td>' . $order_details->product_name . '</td>
+			<td>' . $order_details->product_quantity . '</td>
+			<td>' . number_format($order_details->product_price, 0, ',', '.') . 'đ' . '</td>
+			<td>' . number_format($subtotal, 0, ',', '.') . 'đ' . '</td>
+
+			</tr>';
+        }
+
+        $output .= '<tr>
+		<td colspan="2">
+
+		<p>Giá gốc:' . number_format($ord->order_total, 0, ',', '.') . 'đ' . '</p>
+            <p>Phí ship:' . number_format($ord->order_fee, 0, ',', '.') . 'đ' . '</p>';
+        if ($ord->coupon_total != 0) {
+            '<p>Giảm từ Coupon:' . number_format($ord->order_total - $ord->coupon_total, 0, ',', '.') . 'đ' . '</p>';
+        }
+        $output .= '
+            <hr>
+            <p>Tổng tiền:' . number_format($ord->order_total - $ord->coupon_total + $ord->order_fee, 0, ',', '.') . 'đ' . '</p>
+		</td>
+		</tr>';
+
+        $output .= '
+		</tbody>
+		</table>
+		<p>Ký tên</p>
+		<table>
+		<thead>
+		<tr>
+		<th width="200px">Người lập phiếu</th>
+		<th width="800px">Người nhận</th>
+		</tr>
+		</thead>
+		<tbody>';
+
+        $output .= '
+		</tbody>
+		</table>
+		';
+        return $output;
     }
 }

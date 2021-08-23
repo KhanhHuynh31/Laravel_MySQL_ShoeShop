@@ -76,7 +76,12 @@
             </table>
         </div>
         <li>Tổng tiền:<span>{{number_format(Cart::totalFloat()/1.21).' '.'VNĐ'}}</span></li>
-        <li>Tổng sau khi đã giảm :{{number_format(Session::get('total_coupon',0)).' '.'VNĐ'}}</li>
+        <li>Phí vận chuyển:<span>{{number_format(Session::get('fee')).' '.'VNĐ'}}</span></li>
+        <li>Coupon giảm:{{number_format(Cart::totalFloat()/1.21-Session::get('total_coupon',0)).' '.'VNĐ'}}</li>
+        <hr>
+        <li>Tổng hoá
+            đơn:<span>{{number_format(Cart::totalFloat()/1.21-Session::get('total_coupon',0)+Session::get('fee')).' '.'VNĐ'}}</span>
+        </li>
         <h4 style="margin:40px 0;font-size: 20px;">Chọn hình thức thanh toán</h4>
         <form method="POST" action="{{URL::to('/order-place')}}">
             {{ csrf_field() }}

@@ -201,39 +201,52 @@
     <script src="{{asset('public/frontend/js/sweetalert.js')}}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $('.add-to-cart').click(function(){
-                var id = $(this).data('id_product');
-                var cart_product_id = $('.cart_product_id_' + id).val();
-                var cart_product_name = $('.cart_product_name_' + id).val();
-                var cart_product_image = $('.cart_product_image_' + id).val();
-                var cart_product_price = $('.cart_product_price_' + id).val();
-                var cart_product_qty = $('.cart_product_qty_' + id).val();
-                var _token = $('input[name="_token"]').val();
-                $.ajax({
-                    url: '{{url('/add-cart-ajax')}}',
-                    method: 'POST',
-                    data:{cart_product_id:cart_product_id,cart_product_name:cart_product_name,cart_product_image:cart_product_image,cart_product_price:cart_product_price,cart_product_qty:cart_product_qty,_token:_token},
-                    success:function(){
+            $('.choose').on('change',function(){
+            var action = $(this).attr('id');
+            var ma_id = $(this).val();
+            var _token = $('input[name="_token"]').val();
+            var result = '';
 
-                        swal({
-                                title: "Đã thêm sản phẩm vào giỏ hàng",
-                                text: "Bạn có thể mua hàng tiếp hoặc tới giỏ hàng để tiến hành thanh toán",
-                                showCancelButton: true,
-                                cancelButtonText: "Xem tiếp",
-                                confirmButtonClass: "btn-success",
-                                confirmButtonText: "Đi đến giỏ hàng",
-                                closeOnConfirm: false
-                            },
-                            function() {
-                                window.location.href = "{{url('/gio-hang')}}";
-                            });
-
-                    }
-
-                });
+            if(action=='city'){
+                result = 'province';
+            }else{
+                result = 'wards';
+            }
+            $.ajax({
+                url : '{{url('/select-delivery-home')}}',
+                method: 'POST',
+                data:{action:action,ma_id:ma_id,_token:_token},
+                success:function(data){
+                   $('#'+result).html(data);
+                }
             });
         });
+        });
+
     </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.calculate_delivery').click(function(){
+                var matp = $('.city').val();
+                var maqh = $('.province').val();
+                var xaid = $('.wards').val();
+                var _token = $('input[name="_token"]').val();
+                if(matp == '' && maqh =='' && xaid ==''){
+                    alert('Làm ơn chọn để tính phí vận chuyển');
+                }else{
+                    $.ajax({
+                    url : '{{url('/calculate-fee')}}',
+                    method: 'POST',
+                    data:{matp:matp,maqh:maqh,xaid:xaid,_token:_token},
+                    success:function(){
+                       location.reload();
+                    }
+                    });
+                }
+        });
+    });
+    </script>
+
 
 
 </body>

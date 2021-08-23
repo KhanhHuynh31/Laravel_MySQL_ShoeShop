@@ -57,7 +57,8 @@
                         <td><label class="i-checks m-b-none"><input type="checkbox" name="post[]"><i></i></label></td>
                         <td>{{ $order->customer_name }}</td>
                         <td>{{ $order->order_date }}</td>
-                        <td>{{ $order->coupon_total}}</td>
+                        <td>{{ number_format($order->order_total - $order->coupon_total + $order->order_fee).' '.'VNĐ'}}
+                        </td>
                         <td>{{ $order->order_status }}</td>
 
                         <td>
