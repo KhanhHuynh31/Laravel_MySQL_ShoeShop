@@ -39,12 +39,24 @@
                                 required=""></textarea>
                         </div>
                         <div class="form-group">
+                            <label for="exampleInputEmail1">Số lượng sản phẩm</label>
+                            <input type="text" name="product_count" class="form-control" id="exampleInputEmail1"
+                                placeholder="Số lượng thêm" required="">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Size</label>
+                            <select name="product_size" class="form-control input-sm m-bot15">
+                                <option value="25">25</option>
+                                <option value="30">30</option>
+                                <option value="35">35</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="exampleInputPassword1">Danh mục sản phẩm</label>
                             <select name="product_cate" class="form-control input-sm m-bot15">
                                 @foreach($cate_product as $key => $cate)
                                 <option value="{{$cate->category_id}}">{{$cate->category_name}}</option>
                                 @endforeach
-
                             </select>
                         </div>
                         <div class="form-group">
@@ -53,7 +65,6 @@
                                 @foreach($brand_product as $key => $brand)
                                 <option value="{{$brand->brand_id}}">{{$brand->brand_name}}</option>
                                 @endforeach
-
                             </select>
                         </div>
                         <div class="form-group">
@@ -61,7 +72,6 @@
                             <select name="product_status" class="form-control input-sm m-bot15">
                                 <option value="0">Ẩn</option>
                                 <option value="1">Hiển thị</option>
-
                             </select>
                         </div>
 

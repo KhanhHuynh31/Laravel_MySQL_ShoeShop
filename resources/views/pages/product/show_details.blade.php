@@ -23,11 +23,11 @@
             <h2>{{$value->product_name}}</h2>
             <p>Mã ID: {{$value->product_id}}</p>
             <img src="images/product-details/rating.png" alt="" />
-
+            @if($value->product_count!=0)
             <form action="{{URL::to('/save-cart')}}" method="POST">
                 {{ csrf_field() }}
                 <span>
-                    <span>{{number_format($value->product_price).'VNĐ'}}</span>
+                    <span>{{number_format($value->product_price).' VNĐ'}}</span>
 
                     <label>Số lượng:</label>
                     <input name="qty" type="number" min="1" value="1" />
@@ -36,11 +36,13 @@
                         <i class="fa fa-shopping-cart"></i>
                         Thêm giỏ hàng
                     </button>
-
                 </span>
             </form>
-
             <p><b>Tình trạng:</b> Còn hàng</p>
+            @else
+            <h3>Giá: {{number_format($value->product_price).' VNĐ'}}</h3>
+            <p><b>Tình trạng:</b> Hết hàng</p>
+            @endif
             <p><b>Thương hiệu:</b> {{$value->brand_name}}</p>
             <p><b>Size:</b> {{$value->category_name}}</p>
             <p><b>Màu:</b> {{$value->category_name}}</p>

@@ -97,6 +97,8 @@ Route::get('/manage-order', 'CheckoutController@manage_order');
 Route::get('/view-order/{orderId}', 'CheckoutController@view_order');
 Route::get('/delete-order/{order_code}','CheckoutController@del_order');
 Route::get('/print-order/{checkout_code}','CheckoutController@print_order');
+Route::post('/update-order/{order_id}', 'CheckoutController@update_order');
+
 //Delivery
 Route::get('/delivery','DeliveryController@delivery');
 Route::post('/select-delivery','DeliveryController@select_delivery');

@@ -41,9 +41,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 {{ csrf_field() }}
                 <input type="text" class="ggg" name="admin_user" placeholder="User name" required="">
                 <input type="password" class="ggg" name="admin_password" placeholder="Password" required="">
-
-                <span><input type="checkbox" />Nhớ đăng nhập</span>
-                <h6><a href="#">Quên mật khẩu</a></h6>
                 <div class="clearfix"></div>
                 <div class="g-recaptcha maxacnhan" data-sitekey="{{env('CAPTCHA_KEY')}}"></div>
                 @if($errors->has('g-recaptcha-response'))

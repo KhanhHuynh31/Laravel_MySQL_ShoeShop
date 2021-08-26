@@ -39,7 +39,7 @@
                         </td>
                         <td class="cart_description">
                             <h4><a href="">{{$v_content->name}}</a></h4>
-                            <p>Web ID: 1089772</p>
+                            <p>Size: 30</p>
                         </td>
                         <td class="cart_price">
                             <p>{{number_format($v_content->price).' '.'vnđ'}}</p>
@@ -48,7 +48,7 @@
                             <div class="cart_quantity_button">
                                 <form action="{{URL::to('/update-cart-quantity')}}" method="POST">
                                     {{ csrf_field() }}
-                                    <input class="cart_quantity_input" type="text" name="cart_quantity"
+                                    <input class="cart_quantity_input" type="number" name="cart_quantity"
                                         value="{{$v_content->qty}}">
                                     <input type="hidden" value="{{$v_content->rowId}}" name="rowId_cart"
                                         class="form-control">
@@ -75,12 +75,12 @@
                 </tbody>
             </table>
         </div>
-        <li>Tổng tiền:<span>{{number_format(Cart::totalFloat()/1.21).' '.'VNĐ'}}</span></li>
-        <li>Phí vận chuyển:<span>{{number_format(Session::get('fee')).' '.'VNĐ'}}</span></li>
-        <li>Coupon giảm:{{number_format(Cart::totalFloat()/1.21-Session::get('total_coupon',0)).' '.'VNĐ'}}</li>
+        <li>Tổng tiền: <span>{{number_format(Cart::totalFloat()/1.21).' '.'VNĐ'}}</span></li>
+        <li>Phí vận chuyển: <span>{{number_format(Session::get('fee')).' '.'VNĐ'}}</span></li>
+        <li>Coupon giảm: {{number_format(Cart::totalFloat()/1.21-Session::get('total_coupon',0)).' '.'VNĐ'}}</li>
         <hr>
         <li>Tổng hoá
-            đơn:<span>{{number_format(Cart::totalFloat()/1.21-Session::get('total_coupon',0)+Session::get('fee')).' '.'VNĐ'}}</span>
+            đơn: <span>{{number_format(Cart::totalFloat()/1.21-(Cart::totalFloat()/1.21-Session::get('total_coupon',0))+Session::get('fee')).' '.'VNĐ'}}</span>
         </li>
         <h4 style="margin:40px 0;font-size: 20px;">Chọn hình thức thanh toán</h4>
         <form method="POST" action="{{URL::to('/order-place')}}">

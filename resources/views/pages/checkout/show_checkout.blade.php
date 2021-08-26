@@ -21,15 +21,15 @@
                             <form action="{{URL::to('/save-checkout-customer')}}" method="POST">
                                 @csrf
                                 <input type="text" name="shipping_email" class="form-control"
-                                    value="{{$customer->customer_email }}" placeholder="Email">
+                                    value="{{$customer->customer_email }}" placeholder="Email" required="">
                                 <input type="text" name="shipping_name" class="form-control"
-                                    value="{{$customer->customer_name }}" placeholder="Họ và tên">
+                                    value="{{$customer->customer_name }}" placeholder="Họ và tên" required="">
                                 <input type="text" name="shipping_address" class="form-control"
-                                    value="{{$customer->customer_address }}" placeholder="Địa chỉ">
+                                    value="{{$customer->customer_address }}" placeholder="Địa chỉ" required="">
                                 <input type="text" name="shipping_phone" class="form-control"
-                                    value="{{$customer->customer_phone }}" placeholder="Phone">
+                                    value="{{$customer->customer_phone }}" placeholder="Phone" required="">
                                 <textarea name="shipping_notes" class="form-control"
-                                    placeholder="Ghi chú đơn hàng của bạn" rows="16"></textarea>
+                                    placeholder="Ghi chú đơn hàng của bạn" rows="6"></textarea>
 
                                 @if(Session::get('fee'))
                                 <input type="hidden" name="order_fee" class="order_fee" value="{{Session::get('fee')}}">
@@ -45,20 +45,10 @@
                                 @else
                                 <input type="hidden" name="order_coupon" class="order_coupon" value="no">
                                 @endif
-
-
-
-                                <div class="">
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">Chọn hình thức thanh toán</label>
-                                        <select name="payment_select"
-                                            class="form-control input-sm m-bot15 payment_select">
-                                            <option value="0">Qua chuyển khoản</option>
-                                            <option value="1">Tiền mặt</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <input type="submit" value="Gửi" name="send_order" class="btn btn-primary btn-sm">
+                                @if(Session::get('fee'))
+                                <input type="submit" value="Tiếp tục" name="send_order"
+                                    class="btn btn-primary btn-sm checkoutbutton">
+                                @endif
                             </form>
                         </div>
                         <div class="col-md-6">

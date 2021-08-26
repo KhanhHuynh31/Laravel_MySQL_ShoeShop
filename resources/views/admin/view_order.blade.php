@@ -20,7 +20,7 @@
 
                         <th>Tên khách hàng</th>
                         <th>Số điện thoại</th>
-
+                        <th>Email</th>
 
                         <th style="width:30px;"></th>
                     </tr>
@@ -31,7 +31,7 @@
 
                         <td>{{$customer->customer_name}}</td>
                         <td>{{$customer->customer_phone}}</td>
-
+                        <td>{{$customer->customer_email}}</td>
 
 
                     </tr>
@@ -162,15 +162,31 @@
         <div class="order-coupon">
             @foreach($getorder as $key => $total)
             <p>Giá gốc: {{number_format($total->order_total).' '.'VNĐ'}}</p>
-            <p>Phí ship: {{number_format($total->order_fee).' '.'VNĐ'}}</p>
             @if( $total->coupon_total != 0)
-                <p>Giảm từ Coupon: {{number_format($total->order_total - $total->coupon_total).' '.'VNĐ'}} </p>
-                <hr>
-                <p>Tổng tiền: {{number_format($total->coupon_total+$total->order_fee).' '.'VNĐ'}}</p>
+            <p>Giảm từ Coupon: {{number_format($total->order_total - $total->coupon_total).' '.'VNĐ'}} </p>
+            <p>Phí ship: {{number_format($total->order_fee).' '.'VNĐ'}}</p>
+            <hr>
+            <p>Tổng tiền: {{number_format($total->coupon_total+$total->order_fee).' '.'VNĐ'}}</p>
             @else
-                <hr>
-                <p>Tổng tiền: {{number_format($total->order_total+$total->order_fee).' '.'VNĐ'}}</p>
+            <p>Phí ship: {{number_format($total->order_fee).' '.'VNĐ'}}</p>
+            <hr>
+            <p>Tổng tiền: {{number_format($total->order_total+$total->order_fee).' '.'VNĐ'}}</p>
             @endif
+            @endforeach
+
+            @foreach($getorder as $key => $or)
+            <form action="{{URL::to('/update-order/'.$or->order_id)}}" method="post">
+                @csrf
+                <p>Tình trạng: {{$or->order_status}}</p>
+                <select class="form-control" name="order_status">
+                    <option value="0">Chưa xử lý</option>
+                    <option value="1">Đã nhận</option>
+                    <option value="2">Đang giao hàng</option>
+                    <option value="3">Đã thanh toán</option>
+                    <option value="4">Huỷ đơn</option>
+                </select>
+                <button type="submit" name="order_update" class="btn btn-info">Cập nhật</button>
+            </form>
             @endforeach
         </div>
         <a target="_blank" href="{{url('/print-order/'.$order->order_id)}}">In hoá đơn</a>

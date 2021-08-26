@@ -78,6 +78,25 @@ class CheckoutController extends Controller
         Session::put('message', 'Xóa đơn hàng thành công');
         return redirect()->back();
     }
+    public function update_order(Request $request, $orderId)
+    {
+        $this->AuthLogin();
+        $data = array();
+        $data['order_status'] = $request->order_status;
+        if ($data['order_status'] == 1) {
+            $orderdetails = DB::table('tbl_order_details')->join('tbl_product', 'tbl_product.product_id', '=', 'tbl_order_details.product_id')->where('tbl_order_details.order_id', $orderId)->get();
+            foreach ($orderdetails as $key => $ord) {
+                $product_id = $ord->product_id;
+                $product_qty = $ord->product_quantity;
+                $product_count = $ord->product_count;
+                DB::table('tbl_product')->where('product_id', $product_id)->update(['product_count' => $product_count - $product_qty]);
+            }
+        }
+
+        DB::table('tbl_order')->where('order_id', $orderId)->update($data);
+        Session::put('message', 'Cập nhật hoá đơn thành công');
+        return redirect()->back();
+    }
     public function view_order($orderId)
     {
         $getorder = DB::table('tbl_order')->where('order_id', $orderId)->get();
@@ -127,6 +146,7 @@ class CheckoutController extends Controller
             echo 'Thanh toán thẻ ATM';
         } elseif ($data['payment_method'] == 2) {
             Cart::destroy();
+            Session::forget('fee');
             Session::forget('total_coupon');
             $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_id', 'desc')->get();
             $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
