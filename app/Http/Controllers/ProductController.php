@@ -10,13 +10,14 @@ use Illuminate\Support\Facades\Redirect;
 use App\Imports\ProductImport;
 use App\Exports\ProductExport;
 use Excel;
+use Auth;
 
 session_start();
 class ProductController extends Controller
 {
     public function AuthLogin()
     {
-        $admin_id = Session::get('admin_id');
+        $admin_id = Auth::id();
         if ($admin_id) {
             return Redirect::to('dashboard');
         } else {

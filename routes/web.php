@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -50,8 +50,10 @@ Route::post('/save-brand-product', 'BrandProduct@save_brand_product');
 Route::post('/update-brand-product/{brand_product_id}', 'BrandProduct@update_brand_product');
 
 //Product
-Route::get('/add-product', 'ProductController@add_product');
-Route::get('/edit-product/{product_id}', 'ProductController@edit_product');
+Route::group(['middleware' => 'auth.roles'], function () {
+    Route::get('/add-product', 'ProductController@add_product');
+    Route::get('/edit-product/{product_id}', 'ProductController@edit_product');
+});
 Route::get('/delete-product/{product_id}', 'ProductController@delete_product');
 Route::get('/all-product', 'ProductController@all_product');
 
@@ -61,8 +63,18 @@ Route::get('/active-product/{product_id}', 'ProductController@active_product');
 Route::post('/save-product', 'ProductController@save_product');
 Route::post('/update-product/{product_id}', 'ProductController@update_product');
 
-Route::post('/export-csv','ProductController@export_csv');
-Route::post('/import-csv','ProductController@import_csv');
+Route::post('/export-csv', 'ProductController@export_csv');
+Route::post('/import-csv', 'ProductController@import_csv');
+
+//User
+Route::get('users', 'UserController@index')->middleware('auth.roles');
+Route::get('add-users', 'UserController@add_users')->middleware('auth.roles');
+Route::get('delete-user-roles/{admin_id}', 'UserController@delete_user_roles')->middleware('auth.roles');
+Route::post('store-users', 'UserController@store_users');
+Route::post('assign-roles', 'UserController@assign_roles')->middleware('auth.roles');
+
+Route::get('impersonate/{admin_id}', 'UserController@impersonate');
+Route::get('impersonate-destroy', 'UserController@impersonate_destroy');
 
 //Cart
 Route::post('/update-cart-quantity', 'CartController@update_cart_quantity');
@@ -88,20 +100,28 @@ Route::post('/login-customer', 'CheckoutController@login_customer');
 Route::get('/checkout', 'CheckoutController@checkout');
 Route::get('/payment', 'CheckoutController@payment');
 Route::post('/save-checkout-customer', 'CheckoutController@save_checkout_customer');
-Route::post('/select-delivery-home','CheckoutController@select_delivery_home');
-Route::post('/calculate-fee','CheckoutController@calculate_fee');
+Route::post('/select-delivery-home', 'CheckoutController@select_delivery_home');
+Route::post('/calculate-fee', 'CheckoutController@calculate_fee');
 
 
 //Order
 Route::get('/manage-order', 'CheckoutController@manage_order');
 Route::get('/view-order/{orderId}', 'CheckoutController@view_order');
-Route::get('/delete-order/{order_code}','CheckoutController@del_order');
-Route::get('/print-order/{checkout_code}','CheckoutController@print_order');
+Route::get('/delete-order/{order_code}', 'CheckoutController@del_order');
+Route::get('/print-order/{checkout_code}', 'CheckoutController@print_order');
 Route::post('/update-order/{order_id}', 'CheckoutController@update_order');
 
 //Delivery
-Route::get('/delivery','DeliveryController@delivery');
-Route::post('/select-delivery','DeliveryController@select_delivery');
-Route::post('/insert-delivery','DeliveryController@insert_delivery');
-Route::post('/select-feeship','DeliveryController@select_feeship');
-Route::post('/update-delivery','DeliveryController@update_delivery');
+Route::get('/delivery', 'DeliveryController@delivery');
+Route::post('/select-delivery', 'DeliveryController@select_delivery');
+Route::post('/insert-delivery', 'DeliveryController@insert_delivery');
+Route::post('/select-feeship', 'DeliveryController@select_feeship');
+Route::post('/update-delivery', 'DeliveryController@update_delivery');
+
+//Authentication roles
+Route::get('/register-auth', 'AuthController@register_auth');
+Route::get('/login-auth', 'AuthController@login_auth');
+Route::get('/logout-auth', 'AuthController@logout_auth');
+
+Route::post('/register', 'AuthController@register');
+Route::post('/login', 'AuthController@login');

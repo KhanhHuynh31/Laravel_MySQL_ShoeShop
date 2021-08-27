@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Redirect;
 use DB;
 use App\Rules\Captcha;
 use Validator;
+use Auth;
 
 session_start();
 
@@ -15,7 +16,12 @@ class AdminController extends Controller
 {
     public function AuthLogin()
     {
-        $admin_id = Session::get('admin_id');
+        if (Session::get('login_normal')) {
+
+            $admin_id = Session::get('admin_id');
+        } else {
+            $admin_id = Auth::id();
+        }
         if ($admin_id) {
             return Redirect::to('dashboard');
         } else {
@@ -38,7 +44,7 @@ class AdminController extends Controller
         ]);
         $admin_user = $request->admin_user;
         $admin_password =  $request->admin_password;
-        $result = DB::table('tbl_admin')->where('admin_user', $admin_user)->where('admin_pass', $admin_password)->first();
+        $result = DB::table('tbl_admin')->where('admin_user', $admin_user)->where('admin_password', $admin_password)->first();
         if ($result) {
             Session::put('admin_name', $result->admin_name);
             Session::put('admin_id', $result->admin_id);

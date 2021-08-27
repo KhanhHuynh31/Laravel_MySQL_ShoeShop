@@ -51,6 +51,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <input type="submit" value="Đăng nhập" name="login">
 
             </form>
+            <a href="{{url('/register-auth')}}">Đăng ký Auth</a> |
+            <a href="{{url('/login-auth')}}">Đăng nhập Auth</a>
         </div>
     </div>
     <script src="{{asset('public/backend/js/bootstrap.js')}}"></script>
