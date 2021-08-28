@@ -77,8 +77,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu extended logout">
-                            <li><a href="#"><i class=" fa fa-suitcase"></i>Profile</a></li>
-                            <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
+                            @impersonate
+                            <li>
+                                <a href="{{URL::to('/impersonate-destroy')}}">Trở về tài khoản gốc</a>
+                            </li>
+                            @endimpersonate
                             <li><a href="{{URL::to('/logout-auth')}}"><i class="fa fa-key"></i>Đăng xuất</a></li>
                         </ul>
                     </li>

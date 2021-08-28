@@ -7,6 +7,7 @@ use DB;
 use Session;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
+use Auth;
 
 session_start();
 
@@ -14,7 +15,7 @@ class CategoryProduct extends Controller
 {
     public function AuthLogin()
     {
-        $admin_id = Session::get('admin_id');
+        $admin_id = Auth::id();
         if ($admin_id) {
             return Redirect::to('dashboard');
         } else {
@@ -89,10 +90,10 @@ class CategoryProduct extends Controller
     //End Function Admin Page
     public function show_category_product($category_id)
     {
-        $cate_product = DB::table('tbl_category')->where('category_status','0')->orderby('category_id','desc')->get();
-        $brand_product = DB::table('tbl_brand')->where('brand_status','0')->orderby('brand_id','desc')->get();
-        $category_name = DB::table('tbl_category')->where('tbl_category.category_id',$category_id)->limit(1)->get();
+        $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_id', 'desc')->get();
+        $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
+        $category_name = DB::table('tbl_category')->where('tbl_category.category_id', $category_id)->limit(1)->get();
         $category_by_id = DB::table('tbl_product')->join('tbl_category', 'tbl_product.category_id', '=', 'tbl_category.category_id')->where('tbl_category.category_id', $category_id)->get();
-        return view('pages.category.show_category')->with('category',$cate_product)->with('brand',$brand_product)->with('category_by_id',$category_by_id)->with('category_name',$category_name);
+        return view('pages.category.show_category')->with('category', $cate_product)->with('brand', $brand_product)->with('category_by_id', $category_by_id)->with('category_name', $category_name);
     }
 }

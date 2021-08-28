@@ -13,14 +13,14 @@ use App\Models\Province;
 use App\Models\Wards;
 use App\Models\Feeship;
 use PDF;
-
+use Auth;
 session_start();
 
 class CheckoutController extends Controller
 {
     public function AuthLogin()
     {
-        $admin_id = Session::get('admin_id');
+        $admin_id = Auth::id();
         if ($admin_id) {
             return Redirect::to('dashboard');
         } else {

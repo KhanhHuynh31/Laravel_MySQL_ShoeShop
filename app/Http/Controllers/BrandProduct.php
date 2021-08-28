@@ -7,13 +7,14 @@ use DB;
 use Session;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
+use Auth;
 
 session_start();
 class BrandProduct extends Controller
 {
     public function AuthLogin()
     {
-        $admin_id = Session::get('admin_id');
+        $admin_id = Auth::id();
         if ($admin_id) {
             return Redirect::to('dashboard');
         } else {
@@ -89,11 +90,11 @@ class BrandProduct extends Controller
 
     public function show_brand_product($brand_id)
     {
-        $cate_product = DB::table('tbl_category')->where('category_status','0')->orderby('category_id','desc')->get();
-        $brand_product = DB::table('tbl_brand')->where('brand_status','0')->orderby('brand_id','desc')->get();
+        $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_id', 'desc')->get();
+        $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
 
-        $brand_name = DB::table('tbl_brand')->where('tbl_brand.brand_id',$brand_id)->limit(1)->get();
+        $brand_name = DB::table('tbl_brand')->where('tbl_brand.brand_id', $brand_id)->limit(1)->get();
         $brand_by_id = DB::table('tbl_product')->join('tbl_brand', 'tbl_product.brand_id', '=', 'tbl_brand.brand_id')->where('tbl_brand.brand_id', $brand_id)->get();
-        return view('pages.brand.show_brand')->with('category',$cate_product)->with('brand',$brand_product)->with('brand_by_id',$brand_by_id)->with('brand_name',$brand_name);
+        return view('pages.brand.show_brand')->with('category', $cate_product)->with('brand', $brand_product)->with('brand_by_id', $brand_by_id)->with('brand_name', $brand_name);
     }
 }
