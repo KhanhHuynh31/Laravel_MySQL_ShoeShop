@@ -25,7 +25,8 @@ class CategoryProduct extends Controller
     public function add_category_product()
     {
         $this->AuthLogin();
-        return view('admin.add_category_product');
+        $all_category = DB::table('tbl_category')->get();
+        return view('admin.add_category_product')->with('all_category', $all_category);
     }
     public function all_category_product()
     {
@@ -40,6 +41,7 @@ class CategoryProduct extends Controller
         $data = array();
         $data['category_name'] = $request->category_product_name;
         $data['category_desc'] = $request->category_product_desc;
+        $data['category_parent'] = $request->category_parent;
         $data['category_status'] = $request->category_product_status;
 
         DB::table('tbl_category')->insert($data);

@@ -26,11 +26,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <!-- calendar -->
     <link rel="stylesheet" href="{{asset('public/backend/css/monthly.css')}}">
     <!-- //calendar -->
+    <link rel="stylesheet" href="//cdn.datatables.net/1.11.0/css/jquery.dataTables.min.css">
     <!-- //font-awesome icons -->
     <script src="{{asset('public/backend/js/jquery2.0.3.min.js')}}"></script>
     <script src="{{asset('public/backend/js/raphael-min.js')}}"></script>
     <script src="{{asset('public/backend/js/morris.js')}}"></script>
     <script src="{{asset('public/backend/ckeditor/ckeditor.js')}}"></script>
+
 
 </head>
 
@@ -61,17 +63,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                             <img alt="" src="{{asset('public/backend/images/2.png')}}">
                             <span class="username">
                                 <?php
-                    if(Session::get('login_normal')){
 
-                        $name = Session::get('admin_name');
-                    }else{
-                        $name = Auth::user()->admin_name;
-                    }
-
-                    if($name){
-                        echo $name;
-                    }
-                    ?>
+                                $name = Auth::user()->admin_name;
+                            if($name){
+                                echo $name;
+                            }
+                            ?>
 
                             </span>
                             <b class="caret"></b>
@@ -203,6 +200,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot-chart/excanvas.min.js"></script><![endif]-->
     <script src="{{asset('public/backend/js/jquery.scrollTo.js')}}"></script>
     <!-- morris JavaScript -->
+    <script src="//cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready( function () {
+                $('#myTable').DataTable();
+            } );
+    </script>
     <!-- calendar -->
     <script type="text/javascript" src="{{asset('public/backend/js/monthly.js')}}"></script>
     <script type="text/javascript">

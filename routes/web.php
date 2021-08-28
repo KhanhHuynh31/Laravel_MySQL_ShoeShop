@@ -20,10 +20,8 @@ Route::get('/category-detail/{category_id}', 'CategoryProduct@show_category_prod
 Route::get('/brand-detail/{brand_id}', 'BrandProduct@show_brand_product');
 Route::get('/product-detail/{product_id}', 'ProductController@show_product_detail');
 //====BACKEND====
-Route::get('/admin', 'AdminController@index');
-Route::get('/dashboard', 'AdminController@show_dashboard');
-Route::get('/logout', 'AdminController@logout');
-Route::post('/admin-dashboard', 'AdminController@dashboard');
+Route::get('/admin', 'AuthController@login_auth');
+Route::get('/dashboard', 'AuthController@show_dashboard');
 //Category Product
 Route::get('/add-category-product', 'CategoryProduct@add_category_product');
 Route::get('/edit-category-product/{category_product_id}', 'CategoryProduct@edit_category_product');
@@ -68,9 +66,11 @@ Route::post('/import-csv', 'ProductController@import_csv');
 
 //User
 Route::get('users', 'UserController@index')->middleware('auth.roles');
-Route::get('add-users', 'UserController@add_users')->middleware('auth.roles');
+Route::post('/update-users/{admin_id}', 'UserController@update_users')->middleware('auth.roles');
+Route::post('assign-roles', 'UserController@assign_roles')->middleware('auth.roles');
 Route::get('delete-user-roles/{admin_id}', 'UserController@delete_user_roles')->middleware('auth.roles');
 Route::post('store-users', 'UserController@store_users');
+Route::get('/edit-users/{user_id}', 'UserController@edit_users')->middleware('auth.roles');
 Route::post('assign-roles', 'UserController@assign_roles')->middleware('auth.roles');
 
 Route::get('impersonate/{admin_id}', 'UserController@impersonate');
@@ -123,5 +123,4 @@ Route::get('/register-auth', 'AuthController@register_auth');
 Route::get('/login-auth', 'AuthController@login_auth');
 Route::get('/logout-auth', 'AuthController@logout_auth');
 
-Route::post('/register', 'AuthController@register');
 Route::post('/login', 'AuthController@login');

@@ -29,6 +29,15 @@
                                 id="exampleInputPassword1" placeholder="Mô tả danh mục"></textarea>
                         </div>
                         <div class="form-group">
+                            <label for="exampleInputPassword1">Danh mục cha</label>
+                            <select name="category_parent" class="form-control input-sm m-bot15">
+                                <option selected="selected" value="0">Không có</option>
+                                @foreach($all_category as $key => $cate)
+                                <option value="{{$cate->category_id}}">{{$cate->category_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="exampleInputPassword1">Hiển thị</label>
                             <select name="category_product_status" class="form-control input-sm m-bot15">
                                 <option value="0">Ẩn</option>
