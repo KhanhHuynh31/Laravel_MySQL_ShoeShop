@@ -106,7 +106,10 @@
                         <form action="{{URL::to('/search')}}" method="POST">
                             {{csrf_field()}}
                             <div class="search_box pull-right">
-                                <input type="text" name="searchbox" placeholder="Tìm kiếm" />
+                                <input type="text" name="searchbox" id="keywords" placeholder="Tìm kiếm"
+                                    autocomplete="off" />
+                                <div id="search_ajax"></div>
+
                             </div>
                         </form>
                     </div>
@@ -202,6 +205,35 @@
     <script src="{{asset('public/frontend/js/main.js')}}"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="{{asset('public/frontend/js/sweetalert.js')}}"></script>
+    <script type="text/javascript">
+        $('#keywords').keyup(function(){
+            var query = $(this).val();
+
+              if(query != '')
+                {
+                 var _token = $('input[name="_token"]').val();
+
+                 $.ajax({
+                  url:"{{url('/autocomplete-ajax')}}",
+                  method:"POST",
+                  data:{query:query, _token:_token},
+                  success:function(data){
+                   $('#search_ajax').fadeIn();
+                    $('#search_ajax').html(data);
+                  }
+                 });
+
+                }else{
+
+                    $('#search_ajax').fadeOut();
+                }
+        });
+
+        $(document).on('click', '.li_search_ajax', function(){
+            $('#keywords').val($(this).text());
+            $('#search_ajax').fadeOut();
+        });
+    </script>
     <script type="text/javascript">
         $(document).ready(function(){
             $('.choose').on('change',function(){

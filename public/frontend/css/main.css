@@ -240,6 +240,10 @@ a#scrollUp i {
     color: #fdb45e;
 }
 
+.li_search_ajax {
+
+}
+
 .search_box input {
     border: none;
     border-bottom: 1px solid black;
@@ -248,10 +252,10 @@ a#scrollUp i {
     font-weight: 300;
     height: 35px;
     padding-left: 10px;
-    width: 200px;
+    width: 300px;
     background-image: url(../images/home/searchicon.png);
     background-repeat: no-repeat;
-    background-position: 180px;
+    background-position: 280px;
 }
 
 /*  Dropdown menu*/
@@ -1256,7 +1260,6 @@ h2.title {
 
 .signup-form {
     padding-bottom: 40px;
-
 }
 
 .login-form h2, .signup-form h2 {
@@ -1268,7 +1271,7 @@ h2.title {
 }
 
 .login-form form input, .signup-form form input {
-    border-width:1px;
+    border-width: 1px;
     border-radius: 5px;
     display: block;
     font-family: 'Roboto', sans-serif;
@@ -2252,12 +2255,15 @@ h2.title {
 .applysales {
     float: right;
 }
-.tensp{
+
+.tensp {
     height: 40px;
 }
-.dangnhap{
+
+.dangnhap {
     background-color: black;
 }
-.checkoutbutton{
+
+.checkoutbutton {
     float: right;
 }

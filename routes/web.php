@@ -47,6 +47,8 @@ Route::get('/active-brand-product/{brand_product_id}', 'BrandProduct@active_bran
 Route::post('/save-brand-product', 'BrandProduct@save_brand_product');
 Route::post('/update-brand-product/{brand_product_id}', 'BrandProduct@update_brand_product');
 
+//Search
+Route::post('/autocomplete-ajax','HomeController@autocomplete_ajax');
 Route::post('/search', 'ProductController@search');
 
 //Product
