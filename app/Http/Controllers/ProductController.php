@@ -167,4 +167,14 @@ class ProductController extends Controller
 
         return view('pages.product.show_details')->with('product_details', $product_details)->with('related', $related_product);
     }
+    public function search(Request $request)
+    {
+        $name = $request->searchbox;
+        $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_id', 'desc')->get();
+        $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
+
+        $product_details = DB::table('tbl_product')->where('product_name', 'like', '%' . $name . '%')->get();
+
+        return view('pages.product.search')->with('category', $cate_product)->with('brand', $brand_product)->with('product_details', $product_details);
+    }
 }

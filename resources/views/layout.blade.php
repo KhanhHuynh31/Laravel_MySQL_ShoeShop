@@ -103,9 +103,12 @@
                         </div>
                     </div>
                     <div class="col-sm-3">
-                        <div class="search_box pull-right">
-                            <input type="text" placeholder="Search" />
-                        </div>
+                        <form action="{{URL::to('/search')}}" method="POST">
+                            {{csrf_field()}}
+                            <div class="search_box pull-right">
+                                <input type="text" name="searchbox" placeholder="Tìm kiếm" />
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

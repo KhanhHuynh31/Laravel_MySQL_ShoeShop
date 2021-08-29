@@ -1,6 +1,5 @@
 @extends('layout')
 @section('content')
-<!--/slider-->
 <div class="col-sm-3">
     <div class="left-sidebar">
         <h2>Danh mục sản phẩm</h2>
@@ -63,12 +62,7 @@
 
         <div class="price-range">
             <!--price-range-->
-            <h2>Price Range</h2>
-            <div class="well text-center">
-                <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="600" data-slider-step="5"
-                    data-slider-value="[250,450]" id="sl2"><br />
-                <b class="pull-left">$ 0</b> <b class="pull-right">$ 600</b>
-            </div>
+
         </div>
         <!--/price-range-->
 
@@ -82,10 +76,8 @@
 </div>
 <div class="features_items">
     <!--features_items-->
-    @foreach($brand_name as $key => $br)
-    <h2 class="title text-center">{{$br->brand_name}}</h2>
-    @endforeach
-    @foreach($brand_by_id as $key => $product)
+    <h2 class="title text-center">Sản phẩm nổi bật</h2>
+    @foreach($product_details as $key => $product)
     <div class="col-sm-4">
         <a href="{{URL::to('/product-detail/'.$product->product_id)}}">
             <div class="product-image-wrapper">
@@ -102,6 +94,4 @@
     </div>
     @endforeach
 </div>
-<!--features_items-->
-<!--/recommended_items-->
 @endsection

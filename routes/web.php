@@ -47,6 +47,8 @@ Route::get('/active-brand-product/{brand_product_id}', 'BrandProduct@active_bran
 Route::post('/save-brand-product', 'BrandProduct@save_brand_product');
 Route::post('/update-brand-product/{brand_product_id}', 'BrandProduct@update_brand_product');
 
+Route::post('/search', 'ProductController@search');
+
 //Product
 Route::group(['middleware' => 'auth.roles'], function () {
     Route::get('/add-product', 'ProductController@add_product');
