@@ -8,6 +8,7 @@ use Session;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
 use Auth;
+use App\Models\Category;
 
 session_start();
 
@@ -31,8 +32,10 @@ class CategoryProduct extends Controller
     public function all_category_product()
     {
         $this->AuthLogin();
-        $all_category_product = DB::table('tbl_category')->get();
-        $manager_category_product  = view('admin.all_category_product')->with('all_category_product', $all_category_product);
+        $category_product = Category::where('category_parent',0)->orderBy('category_order','ASC')->get();
+
+        $all_category_product = DB::table('tbl_category')->orderBy('category_order','ASC')->get();
+        $manager_category_product  = view('admin.all_category_product')->with('all_category_product', $all_category_product)->with('category_product',$category_product);
         return view('admin_layout')->with('admin.all_category_product', $manager_category_product);
     }
     public function save_category_product(Request $request)
@@ -88,11 +91,25 @@ class CategoryProduct extends Controller
         Session::put('message', 'Xóa danh mục sản phẩm thành công');
         return Redirect::to('all-category-product');
     }
+    public function arrange_category(Request $request)
+    {
 
+        $this->AuthLogin();
+
+        $data = $request->all();
+        $cate_id = $data["page_id_array"];
+
+        foreach ($cate_id as $key => $value) {
+            $category = Category::find($value);
+            $category->category_order = $key;
+            $category->save();
+        }
+        echo 'Updated';
+    }
     //End Function Admin Page
     public function show_category_product($category_id)
     {
-        $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_id', 'desc')->get();
+        $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_order', 'asc')->get();
         $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
         $category_name = DB::table('tbl_category')->where('tbl_category.category_id', $category_id)->limit(1)->get();
         $category_by_id = DB::table('tbl_product')->join('tbl_category', 'tbl_product.category_id', '=', 'tbl_category.category_id')->where('tbl_category.category_id', $category_id)->get();

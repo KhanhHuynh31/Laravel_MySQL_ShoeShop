@@ -148,7 +148,7 @@ class CheckoutController extends Controller
             Cart::destroy();
             Session::forget('fee');
             Session::forget('total_coupon');
-            $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_id', 'desc')->get();
+            $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_order', 'asc')->get();
             $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
             return view('pages.checkout.thankyou')->with('category', $cate_product)->with('brand', $brand_product);
         } else {

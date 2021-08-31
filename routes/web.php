@@ -35,6 +35,8 @@ Route::get('/active-category-product/{category_product_id}', 'CategoryProduct@ac
 Route::post('/save-category-product', 'CategoryProduct@save_category_product');
 Route::post('/update-category-product/{category_product_id}', 'CategoryProduct@update_category_product');
 
+Route::post('/arrange-category','CategoryProduct@arrange_category');
+
 //Brand Product
 Route::get('/add-brand-product', 'BrandProduct@add_brand_product');
 Route::get('/edit-brand-product/{brand_product_id}', 'BrandProduct@edit_brand_product');
@@ -48,8 +50,15 @@ Route::post('/save-brand-product', 'BrandProduct@save_brand_product');
 Route::post('/update-brand-product/{brand_product_id}', 'BrandProduct@update_brand_product');
 
 //Search
-Route::post('/autocomplete-ajax','HomeController@autocomplete_ajax');
+Route::post('/autocomplete-ajax', 'HomeController@autocomplete_ajax');
 Route::post('/search', 'ProductController@search');
+//Comment
+Route::post('/load-comment', 'ProductController@load_comment');
+Route::post('/send-comment', 'ProductController@send_comment');
+Route::post('/allow-comment', 'ProductController@allow_comment');
+Route::post('/reply-comment', 'ProductController@reply_comment');
+Route::post('/insert-rating', 'ProductController@insert_rating');
+Route::get('/comment', 'ProductController@list_comment');
 
 //Product
 Route::group(['middleware' => 'auth.roles'], function () {

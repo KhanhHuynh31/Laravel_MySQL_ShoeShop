@@ -66,29 +66,58 @@
             <p>{!! $value->product_desc !!}</p>
 
         </div>
-        <div class="tab-pane fade" id="reviews">
+        <div class="tab-pane fade active in" id="reviews" >
             <div class="col-sm-12">
                 <ul>
-                    <li><a href=""><i class="fa fa-user"></i>EUGEN</a></li>
+                    <li><a href=""><i class="fa fa-user"></i>Admin</a></li>
                     <li><a href=""><i class="fa fa-clock-o"></i>12:41 PM</a></li>
-                    <li><a href=""><i class="fa fa-calendar-o"></i>31 DEC 2014</a></li>
+                    <li><a href=""><i class="fa fa-calendar-o"></i>16.09.2020</a></li>
                 </ul>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur.</p>
-                <p><b>Write Your Review</b></p>
+                <style type="text/css">
+                    .style_comment {
+                        border: 1px solid #ddd;
+                        border-radius: 10px;
+                        background: #F0F0E9;
+                    }
+                </style>
+                <form>
+                     @csrf
+                    <input type="hidden" name="comment_product_id" class="comment_product_id" value="{{$value->product_id}}">
+                     <div id="comment_show"></div>
 
+                </form>
+
+                <p><b>Viết đánh giá của bạn</b></p>
+
+                 <!------Rating here---------->
+                            <ul class="list-inline rating"  title="Average Rating">
+                                @for($count=1; $count<=5; $count++)
+                                    @php
+                                        if($count<=$rating){
+                                            $color = 'color:#ffcc00;';
+                                        }
+                                        else {
+                                            $color = 'color:#ccc;';
+                                        }
+
+                                    @endphp
+
+                                <li title="star_rating" id="{{$value->product_id}}-{{$count}}" data-index="{{$count}}"  data-product_id="{{$value->product_id}}" data-rating="{{$rating}}" class="rating" style="cursor:pointer; {{$color}} font-size:30px;">&#9733;</li>
+                                @endfor
+
+                            </ul>
                 <form action="#">
                     <span>
-                        <input type="text" placeholder="Your Name" />
-                        <input type="email" placeholder="Email Address" />
+                        <input style="width:100%;margin-left: 0" type="text" class="comment_name" placeholder="Tên bình luận"/>
+
                     </span>
-                    <textarea name=""></textarea>
-                    <b>Rating: </b> <img src="images/product-details/rating.png" alt="" />
-                    <button type="button" class="btn btn-default pull-right">
-                        Submit
+                    <textarea name="comment" class="comment_content" placeholder="Nội dung bình luận"></textarea>
+                    <div id="notify_comment"></div>
+
+                    <button type="button" class="btn btn-default pull-right send-comment">
+                        Gửi bình luận
                     </button>
+
                 </form>
             </div>
         </div>

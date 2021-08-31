@@ -9,6 +9,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <script type="application/x-javascript">
         addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); }
     </script>
+    <meta name="csrf-token" content="{{csrf_token()}}">
+
     <!-- bootstrap-css -->
     <link rel="stylesheet" href="{{asset('public/backend/css/bootstrap.min.css')}}">
     <!-- //bootstrap-css -->
@@ -32,7 +34,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <script src="{{asset('public/backend/js/raphael-min.js')}}"></script>
     <script src="{{asset('public/backend/js/morris.js')}}"></script>
     <script src="{{asset('public/backend/ckeditor/ckeditor.js')}}"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
 </head>
 
@@ -164,6 +166,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                                 <li><a href="{{URL::to('/delivery')}}">Quản lý vận chuyển</a></li>
                             </ul>
                         </li>
+                        <li class="sub-menu">
+                            <a href="javascript:;">
+                                <i class="fa fa-book"></i>
+                                <span>Bình luận</span>
+                            </a>
+                            <ul class="sub">
+                                <li><a href="{{URL::to('/comment')}}">Liệt kê bình luận</a></li>
+                            </ul>
+                        </li>
                         @hasrole(['admin','author'])
                         <li class="sub-menu">
                             <a href="javascript:;">
@@ -206,7 +217,91 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 $('#myTable').DataTable();
             } );
     </script>
-    <!-- calendar -->
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+            $('#category_order').sortable({
+                placeholder: 'ui-state-highlight',
+                 update  : function(event, ui)
+                  {
+                    var page_id_array = new Array();
+
+                    $('#category_order tr').each(function(){
+                        page_id_array.push($(this).attr("id"));
+                    });
+
+                    $.ajax({
+                            url:"{{url('/arrange-category')}}",
+                            method:"POST",
+                            headers:{
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                            data:{page_id_array:page_id_array},
+                            success:function(data)
+                            {
+                                alert(data);
+                            }
+                    });
+
+                  }
+            });
+
+
+        });
+    </script>
+    <script type="text/javascript">
+        $('.comment_duyet_btn').click(function(){
+            var comment_status = $(this).data('comment_status');
+
+            var comment_id = $(this).data('comment_id');
+            var comment_product_id = $(this).attr('id');
+            if(comment_status==0){
+                var alert = 'Thay đổi thành duyệt thành công';
+            }else{
+                var alert = 'Thay đổi thành không duyệt thành công';
+            }
+              $.ajax({
+                    url:"{{url('/allow-comment')}}",
+                    method:"POST",
+
+                    headers:{
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data:{comment_status:comment_status,comment_id:comment_id,comment_product_id:comment_product_id},
+                    success:function(data){
+                        location.reload();
+                       $('#notify_comment').html('<span class="text text-alert">'+alert+'</span>');
+
+                    }
+                });
+
+
+        });
+        $('.btn-reply-comment').click(function(){
+            var comment_id = $(this).data('comment_id');
+
+            var comment = $('.reply_comment_'+comment_id).val();
+
+            var comment_product_id = $(this).data('product_id');
+
+              $.ajax({
+                    url:"{{url('/reply-comment')}}",
+                    method:"POST",
+
+                    headers:{
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data:{comment:comment,comment_id:comment_id,comment_product_id:comment_product_id},
+                    success:function(data){
+                        $('.reply_comment_'+comment_id).val('');
+                       $('#notify_comment').html('<span class="text text-alert">Trả lời bình luận thành công</span>');
+
+                    }
+                });
+
+
+        });
+    </script>
     <script type="text/javascript" src="{{asset('public/backend/js/monthly.js')}}"></script>
     <script type="text/javascript">
         CKEDITOR.replace( 'editor' );
