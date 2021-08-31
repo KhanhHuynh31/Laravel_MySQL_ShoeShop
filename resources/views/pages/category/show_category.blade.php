@@ -16,7 +16,7 @@
 
                         <a data-toggle="collapse" data-parent="#accordian" href="#{{$cate->category_id}}">
                             <span class="badge pull-right"><i class="fa fa-plus"></i></span>
-                            {{$cate->category_name}}
+                            <a href="{{URL::to('/category-detail/'.$cate->category_id)}}">{{$cate->category_name}}</a>
                         </a>
 
                     </h4>
@@ -72,10 +72,18 @@
         </div>
         <!--/price-range-->
 
-        <div class="shipping text-center">
-            <!--shipping-->
-            <img src="{{('public/frontend/images/home/shipping.jpg')}}" alt="" />
+        <div class="brands_products">
+            <!--brands_products-->
+            <h2>Sản phẩm yêu thích</h2>
+            <div class="brands-name ">
+
+                <div id="row_wishlist" class="row">
+
+                </div>
+
+            </div>
         </div>
+        <!--/brands_products-->
         <!--/shipping-->
 
     </div>

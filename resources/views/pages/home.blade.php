@@ -53,7 +53,8 @@
 
                         <a data-toggle="collapse" data-parent="#accordian" href="#{{$cate->category_id}}">
                             <span class="badge pull-right"><i class="fa fa-plus"></i></span>
-                            {{$cate->category_name}}
+
+                            <a href="{{URL::to('/category-detail/'.$cate->category_id)}}">{{$cate->category_name}}</a>
                         </a>
 
                     </h4>
@@ -97,18 +98,18 @@
             </div>
         </div>
         <!--/brands_products-->
+        <div class="brands_products">
+            <!--brands_products-->
+            <h2>Sản phẩm yêu thích</h2>
+            <div class="brands-name ">
 
-        <div class="price-range">
-            <!--price-range-->
+                <div id="row_wishlist" class="row">
 
+                </div>
+
+            </div>
         </div>
-        <!--/price-range-->
-
-        <div class="shipping text-center">
-            <!--shipping-->
-            <img src="{{('public/frontend/images/home/shipping.jpg')}}" alt="" />
-        </div>
-        <!--/shipping-->
+        <!--/brands_products-->
 
     </div>
 </div>
@@ -117,20 +118,61 @@
     <h2 class="title text-center">Sản phẩm nổi bật</h2>
     @foreach($hot_product as $key => $product)
     <div class="col-sm-4">
-        <a href="{{URL::to('/product-detail/'.$product->product_id)}}">
+        <a id="wishlist_producturl{{$product->product_id}}" href="{{URL::to('/product-detail/'.$product->product_id)}}">
             <div class="product-image-wrapper">
                 <div class="single-products">
                     <div class="productinfo text-center">
-                        <img src="{{URL::to('public/uploads/product/'.$product->product_image)}}" alt="shoe picture"
+                        <input type="hidden" id="wishlist_productname{{$product->product_id}}"
+                            value="{{$product->product_name}}" class="cart_product_name_{{$product->product_id}}">
+                        <input type="hidden" id="wishlist_productprice{{$product->product_id}}"
+                            value="{{number_format($product->product_price,0,',','.')}}VNĐ">
+
+                        <img id="wishlist_productimage{{$product->product_id}}"
+                            src="{{URL::to('public/uploads/product/'.$product->product_image)}}" alt="shoe picture"
                             width="300px" height="250px" />
                         <h2>{{number_format($product->product_price).' '.'VNĐ'}}</h2>
                         <p class="tensp">{{$product->product_name}}</p>
                     </div>
                 </div>
-            </div>
         </a>
+        <div class="choose">
+            <ul class="nav nav-pills nav-justified">
+                <style type="text/css">
+                    ul.nav.nav-pills.nav-justified li {
+                        text-align: center;
+                        font-size: 15px;
+                    }
+
+                    .button_wishlist {
+                        border: none;
+                        background: #ffff;
+                        color: #B3AFA8;
+                    }
+
+                    ul.nav.nav-pills.nav-justified i {
+                        color: #B3AFA8;
+                    }
+
+                    .button_wishlist span:hover {
+                        color: #FE980F;
+                    }
+
+                    .button_wishlist:focus {
+                        border: none;
+                        outline: none;
+                    }
+                </style>
+                <li>
+                    <i class="fa fa-plus-square"></i>
+                    <button class="button_wishlist" id="{{$product->product_id}}"
+                        onclick="add_wistlist(this.id);"><span>Yêu thích</span></button>
+                </li>
+            </ul>
+        </div>
     </div>
-    @endforeach
+</div>
+
+@endforeach
 </div>
 <!--features_items-->
 
