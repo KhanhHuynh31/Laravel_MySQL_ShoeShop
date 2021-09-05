@@ -99,7 +99,7 @@ class ProductController extends Controller
 
         $manager_product  = view('admin.edit_product')->with('edit_product', $edit_product)->with('cate_product', $cate_product)->with('brand_product', $brand_product);
 
-        return view('admin_layout')->with('admin.edit_product', $manager_product);
+        return view('admin_layout')->with('edit_product', $manager_product);
     }
     public function update_product(Request $request, $product_id)
     {

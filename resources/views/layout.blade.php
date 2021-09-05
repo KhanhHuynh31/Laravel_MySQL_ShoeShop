@@ -30,6 +30,8 @@
     <link href="{{asset('public/frontend/css/responsive.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/sweetalert.css')}}" rel="stylesheet">
 
+    <link rel="stylesheet" href="{{asset('public/frontend/owlcarousel/assets/owl.carousel.min.css')}}">
+    <link rel="stylesheet" href="{{asset('public/frontend/owlcarousel/assets/owl.theme.default.min.css')}}">
     <!--[if lt IE 9]>
     <script src="{{asset('public/frontend/js/html5shiv.js')}}"></script>
     <script src="{{asset('public/frontend/js/respond.min.js')}}"></script>
@@ -205,6 +207,24 @@
     <script src="{{asset('public/frontend/js/main.js')}}"></script>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="{{asset('public/frontend/js/sweetalert.js')}}"></script>
+    <script src="{{asset('public/frontend/owlcarousel/owl.carousel.min.js')}}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#sort').on('change',function(){
+                var url = $(this).val();
+                  if (url) {
+                      window.location = url;
+                  }
+                return false;
+            });
+
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".owl-carousel").owlCarousel();
+        });
+    </script>
     <script type="text/javascript">
         function view(){
 

@@ -9,6 +9,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
 use Auth;
 use App\Models\Category;
+use App\Models\Product;
 
 session_start();
 
@@ -32,10 +33,10 @@ class CategoryProduct extends Controller
     public function all_category_product()
     {
         $this->AuthLogin();
-        $category_product = Category::where('category_parent',0)->orderBy('category_order','ASC')->get();
+        $category_product = Category::where('category_parent', 0)->orderBy('category_order', 'ASC')->get();
 
-        $all_category_product = DB::table('tbl_category')->orderBy('category_order','ASC')->get();
-        $manager_category_product  = view('admin.all_category_product')->with('all_category_product', $all_category_product)->with('category_product',$category_product);
+        $all_category_product = DB::table('tbl_category')->orderBy('category_order', 'ASC')->get();
+        $manager_category_product  = view('admin.all_category_product')->with('all_category_product', $all_category_product)->with('category_product', $category_product);
         return view('admin_layout')->with('admin.all_category_product', $manager_category_product);
     }
     public function save_category_product(Request $request)
@@ -112,7 +113,28 @@ class CategoryProduct extends Controller
         $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_order', 'asc')->get();
         $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
         $category_name = DB::table('tbl_category')->where('tbl_category.category_id', $category_id)->limit(1)->get();
-        $category_by_id = DB::table('tbl_product')->join('tbl_category', 'tbl_product.category_id', '=', 'tbl_category.category_id')->where('tbl_category.category_id', $category_id)->get();
+        $category_by_id = DB::table('tbl_product')->join('tbl_category', 'tbl_product.category_id', '=', 'tbl_category.category_id')->where('tbl_category.category_id', $category_id)->orWhere('tbl_category.category_parent', $category_id)->get();
+
+        if (isset($_GET['sort_by'])) {
+
+            $sort_by = $_GET['sort_by'];
+
+            if ($sort_by == 'giam_dan') {
+
+                $category_by_id = Product::with('category')->where('category_id', $category_id)->orderBy('product_price', 'DESC')->paginate(6)->appends(request()->query());
+            } elseif ($sort_by == 'tang_dan') {
+
+                $category_by_id = Product::with('category')->where('category_id', $category_id)->orderBy('product_price', 'ASC')->paginate(6)->appends(request()->query());
+            } elseif ($sort_by == 'kytu_za') {
+
+                $category_by_id = Product::with('category')->where('category_id', $category_id)->orderBy('product_name', 'DESC')->paginate(6)->appends(request()->query());
+            } elseif ($sort_by == 'kytu_az') {
+
+                $category_by_id = Product::with('category')->where('category_id', $category_id)->orderBy('product_name', 'ASC')->paginate(6)->appends(request()->query());
+            }
+        } else {
+            $category_by_id = Product::with('category')->where('category_id', $category_id)->orderBy('product_id', 'DESC')->paginate(6);
+        }
         return view('pages.category.show_category')->with('category', $cate_product)->with('brand', $brand_product)->with('category_by_id', $category_by_id)->with('category_name', $category_name);
     }
 }

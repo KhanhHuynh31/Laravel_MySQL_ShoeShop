@@ -61,17 +61,6 @@
         </div>
         <!--/brands_products-->
 
-        <div class="price-range">
-            <!--price-range-->
-            <h2>Price Range</h2>
-            <div class="well text-center">
-                <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="600" data-slider-step="5"
-                    data-slider-value="[250,450]" id="sl2"><br />
-                <b class="pull-left">$ 0</b> <b class="pull-right">$ 600</b>
-            </div>
-        </div>
-        <!--/price-range-->
-
         <div class="brands_products">
             <!--brands_products-->
             <h2>Sản phẩm yêu thích</h2>
@@ -88,8 +77,29 @@
 
     </div>
 </div>
+
 <div class="features_items">
-    <!--features_items-->
+    <div class="row">
+
+        <div class="col-md-4">
+
+            <label for="amount">Sắp xếp theo</label>
+
+            <form>
+                @csrf
+                <select name="sort" id="sort" class="form-control">
+                    <option value="{{Request::url()}}?sort_by=none">-Sắp xếp-</option>
+                    <option value="{{Request::url()}}?sort_by=tang_dan">Giá tăng dần</option>
+                    <option value="{{Request::url()}}?sort_by=giam_dan">Giá giảm dần</option>
+                    <option value="{{Request::url()}}?sort_by=kytu_az">Lọc theo tên A đến Z</option>
+                    <option value="{{Request::url()}}?sort_by=kytu_za">Lọc theo tên Z đến A</option>
+                </select>
+
+            </form>
+
+        </div>
+
+    </div>
     @foreach($category_name as $key => $cate)
     <h2 class="title text-center">{{$cate->category_name}}</h2>
     @endforeach
@@ -109,7 +119,9 @@
         </a>
     </div>
     @endforeach
+    <ul class="pagination pagination-sm m-t-none m-b-none">
+        {{$category_by_id->links("pagination::bootstrap-4")}}
+    </ul>
 </div>
-<!--features_items-->
-<!--/recommended_items-->
+
 @endsection

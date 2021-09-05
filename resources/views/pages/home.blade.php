@@ -179,27 +179,23 @@
 <div class="recommended_items">
     <!--recommended_items-->
     <h2 class="title text-center">Sản phẩm mới</h2>
-    <div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-            <div class="item active">
-                @foreach($new_product as $key => $product)
-                <div class="col-sm-4">
-                    <a href="{{URL::to('/product-detail/'.$product->product_id)}}">
-                        <div class="product-image-wrapper">
-                            <div class="single-products">
-                                <div class="productinfo text-center">
-                                    <img src="{{URL::to('public/uploads/product/'.$product->product_image)}}"
-                                        alt="shoe picture" width="300px" height="250px" />
-                                    <h2>{{number_format($product->product_price).' '.'VNĐ'}}</h2>
-                                    <p class="tensp">{{$product->product_name}}</p>
-                                </div>
-                            </div>
+    <div class="owl-carousel">
+        @foreach($new_product as $key => $product)
+        <div>
+            <a href="{{URL::to('/product-detail/'.$product->product_id)}}">
+                <div class="product-image-wrapper">
+                    <div class="single-products">
+                        <div class="productinfo text-center">
+                            <img src="{{URL::to('public/uploads/product/'.$product->product_image)}}" alt="shoe picture"
+                                width="300px" height="250px" />
+                            <h2>{{number_format($product->product_price).' '.'VNĐ'}}</h2>
+                            <p class="tensp">{{$product->product_name}}</p>
                         </div>
-                    </a>
+                    </div>
                 </div>
-                @endforeach
-            </div>
+            </a>
         </div>
+        @endforeach
     </div>
 </div>
 <!--/recommended_items-->

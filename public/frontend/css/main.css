@@ -877,7 +877,7 @@ h2.title {
 }
 
 .recommended_items {
-    overflow: hidden;
+    padding-left: 26%;
 }
 
 #recommended-item-carousel .carousel-inner .item {
@@ -899,8 +899,6 @@ h2.title {
 .recommended-item-control i:hover {
     background: #ccccc6;
 }
-
-.recommended_items h2 {}
 
 .our_partners {
     overflow: hidden;
