@@ -14,6 +14,7 @@ use App\Models\Wards;
 use App\Models\Feeship;
 use PDF;
 use Auth;
+
 session_start();
 
 class CheckoutController extends Controller
@@ -179,18 +180,34 @@ class CheckoutController extends Controller
     public function calculate_fee(Request $request)
     {
         $data = $request->all();
+        $order = $data['order'];
+        $fee = array();
         if ($data['matp']) {
             $feeship = Feeship::where('fee_matp', $data['matp'])->where('fee_maqh', $data['maqh'])->where('fee_xaph', $data['xaid'])->get();
             if ($feeship) {
                 $count_feeship = $feeship->count();
                 if ($count_feeship > 0) {
                     foreach ($feeship as $key => $fee) {
-                        Session::put('fee', $fee->fee_feeship);
+                        $fee['fee_price'] = $fee->fee_feeship;
+                        if (Session::get('total_coupon') != "") {
+                            $fee['fee_total'] =  $order + $fee['fee_price'] - Session::get('total_coupon');
+                        } else {
+                            $fee['fee_total'] =  $order + $fee['fee_price'];
+                        }
+                        Session::put('total_shipping', $fee['fee_price']);
                         Session::save();
+                        print json_encode($fee);
                     }
                 } else {
-                    Session::put('fee', 25000);
+                    $fee['fee_price'] = 50000;
+                    if (Session::get('total_coupon') != "") {
+                        $fee['fee_total'] =  $order + $fee['fee_price'] - Session::get('total_coupon');
+                    } else {
+                        $fee['fee_total'] =  $order + $fee['fee_price'];
+                    }
+                    Session::put('total_shipping', $fee['fee_price']);
                     Session::save();
+                    print json_encode($fee);
                 }
             }
         }

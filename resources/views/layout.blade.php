@@ -10,6 +10,8 @@
     <meta name="robots" content="INDEX,FOLLOW" />
     <link rel="canonical" href="http://localhost/shoeshop" />
     <meta name="author" content="">
+    <meta name="csrf-token" content="{{csrf_token()}}">
+
     <link rel="icon" type="image/x-icon" href="public/frontend/images/home/homelogo.jpg" />
 
     <meta property="og:image" content="public/frontend/images/home/homelogo.jpg" />
@@ -208,6 +210,8 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="{{asset('public/frontend/js/sweetalert.js')}}"></script>
     <script src="{{asset('public/frontend/owlcarousel/owl.carousel.min.js')}}"></script>
+
+
     <script type="text/javascript">
         $(document).ready(function(){
             $('#sort').on('change',function(){
@@ -492,6 +496,62 @@
         });
         });
 
+    </script>
+
+    <script type="text/javascript">
+        $('.applysales').click(function(){
+            var coupon = $('#couponCode').val();
+            var order = $('#order_totalFloat').val();
+
+                $.ajax({
+                    url:"{{url('/check-coupon')}}",
+                    method: "POST",
+                    headers:{
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data:{coupon:coupon, order:order},
+                    dataType:'json',
+                    success:function(data){
+                        if(data.coupon_status == 0){
+                            $('#load-coupon').html('<span class="text text-alert">Mã giảm giá không hợp lệ</span>');
+                            $('#coupon-dis').html('<span class="text text-alert">'+ new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(0)+'</span>');
+                            $('#totalOrder').html('<span class="text text-alert">'+ new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.total_shipping)+'</span>');
+                        }
+                        else{
+                        $('#load-coupon').html('<span class="text text-alert">Áp dụng mã giảm giá '+data.coupon_code+' thành công</span>');
+                        $('#coupon-dis').html('<span class="text text-alert">'+ new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.coupon_number)+'</span>');
+                        $('#totalOrder').html('<span class="text text-alert">'+ new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.coupon_with_order)+'</span>');
+                        }
+                    }
+                });
+
+        });
+
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.wards').on('change',function(){
+                    var order =$('#order_totalFloat1').val();
+                    var matp = $('.city').val();
+                    var maqh = $('.province').val();
+                    var xaid = $('.wards').val();
+                    var _token = $('input[name="_token"]').val();
+
+                    $.ajax({
+                    url : '{{url('/calculate-fee')}}',
+                    method: 'POST',
+                    data:{matp:matp,maqh:maqh,xaid:xaid,order:order,_token:_token},
+                    dataType:'json',
+                    success:function(data){
+                        $('#fee-ship').html('<span class="text text-alert">'+ new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.fee_price)+'</span>');
+                        $('#totalOrder').html('<span class="text text-alert">'+ new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.fee_total)+'</span>');
+                    }
+                    });
+
+
+
+            });
+        });
     </script>
     <script type="text/javascript">
         $(document).ready(function(){

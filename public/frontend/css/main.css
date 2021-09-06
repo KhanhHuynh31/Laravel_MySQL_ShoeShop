@@ -240,9 +240,7 @@ a#scrollUp i {
     color: #fdb45e;
 }
 
-.li_search_ajax {
-
-}
+.li_search_ajax {}
 
 .search_box input {
     border: none;
@@ -2264,4 +2262,41 @@ h2.title {
 
 .checkoutbutton {
     float: right;
+}
+
+.city1 {
+    padding-top: 5px;
+    float: left;
+    width: 211px;
+}
+
+.province1 {
+    padding-top: 5px;
+    padding-left: 10px;
+    float: left;
+    width: 211px;
+}
+
+.wards1 {
+    padding-top: 5px;
+    padding-left: 10px;
+    float: left;
+    width: 213px;
+}
+
+.form-checkout {
+    border-radius: 5px;
+    height: 40px;
+    margin-top: 5px;
+}
+.titleCoupon{
+    margin-top: 0px;
+    padding-left: 14px;
+}
+.divCoupon {
+    padding-left: 16px;
+    width: 350px;
+}
+.divCheckout{
+    padding-bottom: 20px;
 }

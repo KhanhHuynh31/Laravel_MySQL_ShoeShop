@@ -33,6 +33,7 @@ class CartController extends Controller
     {
         $today = Carbon::now('Asia/Ho_Chi_Minh')->format('d/m/Y');
         $data = $request->all();
+        $orderTotal = $data['order'];
         $coupon = DB::table('tbl_coupon')->where('coupon_code', $data['coupon'])->where('coupon_status', 1)->where('coupon_end', '>=', $today)->first();
         if ($coupon) {
             $count_coupon = DB::table('tbl_coupon')->count();
@@ -41,28 +42,60 @@ class CartController extends Controller
                 if ($coupon_session == true) {
                     $is_avaiable = 0;
                     if ($is_avaiable == 0) {
-                        $cou[] = array(
-                            'coupon_code' => $coupon->coupon_code,
-                            'coupon_condition' => $coupon->coupon_condition,
-                            'coupon_number' => $coupon->coupon_number,
-
-                        );
-                        Session::put('coupon', $cou);
+                        $cou = array();
+                        $cou['coupon_code'] = $coupon->coupon_code;
+                        $cou['coupon_condition'] = $coupon->coupon_condition;
+                        if ($cou['coupon_condition'] == 1) {
+                            $cou['coupon_number'] =  $orderTotal * $coupon->coupon_number / 100;
+                        } else {
+                            $cou['coupon_number'] = $coupon->coupon_number;
+                        }
+                        $cou['coupon_with_order'] = $orderTotal - $cou['coupon_number'];
+                        Session::put('total_coupon', $cou['coupon_number']);
+                        Session::save();
                     }
                 } else {
-                    $cou[] = array(
-                        'coupon_code' => $coupon->coupon_code,
-                        'coupon_condition' => $coupon->coupon_condition,
-                        'coupon_number' => $coupon->coupon_number,
-
-                    );
-                    Session::put('coupon', $cou);
+                    $cou = array();
+                    $cou['coupon_code'] = $coupon->coupon_code;
+                    $cou['coupon_condition'] = $coupon->coupon_condition;
+                    if ($cou['coupon_condition'] == 1) {
+                        $cou['coupon_number'] =  $orderTotal * $coupon->coupon_number / 100;
+                    } else {
+                        $cou['coupon_number'] = $coupon->coupon_number;
+                    }
+                    $cou['coupon_with_order'] = $orderTotal -  $cou['coupon_number'];
+                    Session::put('total_coupon', $cou['coupon_number']);
+                    Session::save();
                 }
+
+                $cou = array();
+                $cou['coupon_code'] = $coupon->coupon_code;
+                $cou['coupon_condition'] = $coupon->coupon_condition;
+                if ($cou['coupon_condition'] == 1) {
+                    $cou['coupon_number'] =  $orderTotal * $coupon->coupon_number / 100;
+                } else {
+                    $cou['coupon_number'] = $coupon->coupon_number;
+                }
+                if (Session::get('total_shipping') != "") {
+                    $cou['coupon_with_order'] = $orderTotal -  $cou['coupon_number'] + Session::get('total_shipping');
+                } else {
+                    $cou['coupon_with_order'] = $orderTotal -  $cou['coupon_number'];
+                }
+                Session::put('total_coupon', $cou['coupon_number']);
                 Session::save();
-                return redirect()->back()->with('message', 'Thêm mã giảm giá thành công');
+                print json_encode($cou);
             }
         } else {
-            return redirect()->back()->with('error', 'Mã giảm giá không đúng - hoặc đã hết hạn');
+            $cou = array();
+            $cou['coupon_status'] = 0;
+            if (Session::get('total_shipping') != "") {
+                $cou['total_shipping'] = Session::get('total_shipping') + $orderTotal;
+            } else {
+                $cou['total_shipping'] = $orderTotal;
+            }
+            Session::put('total_coupon', "");
+            Session::save();
+            print json_encode($cou);
         }
     }
     public function show_cart()
