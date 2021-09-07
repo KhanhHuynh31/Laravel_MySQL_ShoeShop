@@ -32,7 +32,7 @@
                         <td>{{ $order->customer_name }}</td>
                         <td>{{ $order->order_date }}</td>
                         @if( $order->coupon_total != 0)
-                        <td>{{ number_format($order->coupon_total + $order->order_fee).' '.'VNĐ'}}
+                        <td>{{ number_format($order->order_total - $order->coupon_total + $order->order_fee).' '.'VNĐ'}}
                             @else
                         <td>{{ number_format($order->order_total + $order->order_fee).' '.'VNĐ'}}
                             @endif

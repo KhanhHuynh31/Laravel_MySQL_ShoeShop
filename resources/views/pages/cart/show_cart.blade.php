@@ -80,76 +80,21 @@
                 <div class="total_area">
                     <ul>
                         <li>Tổng tiền:<span>{{number_format(Cart::totalFloat()/1.21).' '.'VNĐ'}}</span></li>
-                        <li>Phí vận chuyển:<span>Miễn phí</span></li>
-                        <li>Mã giảm giá:
-                            <form method="POST" action="{{url('/check-coupon')}}">
-                                @csrf
-                                <input type="text" class="form-control" name="coupon" placeholder="Nhập mã giảm giá">
-                                <input type="submit" name="check_coupon" value="Áp dụng"
-                                    class="applysales btn btn-default">
-                            </form>
-                        </li>
-                        @if(session()->has('message'))
-                        <li>
-                            <div class="alert alert-success">
-                                {!! session()->get('message') !!}
-                            </div>
-                            @if(Session::get('coupon'))
-                        <li>
-                            @foreach(Session::get('coupon') as $key => $cou)
-                            @if($cou['coupon_condition']==1)
-                            Tiết kiệm: {{$cou['coupon_number']}} %
-                            <p>
-                                @php
-                                $total=Cart::totalFloat()/1.21;
-                                $total_coupon = ($total*$cou['coupon_number'])/100;
-                                Session::put('total_coupon',$total_coupon);
-                                @endphp
-                            </p>
-                            <p>
-                        <li>Tổng sau khi đã giảm :{{number_format($total_coupon).' '.'VNĐ'}}</li>
-                        </p>
-                        @elseif($cou['coupon_condition']==2)
-                        Tiết kiệm: {{number_format($cou['coupon_number']).' '.'VNĐ'}}
-                        <p>
-                            @php
-                            $total=Cart::totalFloat()/1.21;
-                            $total_coupon = $total - $cou['coupon_number'];
-                            Session::put('total_coupon', $total_coupon);
-                            @endphp
-                        </p>
-                        <p>
-                            <li>Tổng sau khi đã giảm :{{number_format($total_coupon).' '.'VNĐ'}}</li>
-                        </p>
-                        @endif
-                        @endforeach
-
-                        @endif
-
-                        @elseif(session()->has('error'))
-                        <li>
-                            <div class="alert alert-danger">
-                                {!! session()->get('error') !!}
-                            </div>
-                        </li>
-                        @endif
-
-                        <hr>
 
 
                     </ul>
+
                     <?php
                                    $customer_id = Session::get('customer_id');
                                    if($customer_id!=NULL){
                                  ?>
 
-                    <a class="btn btn-default check_out" href="{{URL::to('/checkout')}}">Thanh toán ngay</a>
+                    <a class="btn btn-default check_out" href="{{URL::to('/checkout')}}">Tiếp tục</a>
                     <?php
                             }else{
                                  ?>
 
-                    <a class="btn btn-default check_out" href="{{URL::to('/login-checkout')}}">Đăng nhập và thanh
-                        toán</a>
+                    <a class="btn btn-default check_out" href="{{URL::to('/login-checkout')}}">Đăng nhập để tiếp tục</a>
                     <?php
                              }
                                  ?>

@@ -20,7 +20,7 @@
                     <div class="bill-to">
                         <p>Điền thông tin gửi hàng</p>
                         <div class="col-md-7 form-style divCheckout">
-                            <form action="{{URL::to('/save-checkout-customer')}}" method="POST">
+                            <form action="{{URL::to('/order-place')}}" method="POST">
                                 @csrf
                                 <input type="text" name="shipping_email" class="form-control form-checkout"
                                     value="{{$customer->customer_email }}" placeholder="Email" required="">
@@ -59,20 +59,22 @@
                                     placeholder="Ghi chú đơn hàng của bạn" rows="6"></textarea>
 
                                 <h3>Chọn hình thức thanh toán</h3>
+
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault1" checked>
+                                    <input class="form-check-input" type="radio" name="payment_option" value="1"
+                                        id="flexRadioDefault1">
                                     <label class="form-check-label" for="flexRadioDefault1">
-                                        Thanh toán khi nhận hàng
+                                        ATM
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault2">
+                                    <input class="form-check-input" type="radio" name="payment_option" value="2"
+                                        id="flexRadioDefault2" checked>
                                     <label class="form-check-label" for="flexRadioDefault2">
-                                        Thanh toán online
+                                        Trả tiền khi nhận hàng
                                     </label>
                                 </div>
+
                                 <input type="submit" value="Hoàn tất đơn hàng" name="send_order"
                                     class="btn btn-primary btn-sm checkoutbutton">
                             </form>

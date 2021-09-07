@@ -53,21 +53,7 @@ class CheckoutController extends Controller
         $city = City::orderby('matp', 'ASC')->get();
         return view('pages.checkout.show_checkout')->with('customer', $customer)->with('city', $city);
     }
-    public function save_checkout_customer(Request $request)
-    {
-        $data = array();
-        $data['shipping_name'] = $request->shipping_name;
-        $data['shipping_phone'] = $request->shipping_phone;
-        $data['shipping_email'] = $request->shipping_email;
-        $data['shipping_notes'] = $request->shipping_notes;
-        $data['shipping_address'] = $request->shipping_address;
 
-        $shipping_id = DB::table('tbl_shipping')->insertGetId($data);
-
-        Session::put('shipping_id', $shipping_id);
-
-        return Redirect::to('/payment');
-    }
     public function payment()
     {
 
@@ -112,9 +98,17 @@ class CheckoutController extends Controller
         return view('admin.view_order')->with('order_details_product', $order_details_product)->with('order_status', $order_status)->with('customer', $customer)->with('shipping', $shipping)->with('getorder', $getorder);
     }
     public function order_place(Request $request)
-    {
-        //insert payment_method
 
+    {
+        $shipping_data = array();
+        $shipping_data['shipping_name'] = $request->shipping_name;
+        $shipping_data['shipping_phone'] = $request->shipping_phone;
+        $shipping_data['shipping_email'] = $request->shipping_email;
+        $shipping_data['shipping_notes'] = $request->shipping_notes;
+        $shipping_data['shipping_address'] = $request->shipping_address;
+        $shipping_id = DB::table('tbl_shipping')->insertGetId($shipping_data);
+
+        //insert payment_method
         $data = array();
         $data['payment_method'] = $request->payment_option;
         $data['payment_status'] = 'Đang chờ xử lý';
@@ -123,11 +117,11 @@ class CheckoutController extends Controller
         //insert order
         $order_data = array();
         $order_data['customer_id'] = Session::get('customer_id');
-        $order_data['shipping_id'] = Session::get('shipping_id');
+        $order_data['shipping_id'] = $shipping_id;
         $order_data['payment_id'] = $payment_id;
         $order_data['order_total'] = Cart::totalFloat() / 1.21;
         $order_data['coupon_total'] = Session::get('total_coupon', 0);
-        $order_data['order_fee'] = Session::get('fee', 0);
+        $order_data['order_fee'] = Session::get('total_shipping', 0);
         $date_now = date('Y-m-d H:i:s');
         $order_data['order_date'] = $date_now;
         $order_data['order_status'] = 'Đang chờ xử lý';
@@ -147,7 +141,7 @@ class CheckoutController extends Controller
             echo 'Thanh toán thẻ ATM';
         } elseif ($data['payment_method'] == 2) {
             Cart::destroy();
-            Session::forget('fee');
+            Session::forget('total_shipping');
             Session::forget('total_coupon');
             $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_order', 'asc')->get();
             $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
