@@ -100,12 +100,24 @@ class CheckoutController extends Controller
     public function order_place(Request $request)
 
     {
+        $selected_data = array();
+        $selected_data['city'] = $request->city;
+        $selected_data['province'] = $request->province;
+        $selected_data['wards'] = $request->wards;
+        $selected_address = DB::table('tbl_tinhthanhpho')->join('tbl_quanhuyen', 'tbl_quanhuyen.matp', '=', 'tbl_tinhthanhpho.matp')->join('tbl_xaphuongthitran', 'tbl_xaphuongthitran.maqh', '=', 'tbl_quanhuyen.maqh')->where('tbl_tinhthanhpho.matp', $selected_data['city'])->where('tbl_quanhuyen.maqh', $selected_data['province'])->where('tbl_xaphuongthitran.xaid', $selected_data['wards'])->select('tbl_tinhthanhpho.name_city', 'tbl_quanhuyen.name_quanhuyen', 'tbl_xaphuongthitran.name_xaphuong')->get();
+        foreach ($selected_address as $key => $add) {
+            $city = $add->name_city;
+            $province =  $add->name_quanhuyen;
+            $wards =  $add->name_xaphuong;
+        }
+        $select_address = ", " . $city . ", " . $province . ", " . $wards;
+
         $shipping_data = array();
         $shipping_data['shipping_name'] = $request->shipping_name;
         $shipping_data['shipping_phone'] = $request->shipping_phone;
         $shipping_data['shipping_email'] = $request->shipping_email;
         $shipping_data['shipping_notes'] = $request->shipping_notes;
-        $shipping_data['shipping_address'] = $request->shipping_address;
+        $shipping_data['shipping_address'] = $request->shipping_address . $select_address;
         $shipping_id = DB::table('tbl_shipping')->insertGetId($shipping_data);
 
         //insert payment_method

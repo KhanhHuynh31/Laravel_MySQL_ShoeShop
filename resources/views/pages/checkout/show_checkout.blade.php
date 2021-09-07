@@ -33,7 +33,7 @@
                                 <input type="hidden" id="order_totalFloat1" value="{{Cart::totalFloat()/1.21}}">
                                 <div class="form-group city1">
                                     <label for="exampleInputPassword1">Chọn thành phố</label>
-                                    <select name="city" id="city" class="form-control choose city">
+                                    <select name="city" id="city" class="form-control choose city" required="">
 
                                         <option value="">Chọn thành phố</option>
                                         @foreach($city as $key => $ci)
@@ -44,14 +44,14 @@
                                 </div>
                                 <div class="form-group province1">
                                     <label for="exampleInputPassword1">Chọn quận huyện</label>
-                                    <select name="province" id="province" class="form-control province choose">
+                                    <select name="province" id="province" class="form-control province choose" required="">
                                         <option value="">Chọn quận huyện</option>
 
                                     </select>
                                 </div>
                                 <div class="form-group wards1">
                                     <label for="exampleInputPassword1">Chọn xã phường</label>
-                                    <select name="wards" id="wards" class="form-control wards">
+                                    <select name="wards" id="wards" class="form-control wards" required="">
                                         <option value="">Chọn xã phường</option>
                                     </select>
                                 </div>
