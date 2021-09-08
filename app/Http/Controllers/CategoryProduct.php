@@ -113,7 +113,6 @@ class CategoryProduct extends Controller
         $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_order', 'asc')->get();
         $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
         $category_name = DB::table('tbl_category')->where('tbl_category.category_id', $category_id)->limit(1)->get();
-        $category_by_id = DB::table('tbl_product')->join('tbl_category', 'tbl_product.category_id', '=', 'tbl_category.category_id')->where('tbl_category.category_id', $category_id)->orWhere('tbl_category.category_parent', $category_id)->get();
 
         if (isset($_GET['sort_by'])) {
 
@@ -121,19 +120,19 @@ class CategoryProduct extends Controller
 
             if ($sort_by == 'giam_dan') {
 
-                $category_by_id = Product::with('category')->where('category_id', $category_id)->orderBy('product_price', 'DESC')->paginate(6)->appends(request()->query());
+                $category_by_id = Product::with('category')->where('category_id', $category_id)->groupBy('product_name')->orderBy('product_price', 'DESC')->paginate(6)->appends(request()->query());
             } elseif ($sort_by == 'tang_dan') {
 
-                $category_by_id = Product::with('category')->where('category_id', $category_id)->orderBy('product_price', 'ASC')->paginate(6)->appends(request()->query());
+                $category_by_id = Product::with('category')->where('category_id', $category_id)->groupBy('product_name')->orderBy('product_price', 'ASC')->paginate(6)->appends(request()->query());
             } elseif ($sort_by == 'kytu_za') {
 
-                $category_by_id = Product::with('category')->where('category_id', $category_id)->orderBy('product_name', 'DESC')->paginate(6)->appends(request()->query());
+                $category_by_id = Product::with('category')->where('category_id', $category_id)->groupBy('product_name')->orderBy('product_name', 'DESC')->paginate(6)->appends(request()->query());
             } elseif ($sort_by == 'kytu_az') {
 
-                $category_by_id = Product::with('category')->where('category_id', $category_id)->orderBy('product_name', 'ASC')->paginate(6)->appends(request()->query());
+                $category_by_id = Product::with('category')->where('category_id', $category_id)->groupBy('product_name')->orderBy('product_name', 'ASC')->paginate(6)->appends(request()->query());
             }
         } else {
-            $category_by_id = Product::with('category')->where('category_id', $category_id)->orderBy('product_id', 'DESC')->paginate(6);
+            $category_by_id = Product::with('category')->where('category_id', $category_id)->groupBy('product_name')->orderBy('product_id', 'DESC')->paginate(6);
         }
         return view('pages.category.show_category')->with('category', $cate_product)->with('brand', $brand_product)->with('category_by_id', $category_by_id)->with('category_name', $category_name);
     }

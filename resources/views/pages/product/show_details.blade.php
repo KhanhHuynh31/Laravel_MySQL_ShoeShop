@@ -44,8 +44,16 @@
             <p><b>Tình trạng:</b> Hết hàng</p>
             @endif
             <p><b>Thương hiệu:</b> {{$value->brand_name}}</p>
-            <p><b>Size:</b> {{$value->category_name}}</p>
-            <p><b>Màu:</b> {{$value->category_name}}</p>
+            <p><b>Size:</b></p>
+            <ul class="nav nav-pills nav-style-li">
+                @foreach($product_size as $key => $size)
+                    @if($size->product_count==0)
+                    <li><a href="#">{{$size->product_size}} (Hết hàng)</a></li>
+                    @else
+                    <li><a href="#">{{$size->product_size}}</a></li>
+                    @endif
+                @endforeach
+            </ul>
             <a href=""><img src="images/product-details/share.png" class="share img-responsive" alt="" /></a>
         </div>
         <!--/product-information-->
@@ -66,7 +74,7 @@
             <p>{!! $value->product_desc !!}</p>
 
         </div>
-        <div class="tab-pane fade active in" id="reviews" >
+        <div class="tab-pane fade active in" id="reviews">
             <div class="col-sm-12">
                 <ul>
                     <li><a href=""><i class="fa fa-user"></i>Admin</a></li>
@@ -81,34 +89,28 @@
                     }
                 </style>
                 <form>
-                     @csrf
-                    <input type="hidden" name="comment_product_id" class="comment_product_id" value="{{$value->product_id}}">
-                     <div id="comment_show"></div>
+                    @csrf
+                    <input type="hidden" name="comment_product_id" class="comment_product_id"
+                        value="{{$value->product_id}}">
+                    <div id="comment_show"></div>
 
                 </form>
 
                 <p><b>Viết đánh giá của bạn</b></p>
 
-                 <!------Rating here---------->
-                            <ul class="list-inline rating"  title="Average Rating">
-                                @for($count=1; $count<=5; $count++)
-                                    @php
-                                        if($count<=$rating){
-                                            $color = 'color:#ffcc00;';
-                                        }
-                                        else {
-                                            $color = 'color:#ccc;';
-                                        }
+                <!------Rating here---------->
+                <ul class="list-inline rating" title="Average Rating">
+                    @for($count=1; $count<=5; $count++) @php if($count<=$rating){ $color='color:#ffcc00;' ; } else {
+                        $color='color:#ccc;' ; } @endphp <li title="star_rating" id="{{$value->product_id}}-{{$count}}"
+                        data-index="{{$count}}" data-product_id="{{$value->product_id}}" data-rating="{{$rating}}"
+                        class="rating" style="cursor:pointer; {{$color}} font-size:30px;">&#9733;</li>
+                        @endfor
 
-                                    @endphp
-
-                                <li title="star_rating" id="{{$value->product_id}}-{{$count}}" data-index="{{$count}}"  data-product_id="{{$value->product_id}}" data-rating="{{$rating}}" class="rating" style="cursor:pointer; {{$color}} font-size:30px;">&#9733;</li>
-                                @endfor
-
-                            </ul>
+                </ul>
                 <form action="#">
                     <span>
-                        <input style="width:100%;margin-left: 0" type="text" class="comment_name" placeholder="Tên bình luận"/>
+                        <input style="width:100%;margin-left: 0" type="text" class="comment_name"
+                            placeholder="Tên bình luận" />
 
                     </span>
                     <textarea name="comment" class="comment_content" placeholder="Nội dung bình luận"></textarea>

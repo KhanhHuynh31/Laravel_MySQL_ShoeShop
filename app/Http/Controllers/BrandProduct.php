@@ -97,7 +97,6 @@ class BrandProduct extends Controller
 
         $brand_name = DB::table('tbl_brand')->where('tbl_brand.brand_id', $brand_id)->limit(1)->get();
 
-        $brand_by_id = DB::table('tbl_product')->join('tbl_brand', 'tbl_product.brand_id', '=', 'tbl_brand.brand_id')->where('tbl_brand.brand_id', $brand_id)->get();
         if (isset($_GET['sort_by'])) {
 
             $sort_by = $_GET['sort_by'];
@@ -107,16 +106,16 @@ class BrandProduct extends Controller
                 $brand_by_id = Product::with('brand')->where('brand_id', $brand_id)->orderBy('product_price', 'DESC')->paginate(6)->appends(request()->query());
             } elseif ($sort_by == 'tang_dan') {
 
-                $brand_by_id = Product::with('brand')->where('brand_id', $brand_id)->orderBy('product_price', 'ASC')->paginate(6)->appends(request()->query());
+                $brand_by_id = Product::with('brand')->where('brand_id', $brand_id)->groupBy('product_name')->orderBy('product_price', 'ASC')->paginate(6)->appends(request()->query());
             } elseif ($sort_by == 'kytu_za') {
 
-                $brand_by_id = Product::with('brand')->where('brand_id', $brand_id)->orderBy('product_name', 'DESC')->paginate(6)->appends(request()->query());
+                $brand_by_id = Product::with('brand')->where('brand_id', $brand_id)->groupBy('product_name')->orderBy('product_name', 'DESC')->paginate(6)->appends(request()->query());
             } elseif ($sort_by == 'kytu_az') {
 
-                $brand_by_id = Product::with('brand')->where('brand_id', $brand_id)->orderBy('product_name', 'ASC')->paginate(6)->appends(request()->query());
+                $brand_by_id = Product::with('brand')->where('brand_id', $brand_id)->groupBy('product_name')->orderBy('product_name', 'ASC')->paginate(6)->appends(request()->query());
             }
         } else {
-            $brand_by_id = Product::with('brand')->where('brand_id', $brand_id)->orderBy('product_id', 'DESC')->paginate(6);
+            $brand_by_id = Product::with('brand')->where('brand_id', $brand_id)->groupBy('product_name')->orderBy('product_id', 'DESC')->paginate(6);
         }
         return view('pages.brand.show_brand')->with('category', $cate_product)->with('brand', $brand_product)->with('brand_by_id', $brand_by_id)->with('brand_name', $brand_name);
     }

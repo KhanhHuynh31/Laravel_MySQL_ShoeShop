@@ -158,7 +158,10 @@ class ProductController extends Controller
         foreach ($product_details as $key => $value) {
             $brand_id = $value->brand_id;
             $category_id = $value->category_id;
+            $product_name = $value->product_name;
         }
+        $product_size =  DB::table('tbl_product')->where('product_name', $product_name)->get();
+
         $related_product = DB::table('tbl_product')
             ->join('tbl_category', 'tbl_product.category_id', '=', 'tbl_category.category_id')
             ->join('tbl_brand', 'tbl_product.brand_id', '=', 'tbl_brand.brand_id')
@@ -169,7 +172,7 @@ class ProductController extends Controller
             ->get();
         $rating = Rating::where('product_id', $product_id)->avg('rating');
         $rating = round($rating);
-        return view('pages.product.show_details')->with('product_details', $product_details)->with('related', $related_product)->with('rating', $rating);
+        return view('pages.product.show_details')->with('product_details', $product_details)->with('product_size', $product_size)->with('related', $related_product)->with('rating', $rating);
     }
     public function search(Request $request)
     {
