@@ -15,18 +15,17 @@ class CartController extends Controller
 {
     public function save_cart(Request $request)
     {
-        $productId = $request->productid_hidden;
+        //$productId = $request->productid_hidden;
         $quantity = $request->qty;
-        $product_info = DB::table('tbl_product')->where('product_id', $productId)->first();
-        // Cart::destroy();
+        $size_id = $request->size;
+        $product_info = DB::table('tbl_product')->where('product_id', $size_id)->first();
         $data['id'] = $product_info->product_id;
         $data['qty'] = $quantity;
         $data['name'] = $product_info->product_name;
         $data['price'] = $product_info->product_price;
-        $data['weight'] = $product_info->product_price;
+        $data['weight'] = $product_info->product_size;
         $data['options']['image'] = $product_info->product_image;
         Cart::add($data);
-        // Cart::destroy();
         return Redirect::to('/show-cart');
     }
     public function check_coupon(Request $request)

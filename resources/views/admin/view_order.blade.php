@@ -112,6 +112,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Tên sản phẩm</th>
+                        <th>Size</th>
                         <th>Số lượng</th>
                         <th>Giá</th>
                         <th>Tổng tiền</th>
@@ -122,6 +123,7 @@
                     <tr>
                         <td>{{$order->product_id}}</td>
                         <td>{{$order->product_name }}</td>
+                        <td>{{$order->product_size }}</td>
                         <td>{{$order->product_quantity }}</td>
                         <td>{{$order->product_price}}</td>
                         <td>{{$order->product_price*$order->product_quantity }}</td>

@@ -44,7 +44,8 @@
                                 </div>
                                 <div class="form-group province1">
                                     <label for="exampleInputPassword1">Chọn quận huyện</label>
-                                    <select name="province" id="province" class="form-control province choose" required="">
+                                    <select name="province" id="province" class="form-control province choose"
+                                        required="">
                                         <option value="">Chọn quận huyện</option>
 
                                     </select>
@@ -113,8 +114,8 @@
                                                     </td>
                                                     <td>{{$v_content->name}}<strong class="mx-2">
                                                             <h5>Số lượng: {{$v_content->qty}}</h5>
+                                                            <h5>Size: {{$v_content->weight}}</h5>
                                                     </td>
-
                                                     <td>{{number_format($v_content->price).' '.'VNĐ'}}</td>
                                                 </tr>
                                                 @endforeach

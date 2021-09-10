@@ -37,24 +37,30 @@
                         Thêm giỏ hàng
                     </button>
                 </span>
+
+                <p><b>Tình trạng:</b> Còn hàng</p>
+                @else
+                <h3>Giá: {{number_format($value->product_price).' VNĐ'}}</h3>
+                <p><b>Tình trạng:</b> Hết hàng</p>
+                @endif
+                <p><b>Thương hiệu:</b> {{$value->brand_name}}</p>
+                <p><b>Size:</b></p>
+                <ul class="nav nav-pills nav-style-li">
+                    <div class="radio-toolbar">
+
+                        @foreach($product_size as $key => $size)
+                        @if ($size->product_count ==0)
+                        <label class="radio-dis">{{$size->product_size}}</label>
+                        @else
+                        <input type="radio" id="{{$size->product_id}}" name="size" value="{{$size->product_id}}"
+                            required="">
+                        <label class="size-label" for="{{$size->product_id}}">{{$size->product_size}}</label>
+                        @endif
+                        @endforeach
+                    </div>
+
+                </ul>
             </form>
-            <p><b>Tình trạng:</b> Còn hàng</p>
-            @else
-            <h3>Giá: {{number_format($value->product_price).' VNĐ'}}</h3>
-            <p><b>Tình trạng:</b> Hết hàng</p>
-            @endif
-            <p><b>Thương hiệu:</b> {{$value->brand_name}}</p>
-            <p><b>Size:</b></p>
-            <ul class="nav nav-pills nav-style-li">
-                @foreach($product_size as $key => $size)
-                    @if($size->product_count==0)
-                    <li><a href="#">{{$size->product_size}} (Hết hàng)</a></li>
-                    @else
-                    <li><a href="#">{{$size->product_size}}</a></li>
-                    @endif
-                @endforeach
-            </ul>
-            <a href=""><img src="images/product-details/share.png" class="share img-responsive" alt="" /></a>
         </div>
         <!--/product-information-->
     </div>

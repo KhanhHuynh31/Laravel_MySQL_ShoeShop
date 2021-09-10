@@ -2289,19 +2289,58 @@ h2.title {
     height: 40px;
     margin-top: 5px;
 }
-.titleCoupon{
+
+.titleCoupon {
     margin-top: 0px;
     padding-left: 14px;
 }
+
 .divCoupon {
     padding-left: 16px;
     width: 350px;
 }
-.divCheckout{
+
+.divCheckout {
     padding-bottom: 20px;
 }
+
 ul.nav.nav-pills.nav-style-li li {
     border: 1px solid #ddd;
     border-radius: 5px;
     margin: 2px 5px;
+}
+
+.radio-toolbar {
+    margin: 10px;
+}
+
+.radio-toolbar input[type="radio"] {
+    opacity: 0;
+    position: fixed;
+    width: 0;
+}
+
+.size-label {
+    display: inline-block;
+    padding: 10px 20px;
+    font-family: sans-serif, Arial;
+    font-size: 16px;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 4px;
+}
+
+.radio-toolbar .size-label:hover {
+    background-color: rgb(250, 250, 250);
+}
+
+.radio-toolbar input[type="radio"]:checked+label {
+    background-color: rgb(250, 250, 250);
+    border-color: rgb(0, 0, 0);
+}
+
+.radio-dis {
+    display: inline-block;
+    padding: 10px 20px;
+    font-family: sans-serif, Arial;
+    font-size: 16px;
 }

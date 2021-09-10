@@ -32,7 +32,7 @@
                         </td>
                         <td class="cart_description">
                             <h4><a href="">{{$v_content->name}}</a></h4>
-                            <p>Size: 23</p>
+                            <p>Size: {{$v_content->weight}}</p>
                         </td>
                         <td class="cart_price">
                             <p>{{number_format($v_content->price).' '.'VNĐ'}}</p>

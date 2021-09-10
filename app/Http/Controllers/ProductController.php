@@ -160,7 +160,7 @@ class ProductController extends Controller
             $category_id = $value->category_id;
             $product_name = $value->product_name;
         }
-        $product_size =  DB::table('tbl_product')->where('product_name', $product_name)->get();
+        $product_size =  DB::table('tbl_product')->where('product_name', $product_name)->orderby('product_size', 'asc')->get();
 
         $related_product = DB::table('tbl_product')
             ->join('tbl_category', 'tbl_product.category_id', '=', 'tbl_category.category_id')
@@ -168,6 +168,7 @@ class ProductController extends Controller
             ->where('tbl_product.product_id', '!=', $product_id)
             ->where('tbl_product.brand_id', $brand_id)
             ->where('tbl_product.category_id', $category_id)
+            ->groupBy('product_name')
             ->limit(3)
             ->get();
         $rating = Rating::where('product_id', $product_id)->avg('rating');
