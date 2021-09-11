@@ -76,6 +76,10 @@ Route::post('/update-product/{product_id}', 'ProductController@update_product');
 
 Route::post('/export-csv', 'ProductController@export_csv');
 Route::post('/import-csv', 'ProductController@import_csv');
+//Favorite product
+Route::post('/favorite-product', 'ProductController@favorite_product');
+Route::get('/show-favorite-product', 'ProductController@show_favorite_product');
+
 
 //User
 Route::get('users', 'UserController@index')->middleware('auth.roles');

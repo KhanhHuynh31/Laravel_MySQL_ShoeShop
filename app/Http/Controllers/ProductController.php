@@ -270,4 +270,30 @@ class ProductController extends Controller
         $rating->save();
         echo 'done';
     }
+
+    public function favorite_product(Request $request)
+    {
+        $data = $request->all();
+        $product_id = $data['id'];
+        $customer_id = Session::get('customer_id');
+        if ($customer_id != "") {
+            $data = array();
+            $data['product_id'] =  $product_id;
+            $data['customer_id'] =  $customer_id;
+            DB::table('tbl_favorite')->insert($data);
+            echo 'Đã lưu vào danh sách yêu thích';
+        } else {
+            echo 'Bạn chưa đăng nhập';
+        }
+    }
+
+    public function show_favorite_product()
+    {
+        $customer_id = Session::get('customer_id');
+        $fav_product = DB::table('tbl_favorite')
+            ->join('tbl_product', 'tbl_product.product_id', '=', 'tbl_favorite.product_id')
+            ->where('tbl_favorite.customer_id', '=', $customer_id)
+            ->orderby('tbl_favorite.favorite_id', 'desc')->get();
+        return view('pages.favorite.show_favorite')->with('fav_product', $fav_product);
+    }
 }

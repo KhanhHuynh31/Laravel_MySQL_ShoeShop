@@ -24,7 +24,7 @@
 
     <title>The Shoe Shop</title>
     <link href="{{asset('public/frontend/css/bootstrap.min.css')}}" rel="stylesheet">
-    <link href="{{asset('public/frontend/css/font-awesome.min.css')}}" rel="stylesheet">
+    <link href="{{asset('public/frontend/fontawesome/css/all.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/prettyPhoto.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/price-range.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/animate.css')}}" rel="stylesheet">
@@ -72,7 +72,7 @@
                         <div class="shop-menu pull-right">
                             <ul class="nav navbar-nav">
                                 <li><a href="#"><i class="fa fa-user"></i> Account</a></li>
-                                <li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
+                                <li><a href="{{URL::to('/show-favorite-product')}}"><i class="fa fa-star"></i> Wishlist</a></li>
                                 <li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
                                 <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
                                 <li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
@@ -212,6 +212,8 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="{{asset('public/frontend/js/sweetalert.js')}}"></script>
     <script src="{{asset('public/frontend/owlcarousel/owl.carousel.min.js')}}"></script>
+    <script src="{{asset('public/frontend/fontawesome/js/all.js')}}"></script>
+
 
 
     <script type="text/javascript">
@@ -554,6 +556,25 @@
 
             });
         });
+    </script>
+    <script type="text/javascript">
+        $('#favorite').click(function(){
+                var id = $('#favorite').val();
+                    $.ajax({
+                        url:"{{url('/favorite-product')}}",
+                        method: "POST",
+                        headers:{
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data:{id:id},
+                        success:function(data){
+                                $('#load-favorite').html('<span class="text text-alert">'+data+'</span>');
+
+                        }
+                    });
+
+            });
+
     </script>
 </body>
 

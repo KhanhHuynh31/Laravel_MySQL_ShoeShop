@@ -672,7 +672,7 @@ h2.title {
     font-family: 'Roboto', sans-serif;
     font-size: 18px;
     font-weight: 700;
-    margin: 0 15px;
+    margin: 10px 15px;
     text-transform: uppercase;
     margin-bottom: 30px;
     position: relative;
@@ -2343,4 +2343,11 @@ ul.nav.nav-pills.nav-style-li li {
     padding: 10px 20px;
     font-family: sans-serif, Arial;
     font-size: 16px;
+}
+.btnLove{
+    border: solid 1px;
+
+}
+.btnLove:hover{
+    background-color: rgb(245, 245, 245) ;
 }

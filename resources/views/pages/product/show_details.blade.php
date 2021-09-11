@@ -21,17 +21,18 @@
             <!--/product-information-->
             <img src="images/product-details/new.jpg" class="newarrival" alt="" />
             <h2>{{$value->product_name}}</h2>
-            <p>Mã ID: {{$value->product_id}}</p>
-            <img src="images/product-details/rating.png" alt="" />
+            <button type="submit" id="favorite" value="{{$value->product_id}}" class="btn btnLove">
+                <i class="far fa-heart"></i>
+                Yêu thích
+            </button>
+            <div id='load-favorite'></div>
             @if($value->product_count!=0)
             <form action="{{URL::to('/save-cart')}}" method="POST">
                 {{ csrf_field() }}
                 <span>
                     <span>{{number_format($value->product_price).' VNĐ'}}</span>
-
                     <label>Số lượng:</label>
                     <input name="qty" type="number" min="1" value="1" />
-                    <input name="productid_hidden" type="hidden" value="{{$value->product_id}}" />
                     <button type="submit" class="btn btn-fefault cart">
                         <i class="fa fa-shopping-cart"></i>
                         Thêm giỏ hàng
@@ -80,7 +81,7 @@
             <p>{!! $value->product_desc !!}</p>
 
         </div>
-        <div class="tab-pane fade active in" id="reviews">
+        <div class="tab-pane fade " id="reviews">
             <div class="col-sm-12">
                 <ul>
                     <li><a href=""><i class="fa fa-user"></i>Admin</a></li>
