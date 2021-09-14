@@ -276,12 +276,15 @@ class ProductController extends Controller
         $data = $request->all();
         $product_id = $data['id'];
         $customer_id = Session::get('customer_id');
-        if ($customer_id != "") {
+        $fav_product = DB::table('tbl_favorite')->where('customer_id', '=', $customer_id)->where('product_id', '=', $product_id)->count();
+        if ($fav_product > 0) {
+            echo 'Bạn đã yêu thích sản phẩm này';
+        } else if ($customer_id != "") {
             $data = array();
             $data['product_id'] =  $product_id;
             $data['customer_id'] =  $customer_id;
             DB::table('tbl_favorite')->insert($data);
-            echo 'Đã lưu vào danh sách yêu thích';
+            echo 'Yêu thích sản phẩm thành công';
         } else {
             echo 'Bạn chưa đăng nhập';
         }
@@ -293,7 +296,7 @@ class ProductController extends Controller
         $fav_product = DB::table('tbl_favorite')
             ->join('tbl_product', 'tbl_product.product_id', '=', 'tbl_favorite.product_id')
             ->where('tbl_favorite.customer_id', '=', $customer_id)
-            ->orderby('tbl_favorite.favorite_id', 'desc')->get();
+            ->orderby('tbl_favorite.favorite_id', 'desc')->paginate(6);
         return view('pages.favorite.show_favorite')->with('fav_product', $fav_product);
     }
 }

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Redirect;
 use Auth;
 use App\Models\Brand;
 use App\Models\Product;
+use Toastr;
 
 session_start();
 class BrandProduct extends Controller
@@ -77,7 +78,7 @@ class BrandProduct extends Controller
         $data['brand_name'] = $request->brand_product_name;
         $data['brand_desc'] = $request->brand_product_desc;
         DB::table('tbl_brand')->where('brand_id', $brand_product_id)->update($data);
-        Session::put('message', 'Cập nhật thương hiệu sản phẩm thành công');
+        Toastr::success('Cập nhật sản phẩm thành công', 'Thành công');
         return Redirect::to('all-brand-product');
     }
     public function delete_brand_product($brand_product_id)

@@ -21,7 +21,7 @@
             <!--/product-information-->
             <img src="images/product-details/new.jpg" class="newarrival" alt="" />
             <h2>{{$value->product_name}}</h2>
-            <button type="submit" id="favorite" value="{{$value->product_id}}" class="btn btnLove">
+            <button type="button" id="favorite" value="{{$value->product_id}}" class="btn btnLove">
                 <i class="far fa-heart"></i>
                 Yêu thích
             </button>

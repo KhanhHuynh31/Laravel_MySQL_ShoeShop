@@ -2344,10 +2344,21 @@ ul.nav.nav-pills.nav-style-li li {
     font-family: sans-serif, Arial;
     font-size: 16px;
 }
-.btnLove{
-    border: solid 1px;
 
+.btnLove {
+    border: solid 1px;
 }
-.btnLove:hover{
-    background-color: rgb(245, 245, 245) ;
+
+.btnLove:hover {
+    background-color: rgb(245, 245, 245);
+}
+
+.favorite_products {
+    position: relative;
+}
+
+#delFavorite {
+    position: absolute;
+    top: 15px;
+    right: 15px;
 }

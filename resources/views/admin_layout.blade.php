@@ -30,6 +30,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <!-- //calendar -->
     <link rel="stylesheet" href="//cdn.datatables.net/1.11.0/css/jquery.dataTables.min.css">
     <!-- //font-awesome icons -->
+    {{-- toastr --}}
+    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
     <script src="{{asset('public/backend/js/jquery2.0.3.min.js')}}"></script>
     <script src="{{asset('public/backend/js/raphael-min.js')}}"></script>
     <script src="{{asset('public/backend/js/morris.js')}}"></script>
@@ -212,6 +214,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <script src="{{asset('public/backend/js/jquery.scrollTo.js')}}"></script>
     <!-- morris JavaScript -->
     <script src="//cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
+    <script src="http://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+    {!! Toastr::message() !!}
     <script type="text/javascript">
         $(document).ready( function () {
                 $('#myTable').DataTable();
