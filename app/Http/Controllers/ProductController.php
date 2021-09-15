@@ -14,7 +14,7 @@ use Auth;
 use App\Models\Comment;
 use App\Models\Product;
 use App\Models\Rating;
-
+use Toastr;
 session_start();
 class ProductController extends Controller
 {
@@ -285,6 +285,7 @@ class ProductController extends Controller
             $data['customer_id'] =  $customer_id;
             DB::table('tbl_favorite')->insert($data);
             echo 'Yêu thích sản phẩm thành công';
+
         } else {
             echo 'Bạn chưa đăng nhập';
         }

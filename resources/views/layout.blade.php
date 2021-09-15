@@ -31,6 +31,7 @@
     <link href="{{asset('public/frontend/css/main.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/responsive.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/sweetalert.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 
     <link rel="stylesheet" href="{{asset('public/frontend/owlcarousel/assets/owl.carousel.min.css')}}">
     <link rel="stylesheet" href="{{asset('public/frontend/owlcarousel/assets/owl.theme.default.min.css')}}">
@@ -72,7 +73,8 @@
                         <div class="shop-menu pull-right">
                             <ul class="nav navbar-nav">
                                 <li><a href="#"><i class="fa fa-user"></i> Account</a></li>
-                                <li><a href="{{URL::to('/show-favorite-product')}}"><i class="fa fa-star"></i> Wishlist</a></li>
+                                <li><a href="{{URL::to('/show-favorite-product')}}"><i class="fa fa-star"></i>
+                                        Wishlist</a></li>
                                 <li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
                                 <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
                                 <li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
@@ -213,7 +215,8 @@
     <script src="{{asset('public/frontend/js/sweetalert.js')}}"></script>
     <script src="{{asset('public/frontend/owlcarousel/owl.carousel.min.js')}}"></script>
     <script src="{{asset('public/frontend/fontawesome/js/all.js')}}"></script>
-
+    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+    {!! Toastr::message() !!}
 
 
     <script type="text/javascript">
@@ -228,129 +231,24 @@
 
         });
     </script>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $(".owl-carousel").owlCarousel();
-        });
+    <script>
+        $('.owl-carousel').owlCarousel({
+    loop:true,
+    margin:10,
+    responsiveClass:true,
+    responsive:{
+        0:{
+            items:1,
+        },
+        600:{
+            items:3,
+        },
+        1000:{
+            items:5,
+        }
+    }
+})
     </script>
-    <script type="text/javascript">
-        function view(){
-
-
-            if(localStorage.getItem('data')!=null){
-
-                var data = JSON.parse(localStorage.getItem('data'));
-
-                data.reverse();
-
-                document.getElementById('row_wishlist').style.overflow = 'scroll';
-                document.getElementById('row_wishlist').style.height = '500px';
-
-                for(i=0;i<data.length;i++){
-
-                   var name = data[i].name;
-                   var price = data[i].price;
-                   var image = data[i].image;
-                   var url = data[i].url;
-
-                   $('#row_wishlist').append('<div class="row" style="margin:10px 0"><div class="col-md-4"><img width="100%" src="'+image+'"></div><div class="col-md-8 info_wishlist"><p>'+name+'</p><p style="color:#FE980F">'+price+'</p><a href="'+url+'">Xem chi tiết</a></div><button class="delete_withlist" onclick="del_wistlist('+i+');"><span>Xoá</span></button>');
-               }
-
-           }
-
-       }
-
-       view();
-
-
-      function add_wistlist(clicked_id){
-
-           var id = clicked_id;
-           var name = document.getElementById('wishlist_productname'+id).value;
-           var price = document.getElementById('wishlist_productprice'+id).value;
-           var image = document.getElementById('wishlist_productimage'+id).src;
-           var url = document.getElementById('wishlist_producturl'+id).href;
-
-           var newItem = {
-               'url':url,
-               'id' :id,
-               'name': name,
-               'price': price,
-               'image': image
-           }
-
-           if(localStorage.getItem('data')==null){
-              localStorage.setItem('data', '[]');
-           }
-
-           var old_data = JSON.parse(localStorage.getItem('data'));
-
-           var matches = $.grep(old_data, function(obj){
-               return obj.id == id;
-           })
-
-           if(matches.length){
-               alert('Sản phẩm bạn đã yêu thích,nên không thể thêm');
-
-           }else{
-
-               old_data.push(newItem);
-               $('#row_wishlist').append('<div class="row" style="margin:10px 0"><div class="col-md-4"><img width="100%" src="'+newItem.image+'"></div><div class="col-md-8 info_wishlist"><p>'+newItem.name+'</p><p style="color:#FE980F">'+newItem.price+'</p><a href="'+newItem.url+'">Xem chi tiết</a></div><button class="delete_withlist" onclick="del_wistlist();"><span>Xoá</span></button>');
-
-
-           }
-
-           localStorage.setItem('data', JSON.stringify(old_data));
-      }
-      function del_wistlist()
-      {
-          localStorage.clear();
-          window.location.reload();
-     }
-
-
-    </script>
-    <script type="text/javascript">
-        $(document).on('click','.delete_withlist',function(event) {
-              event.preventDefault();
-              var id = $(this).data('id');
-              if (result) {
-                for(var i = 0; i < result.length; i++) {
-                    if(result[i].id == id) {
-                     result.splice(i,i);
-                     break;
-                 }
-             }
-             localStorage.setItem('data',JSON.stringify(result));
-             swal({
-                title: 'Sản phẩm đã được xóa khỏi danh mục yêu thích!!!',
-                icon: "success",
-                button: "Quay lại",
-            }).then(ok=>{
-               window.location.reload();
-            });
-
-         }
-         if(result.length==1){
-          for(var i = 0; i < result.length; i++) {
-            if(result[i].id == id) {
-             result.splice(i,1);
-             break;
-         }
-     }
-     localStorage.setItem('data',JSON.stringify(result));
-     swal({
-                title: 'Sản phẩm đã được xóa khỏi danh mục yêu thích!!!',
-                icon: "success",
-                button: "Quay lại",
-            }).then(ok=>{
-               window.location.reload();
-            });
- }
-
-});
-    </script>
-
     <script type="text/javascript">
         function remove_background(product_id)
          {

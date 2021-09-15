@@ -97,20 +97,6 @@
                 </ul>
             </div>
         </div>
-        <!--/brands_products-->
-        <div class="brands_products">
-            <!--brands_products-->
-            <h2>Sản phẩm yêu thích</h2>
-            <div class="brands-name ">
-
-                <div id="row_wishlist" class="row">
-
-                </div>
-
-            </div>
-        </div>
-        <!--/brands_products-->
-
     </div>
 </div>
 <div class="features_items">
@@ -179,7 +165,7 @@
 <div class="recommended_items">
     <!--recommended_items-->
     <h2 class="title text-center">Sản phẩm mới</h2>
-    <div class="owl-carousel">
+    <div class="owl-carousel owl-theme">
         @foreach($new_product as $key => $product)
         <div>
             <a href="{{URL::to('/product-detail/'.$product->product_id)}}">

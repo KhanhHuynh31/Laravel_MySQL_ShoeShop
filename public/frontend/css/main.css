@@ -874,9 +874,6 @@ h2.title {
     margin-right: 0;
 }
 
-.recommended_items {
-    padding-left: 26%;
-}
 
 #recommended-item-carousel .carousel-inner .item {
     padding-left: 0;
@@ -2361,4 +2358,10 @@ ul.nav.nav-pills.nav-style-li li {
     position: absolute;
     top: 15px;
     right: 15px;
+}
+.sub__category{
+    padding: 1px 0;
+}
+.panel-body ul li a {
+    font-size: 16px;
 }
