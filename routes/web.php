@@ -2,16 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 //====FRONTEND====
 Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@index');
@@ -35,7 +25,7 @@ Route::get('/active-category-product/{category_product_id}', 'CategoryProduct@ac
 Route::post('/save-category-product', 'CategoryProduct@save_category_product');
 Route::post('/update-category-product/{category_product_id}', 'CategoryProduct@update_category_product');
 
-Route::post('/arrange-category','CategoryProduct@arrange_category');
+Route::post('/arrange-category', 'CategoryProduct@arrange_category');
 
 //Brand Product
 Route::get('/add-brand-product', 'BrandProduct@add_brand_product');
@@ -76,6 +66,13 @@ Route::post('/update-product/{product_id}', 'ProductController@update_product');
 
 Route::post('/export-csv', 'ProductController@export_csv');
 Route::post('/import-csv', 'ProductController@import_csv');
+//Customer
+Route::get('/logout-customer', 'CustomerController@logout_customer');
+Route::post('/login-customer', 'CustomerController@login_customer');
+Route::post('/add-customer', 'CustomerController@add_customer');
+Route::get('/account-info', 'CustomerController@show_account');
+
+
 //Favorite product
 Route::post('/favorite-product', 'ProductController@favorite_product');
 Route::get('/show-favorite-product', 'ProductController@show_favorite_product');
@@ -111,9 +108,7 @@ Route::get('/active-coupon-product/{coupon_id}', 'CouponController@active_coupon
 //Checkout
 Route::get('/login-checkout', 'CheckoutController@login_checkout');
 Route::get('/logout-checkout', 'CheckoutController@logout_checkout');
-Route::post('/add-customer', 'CheckoutController@add_customer');
 Route::post('/order-place', 'CheckoutController@order_place');
-Route::post('/login-customer', 'CheckoutController@login_customer');
 Route::get('/checkout', 'CheckoutController@checkout');
 Route::get('/payment', 'CheckoutController@payment');
 Route::post('/select-delivery-home', 'CheckoutController@select_delivery_home');

@@ -72,12 +72,46 @@
                     <div class="col-sm-8">
                         <div class="shop-menu pull-right">
                             <ul class="nav navbar-nav">
-                                <li><a href="#"><i class="fa fa-user"></i> Account</a></li>
-                                <li><a href="{{URL::to('/show-favorite-product')}}"><i class="fa fa-star"></i>
-                                        Wishlist</a></li>
-                                <li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-                                <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-                                <li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
+                                <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
+
+                                <?php
+                                $customer_id = Session::get('customer_id');
+                                if($customer_id!=NULL){
+                                    $customer_name= Session::get('customer_name');
+
+                              ?>
+                                <li class="dropdown">
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                        <i class="fa fa-user"></i>
+                                        <span class="username">
+                                            <?php
+                                             echo $customer_name;
+                                             ?>
+                                        </span>
+                                    </a>
+                                    <ul class="dropdown-menu extended logout">
+                                        <li><a href="{{URL::to('/account-info')}}"><i class="fa fa-key"></i> Thông tin
+                                                tài
+                                                khoản</a></li>
+                                        <li><a href="{{URL::to('/show-favorite-product')}}"><i class="fa fa-star"></i>
+                                                Yêu thích</a></li>
+                                        <li><a href="{{URL::to('/logout-customer')}}"><i class="fa fa-sign-out-alt"></i>
+                                                Đăng xuất</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <?php
+                                     }else{
+                                         ?>
+                                <li><a href="#" data-toggle="modal" data-target=".login-register-form"><i
+                                            class="fa fa-lock"></i> Đăng nhập</a></li>
+
+                                <?php
+                                     }
+                                         ?>
+
+
+
                             </ul>
                         </div>
                     </div>
@@ -102,9 +136,9 @@
                         </div>
                         <div class="mainmenu pull-left">
                             <ul class="nav navbar-nav collapse navbar-collapse">
-                                <li><a href="index.html" class="active">Home</a></li>
-                                <li><a href="index.html">Products</a></li>
-                                <li><a href="contact-us.html">Contact</a></li>
+                                <li><a href="{{URL::to('home')}}" class="active">TRANG CHỦ</a></li>
+                                <li><a href="{{URL::to('home')}}">SẢN PHẨM</a></li>
+                                <li><a href="{{URL::to('home')}}">TIN TỨC</a></li>
                             </ul>
                         </div>
                     </div>
@@ -147,8 +181,7 @@
                                 <li><a href="#">Online Help</a></li>
                                 <li><a href="#">Contact Us</a></li>
                                 <li><a href="#">Order Status</a></li>
-                                <li><a href="#">Change Location</a></li>
-                                <li><a href="#">FAQ’s</a></li>
+
                             </ul>
                         </div>
                     </div>
@@ -159,8 +192,6 @@
                                 <li><a href="#">T-Shirt</a></li>
                                 <li><a href="#">Mens</a></li>
                                 <li><a href="#">Womens</a></li>
-                                <li><a href="#">Gift Cards</a></li>
-                                <li><a href="#">Shoes</a></li>
                             </ul>
                         </div>
                     </div>
@@ -171,32 +202,18 @@
                                 <li><a href="#">Terms of Use</a></li>
                                 <li><a href="#">Privecy Policy</a></li>
                                 <li><a href="#">Refund Policy</a></li>
-                                <li><a href="#">Billing System</a></li>
-                                <li><a href="#">Ticket System</a></li>
+
                             </ul>
                         </div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-5 col-sm-offset-1">
                         <div class="single-widget">
                             <h2>About Shopper</h2>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Company Information</a></li>
-                                <li><a href="#">Careers</a></li>
-                                <li><a href="#">Store Location</a></li>
-                                <li><a href="#">Affillate Program</a></li>
-                                <li><a href="#">Copyright</a></li>
+                                <li><a href="#">Địa chỉ: Số 06 Trần Văn Ơn, Phú Hoà, Thủ Dầu Một, Bình Dương, Việt
+                                        Nam</a></li>
+                                <li><a href="#">SĐT: 035324110</a></li>
                             </ul>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-sm-offset-1">
-                        <div class="single-widget">
-                            <h2>About Shopper</h2>
-                            <div class="row">
-                                <div class="address">
-                                    <img src="{{asset('public/frontend/images/home/map.png')}}" alt="" />
-                                    <p>505 S Atlantic Ave Virginia Beach, VA(Virginia)</p>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -204,7 +221,76 @@
         </div>
     </footer>
     <!--/Footer-->
+    <!-- Login / Register Modal-->
+    <div class="modal fade login-register-form" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#login-form"> Đăng nhập
+                                <span class="glyphicon glyphicon-user"></span></a></li>
+                        <li><a data-toggle="tab" href="#registration-form"> Đăng ký <span
+                                    class="glyphicon glyphicon-pencil"></span></a></li>
+                    </ul>
+                </div>
+                <div class="modal-body">
+                    <div class="tab-content">
+                        <div id="login-form" class="tab-pane fade in active">
+                            <div class="form-group">
+                                <label for="email_account">Email:</label>
+                                <input type="email" class="form-control" id="email_account" placeholder="Nhập Email"
+                                    name="email_account">
+                            </div>
+                            <div class="form-group">
+                                <label for="password_account">Password:</label>
+                                <input type="password" class="form-control" id="password_account"
+                                    placeholder="Nhập password" name="password_account">
+                            </div>
+                            <div class="checkbox">
+                                <label><input type="checkbox" name="remember"> Lưu đăng nhập
+                                </label>
+                            </div>
+                            <div id="alert-login"></div>
+                            <button id="submit-login" class="btn btn-default">Đăng nhập</button>
+                        </div>
+                        <div id="registration-form" class="tab-pane fade">
+                            <div class="form-group">
+                                <label for="customer_name">Họ tên <span style="color: red">*</span></label>
+                                <input type="text" class="form-control" id="customer_name" placeholder="Nhập họ tên"
+                                    name="customer_name">
+                            </div>
+                            <div class="form-group">
+                                <label for="customer_email">Email <span style="color: red">*</span></label>
+                                <input type="email" class="form-control" id="customer_email" placeholder="Nhập email"
+                                    name="customer_email">
+                            </div>
+                            <div class="form-group">
+                                <label for="customer_password">Password <span style="color: red">*</span></label>
+                                <input type="password" class="form-control" id="customer_password"
+                                    placeholder="Nhập mật khẩu" name="customer_password">
+                            </div>
+                            <div class="form-group">
+                                <label for="customer_phone">Số điện thoại:</label>
+                                <input type="tel" class="form-control" id="customer_phone"
+                                    placeholder="Nhập số điện thoại" name="customer_phone">
+                            </div>
+                            <div class="form-group">
+                                <label for="customer_address">Địa chỉ:</label>
+                                <input type="text" class="form-control" id="customer_address" placeholder="Nhập địa chỉ"
+                                    name="customer_address">
+                            </div>
+                            <div id="alert-register"></div>
+                            <button type="submit" id="submit-register" class="btn btn-default">Đăng ký</button>
+                        </div>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="{{asset('public/frontend/js/jquery.js')}}"></script>
     <script src="{{asset('public/frontend/js/bootstrap.min.js')}}"></script>
     <script src="{{asset('public/frontend/js/jquery.scrollUp.min.js')}}"></script>
@@ -241,10 +327,10 @@
             items:1,
         },
         600:{
-            items:3,
+            items:2,
         },
         1000:{
-            items:5,
+            items:3,
         }
     }
 })
@@ -474,6 +560,58 @@
             });
 
     </script>
+    {{-- Login --}}
+    <script type="text/javascript">
+        $('#submit-login').click(function(){
+                var email = $('#email_account').val();
+                var password = $('#password_account').val();
+                    $.ajax({
+                        url:"{{url('/login-customer')}}",
+                        method: "POST",
+                        headers:{
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data:{email:email, password:password},
+                        success:function(data){
+                            if(data == 1)
+                            {
+                                location.reload();
+                            }
+                            else{
+                                $('#alert-login').html('<span class="text text-alert">Sai tài khoản hoặc mật khẩu</span>');
+                            }
+                        }
+                    });
+            });
+    </script>
+    {{-- Register --}}
+    <script type="text/javascript">
+        $('#submit-register').click(function(){
+                var name = $('#customer_name').val();
+                var email = $('#customer_email').val();
+                var password = $('#customer_password').val();
+                var phone = $('#customer_phone').val();
+                var address = $('#customer_address').val();
+                    $.ajax({
+                        url:"{{url('/add-customer')}}",
+                        method: "POST",
+                        headers:{
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data:{name:name, email:email, password:password, phone:phone, address:address},
+                        success:function(data){
+                            if(data == 1)
+                            {
+                                location.reload();
+                            }
+                            else{
+                                $('#alert-register').html('<span class="text text-alert">Email đã được sử dụng</span>');
+                            }
+                        }
+                    });
+            });
+    </script>
+
 </body>
 
 </html>
