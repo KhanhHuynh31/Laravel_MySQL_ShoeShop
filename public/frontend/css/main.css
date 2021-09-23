@@ -2378,10 +2378,27 @@ ul.nav.nav-pills.nav-style-li li {
 .left__menu ul li{
     padding: 5px 0;
 }
+.right__menu{
+    margin-bottom: 20px;
+}
+.right__menu input{
+    border: none;
+    outline: none;
+    border-radius: 0;
+    box-shadow: none;
+    border-bottom: 1px solid black;
+}
 .item__menu{
     color: black;
     text-decoration: none;
     font-size: 14px;
 
 }
-
+.chose__address{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+.chose__address .form-group{
+    width: 50%;
+}

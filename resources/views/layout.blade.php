@@ -35,6 +35,8 @@
 
     <link rel="stylesheet" href="{{asset('public/frontend/owlcarousel/assets/owl.carousel.min.css')}}">
     <link rel="stylesheet" href="{{asset('public/frontend/owlcarousel/assets/owl.theme.default.min.css')}}">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.11.0/css/jquery.dataTables.min.css">
+
     <!--[if lt IE 9]>
     <script src="{{asset('public/frontend/js/html5shiv.js')}}"></script>
     <script src="{{asset('public/frontend/js/respond.min.js')}}"></script>
@@ -301,10 +303,23 @@
     <script src="{{asset('public/frontend/js/sweetalert.js')}}"></script>
     <script src="{{asset('public/frontend/owlcarousel/owl.carousel.min.js')}}"></script>
     <script src="{{asset('public/frontend/fontawesome/js/all.js')}}"></script>
-    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
-    {!! Toastr::message() !!}
-
-
+    <script src="//cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready( function () {
+                $('#myTable').DataTable({
+                    searching: false,
+                    lengthChange: false,
+                    pageLength: 5,
+                    info:false,
+                    language: {
+                        paginate: {
+                            previous: '<',
+                            next:     '>'
+                        },
+                    }
+                });
+            } );
+    </script>
     <script type="text/javascript">
         $(document).ready(function(){
             $('#sort').on('change',function(){

@@ -31,7 +31,7 @@
                                 Session::put('message',null);
                             }
                             ?>
-            <table class="table table-striped b-t b-light" id="myTable">
+            <table class="table table-striped b-t b-light myTable">
                 <thead>
                     <tr>
                         <th>ID</th>

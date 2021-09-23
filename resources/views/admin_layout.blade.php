@@ -214,9 +214,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <script src="{{asset('public/backend/js/jquery.scrollTo.js')}}"></script>
     <!-- morris JavaScript -->
     <script src="//cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
-    <script src="http://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
-    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
-    {!! Toastr::message() !!}
     <script type="text/javascript">
         $(document).ready( function () {
                 $('#myTable').DataTable();

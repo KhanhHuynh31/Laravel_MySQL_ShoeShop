@@ -6,13 +6,18 @@ use Illuminate\Http\Request;
 use DB;
 use Session;
 use Illuminate\Support\Facades\Redirect;
-
+use App\Models\City;
 class CustomerController extends Controller
 {
     public function show_account()
     {
-        return view('pages.account.show_account');
+        $customer_id = Session::get('customer_id');
+        $customer_info = DB::table('tbl_customer')->where('customer_id', $customer_id)->get();
+        $city = City::orderby('matp', 'ASC')->get();
+        $customer_order = DB::table('tbl_order')->where('customer_id', $customer_id)->get();
+        return view('pages.account.show_account')->with('customer_info', $customer_info)->with('city', $city)->with('customer_order', $customer_order);
     }
+
     public function login_customer(Request $request)
     {
         $email = $request->email;
