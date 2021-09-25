@@ -71,6 +71,7 @@ Route::get('/logout-customer', 'CustomerController@logout_customer');
 Route::post('/login-customer', 'CustomerController@login_customer');
 Route::post('/add-customer', 'CustomerController@add_customer');
 Route::get('/account-info', 'CustomerController@show_account');
+Route::post('/change-info', 'CustomerController@change_info');
 
 
 //Favorite product

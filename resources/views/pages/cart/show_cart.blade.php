@@ -80,10 +80,7 @@
                 <div class="total_area">
                     <ul>
                         <li>Tổng tiền:<span>{{number_format(Cart::totalFloat()/1.21).' '.'VNĐ'}}</span></li>
-
-
                     </ul>
-
                     <?php
                                    $customer_id = Session::get('customer_id');
                                    if($customer_id!=NULL){
@@ -93,8 +90,8 @@
                     <?php
                             }else{
                                  ?>
-
-                    <a class="btn btn-default check_out" href="{{URL::to('/login-checkout')}}">Đăng nhập để tiếp tục</a>
+                    <a class="btn btn-default check_out" data-toggle="modal" data-target=".login-register-form"
+                        href="">Đăng nhập để tiếp tục</a>
                     <?php
                              }
                                  ?>

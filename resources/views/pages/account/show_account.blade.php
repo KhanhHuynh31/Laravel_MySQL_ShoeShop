@@ -18,18 +18,22 @@
             <div class="right__menu">
                 <div class="tab-content">
                     <div id="customerInfo" class="tab-pane fade in active">
-                        <form action="">
+                        <form action="{{URL::to('/change-info')}}" method="POST">
+                            @csrf
                             <div class="form-group">
                                 <label for="name">Họ tên:</label>
-                                <input type="text" class="form-control" id="name" value="{{$value->customer_name}}">
+                                <input type="text" class="form-control" name="customer_name" id="name"
+                                    value="{{$value->customer_name}}">
                             </div>
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input type="email" class="form-control" id="email" value="{{$value->customer_email}}">
+                                <input type="email" class="form-control" name="customer_email" id="email"
+                                    value="{{$value->customer_email}}">
                             </div>
                             <div class="form-group">
                                 <label for="phone">Điện thoại:</label>
-                                <input type="tel" class="form-control" id="phone" value="{{$value->customer_phone}}">
+                                <input type="tel" class="form-control" name="customer_phone" id="phone"
+                                    value="{{$value->customer_phone}}">
                             </div>
                             <div class="chose__address">
                                 <div class="form-group">
@@ -59,7 +63,7 @@
                             <div style="clear: both"></div>
                             <div class="form-group">
                                 <label for="address">Số nhà:</label>
-                                <input type="text" class="form-control" id="address"
+                                <input type="text" class="form-control" name="customer_address" id="address"
                                     value="{{$value->customer_address}}">
                             </div>
                             <div class="text-center">

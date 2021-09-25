@@ -54,4 +54,27 @@ class CustomerController extends Controller
             echo 1;
         }
     }
+    public function change_info(Request $request)
+    {
+        $customer_id = Session::get('customer_id');
+        $address_data = array();
+        $address_data['city'] = $request->city;
+        $address_data['province'] = $request->province;
+        $address_data['wards'] = $request->wards;
+        $selected_address = DB::table('tbl_tinhthanhpho')->join('tbl_quanhuyen', 'tbl_quanhuyen.matp', '=', 'tbl_tinhthanhpho.matp')->join('tbl_xaphuongthitran', 'tbl_xaphuongthitran.maqh', '=', 'tbl_quanhuyen.maqh')->where('tbl_tinhthanhpho.matp', $address_data['city'])->where('tbl_quanhuyen.maqh', $address_data['province'])->where('tbl_xaphuongthitran.xaid', $address_data['wards'])->select('tbl_tinhthanhpho.name_city', 'tbl_quanhuyen.name_quanhuyen', 'tbl_xaphuongthitran.name_xaphuong')->get();
+        foreach ($selected_address as $key => $add) {
+            $city = $add->name_city;
+            $province =  $add->name_quanhuyen;
+            $wards =  $add->name_xaphuong;
+        }
+        $selceted_address = ", " . $city . ", " . $province . ", " . $wards;
+        $selected_data = array();
+        $selected_data['customer_address'] = $request->customer_address . $selceted_address;
+        $selected_data['customer_name'] = $request->customer_name;
+        $selected_data['customer_phone'] = $request->customer_phone;
+        $selected_data['customer_email'] = $request->customer_email;
+        Session::put('customer_name', $selected_data['customer_name']);
+        DB::table('tbl_customer')->where('customer_id', $customer_id)->update($selected_data);
+        return Redirect::to('/account-info');
+    }
 }
