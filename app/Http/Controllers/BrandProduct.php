@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Redirect;
 use Auth;
 use App\Models\Brand;
 use App\Models\Product;
+use App\Models\City;
 use Toastr;
 
 session_start();
@@ -95,7 +96,7 @@ class BrandProduct extends Controller
     {
         $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_order', 'asc')->get();
         $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
-
+        $city = City::orderby('matp', 'ASC')->get();
         $brand_name = DB::table('tbl_brand')->where('tbl_brand.brand_id', $brand_id)->limit(1)->get();
 
         if (isset($_GET['sort_by'])) {
@@ -118,6 +119,6 @@ class BrandProduct extends Controller
         } else {
             $brand_by_id = Product::with('brand')->where('brand_id', $brand_id)->groupBy('product_name')->orderBy('product_id', 'DESC')->paginate(6);
         }
-        return view('pages.brand.show_brand')->with('category', $cate_product)->with('brand', $brand_product)->with('brand_by_id', $brand_by_id)->with('brand_name', $brand_name);
+        return view('pages.brand.show_brand')->with('category', $cate_product)->with('brand', $brand_product)->with('brand_by_id', $brand_by_id)->with('brand_name', $brand_name)->with('city', $city);
     }
 }

@@ -72,7 +72,7 @@ Route::post('/login-customer', 'CustomerController@login_customer');
 Route::post('/add-customer', 'CustomerController@add_customer');
 Route::get('/account-info', 'CustomerController@show_account');
 Route::post('/change-info', 'CustomerController@change_info');
-
+Route::post('/view-customer-order', 'CustomerController@view_customer_order');
 
 //Favorite product
 Route::post('/favorite-product', 'ProductController@favorite_product');

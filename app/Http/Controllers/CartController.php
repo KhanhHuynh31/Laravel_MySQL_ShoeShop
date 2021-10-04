@@ -9,13 +9,14 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\Redirect;
 use Cart;
 use Carbon\Carbon;
+use App\Models\City;
+
 
 session_start();
 class CartController extends Controller
 {
     public function save_cart(Request $request)
     {
-        //$productId = $request->productid_hidden;
         $quantity = $request->qty;
         $size_id = $request->size;
         $product_info = DB::table('tbl_product')->where('product_id', $size_id)->first();
@@ -99,7 +100,8 @@ class CartController extends Controller
     }
     public function show_cart()
     {
-        return view('pages.cart.show_cart');
+        $city = City::orderby('matp', 'ASC')->get();
+        return view('pages.cart.show_cart')->with('city', $city);
     }
     public function delete_to_cart($rowId)
     {

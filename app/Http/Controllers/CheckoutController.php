@@ -28,30 +28,20 @@ class CheckoutController extends Controller
             return Redirect::to('admin')->send();
         }
     }
-    public function login_checkout()
-    {
-        return view('pages.checkout.login_checkout');
-    }
-    public function add_customer(Request $request)
-    {
 
-        $data = array();
-        $data['customer_name'] = $request->customer_name;
-        $data['customer_phone'] = $request->customer_phone;
-        $data['customer_address'] = $request->customer_address;
-        $data['customer_email'] = $request->customer_email;
-        $data['customer_password'] = md5($request->customer_password);
-        $customer_id = DB::table('tbl_customer')->insertGetId($data);
-        Session::put('customer_id', $customer_id);
-        Session::put('customer_name', $request->customer_name);
-        return Redirect::to('/show-cart');
-    }
     public function checkout()
     {
         $customer_id = Session::get('customer_id');
-        $customer = DB::table('tbl_customer')->where('customer_id', $customer_id)->first();
+        $customer = DB::table('tbl_customer')->where('customer_id', $customer_id)->get();
+        foreach ($customer as $key => $info) {
+            $customer_city = $info->customer_city;
+            $customer_province =  $info->customer_province;
+            $customer_wards =  $info->customer_wards;
+        }
+        $selected_address = DB::table('tbl_tinhthanhpho')->join('tbl_quanhuyen', 'tbl_quanhuyen.matp', '=', 'tbl_tinhthanhpho.matp')->join('tbl_xaphuongthitran', 'tbl_xaphuongthitran.maqh', '=', 'tbl_quanhuyen.maqh')->where('tbl_tinhthanhpho.matp', $customer_city)->where('tbl_quanhuyen.maqh', $customer_province)->where('tbl_xaphuongthitran.xaid', $customer_wards)->get();
+        $customer_ship = Feeship::where('fee_matp', $customer_city)->where('fee_maqh', $customer_province)->where('fee_xaph', $customer_wards)->get();
         $city = City::orderby('matp', 'ASC')->get();
-        return view('pages.checkout.show_checkout')->with('customer', $customer)->with('city', $city);
+        return view('pages.checkout.show_checkout')->with('customer', $customer)->with('selected_address', $selected_address)->with('city', $city)->with('customer_ship',$customer_ship);
     }
 
     public function payment()
@@ -157,7 +147,8 @@ class CheckoutController extends Controller
             Session::forget('total_coupon');
             $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_order', 'asc')->get();
             $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
-            return view('pages.checkout.thankyou')->with('category', $cate_product)->with('brand', $brand_product);
+            $city = City::orderby('matp', 'ASC')->get();
+            return view('pages.checkout.thankyou')->with('category', $cate_product)->with('brand', $brand_product)->with('city', $city);
         } else {
             echo 'Thẻ ghi nợ';
         }

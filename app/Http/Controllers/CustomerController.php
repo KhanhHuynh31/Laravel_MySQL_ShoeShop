@@ -7,6 +7,7 @@ use DB;
 use Session;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\City;
+
 class CustomerController extends Controller
 {
     public function show_account()
@@ -14,8 +15,16 @@ class CustomerController extends Controller
         $customer_id = Session::get('customer_id');
         $customer_info = DB::table('tbl_customer')->where('customer_id', $customer_id)->get();
         $city = City::orderby('matp', 'ASC')->get();
+        foreach ($customer_info as $key => $info) {
+            $customer_city = $info->customer_city;
+            $customer_province =  $info->customer_province;
+            $customer_wards =  $info->customer_wards;
+        }
+        $selected_address = DB::table('tbl_tinhthanhpho')->join('tbl_quanhuyen', 'tbl_quanhuyen.matp', '=', 'tbl_tinhthanhpho.matp')->join('tbl_xaphuongthitran', 'tbl_xaphuongthitran.maqh', '=', 'tbl_quanhuyen.maqh')->where('tbl_tinhthanhpho.matp', $customer_city)->where('tbl_quanhuyen.maqh', $customer_province)->where('tbl_xaphuongthitran.xaid', $customer_wards)->get();
+
         $customer_order = DB::table('tbl_order')->where('customer_id', $customer_id)->get();
-        return view('pages.account.show_account')->with('customer_info', $customer_info)->with('city', $city)->with('customer_order', $customer_order);
+
+        return view('pages.account.show_account')->with('customer_info', $customer_info)->with('city', $city)->with('selected_address', $selected_address)->with('customer_order', $customer_order);
     }
 
     public function login_customer(Request $request)
@@ -57,24 +66,157 @@ class CustomerController extends Controller
     public function change_info(Request $request)
     {
         $customer_id = Session::get('customer_id');
-        $address_data = array();
-        $address_data['city'] = $request->city;
-        $address_data['province'] = $request->province;
-        $address_data['wards'] = $request->wards;
-        $selected_address = DB::table('tbl_tinhthanhpho')->join('tbl_quanhuyen', 'tbl_quanhuyen.matp', '=', 'tbl_tinhthanhpho.matp')->join('tbl_xaphuongthitran', 'tbl_xaphuongthitran.maqh', '=', 'tbl_quanhuyen.maqh')->where('tbl_tinhthanhpho.matp', $address_data['city'])->where('tbl_quanhuyen.maqh', $address_data['province'])->where('tbl_xaphuongthitran.xaid', $address_data['wards'])->select('tbl_tinhthanhpho.name_city', 'tbl_quanhuyen.name_quanhuyen', 'tbl_xaphuongthitran.name_xaphuong')->get();
-        foreach ($selected_address as $key => $add) {
-            $city = $add->name_city;
-            $province =  $add->name_quanhuyen;
-            $wards =  $add->name_xaphuong;
-        }
-        $selceted_address = ", " . $city . ", " . $province . ", " . $wards;
         $selected_data = array();
-        $selected_data['customer_address'] = $request->customer_address . $selceted_address;
+        $selected_data['customer_address'] = $request->customer_address;
+        $selected_data['customer_city'] = $request->city;
+        $selected_data['customer_province'] = $request->province;
+        $selected_data['customer_wards'] = $request->wards;
         $selected_data['customer_name'] = $request->customer_name;
         $selected_data['customer_phone'] = $request->customer_phone;
         $selected_data['customer_email'] = $request->customer_email;
         Session::put('customer_name', $selected_data['customer_name']);
         DB::table('tbl_customer')->where('customer_id', $customer_id)->update($selected_data);
         return Redirect::to('/account-info');
+    }
+    public function view_customer_order(Request $request)
+    {
+        $data = $request->all();
+        $orderId = $data['id'];
+        $customer_order = array();
+        $getorder = DB::table('tbl_order')->where('order_id', $orderId)->get();
+        foreach ($getorder as $key => $cus_order) {
+            $shipping_id = $cus_order->shipping_id;
+            $customer_order['date'] = $cus_order->order_date;
+            $customer_order['status'] = $cus_order->order_status;
+            $customer_order['ship'] = $cus_order->order_fee;
+            $customer_order['coupon'] = $cus_order->coupon_total;
+            $customer_order['total'] = $cus_order->order_total;
+        }
+        $shipping = DB::table('tbl_shipping')->where('shipping_id', $shipping_id)->get();
+        foreach ($shipping as $key => $cus_ship) {
+            $customer_order['customer_name'] = $cus_ship->shipping_name;
+            $customer_order['phone'] = $cus_ship->shipping_phone;
+            $customer_order['note'] = $cus_ship->shipping_notes;
+            $customer_order['address'] = $cus_ship->shipping_address;
+        }
+        $order_details_product = DB::table('tbl_order_details')->join('tbl_product', 'tbl_product.product_id', '=', 'tbl_order_details.product_id')->where('order_id', $orderId)->get();
+        $status_text = "";
+        $status_line = array("", "", "", "");
+        switch ($customer_order['status']) {
+            case 1:
+                $status_line[0] = "active";
+                $status_text = "Đã xác nhận";
+                break;
+            case 2:
+                $status_line[0] = "active";
+                $status_line[1] = "active";
+                $status_text = "Đang vận chuyển";
+                break;
+            case 3:
+                $status_line[0] = "active";
+                $status_line[1] = "active";
+                $status_line[2] = "active";
+                $status_text = "Đang giao đến bạn";
+                break;
+            case 4:
+                $status_line[0] = "active";
+                $status_line[1] = "active";
+                $status_line[2] = "active";
+                $status_line[3] = "active";
+                $status_text = "Đã giao hàng";
+                break;
+            default:
+                $status_text = "Chờ xác nhận";
+        }
+        $output = '';
+        $output = '
+        <p><b>Tên người nhận hàng: </b><span id="shipping__name">' . $customer_order['customer_name'] . '</span></p>
+            <p><b>Ghi chú: </b><span id="shipping__note">' . $customer_order['note'] . '</span></p>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p><b>Địa chỉ nhận hàng: </b></p> <span id="shipping__address">' . $customer_order['address'] . '</span>
+                </div>
+                <div class="col-md-2">
+                    <p><b>Số điện thoại: </b></p> <span id="shipping__phone">' . $customer_order['phone'] . '</span>
+                </div>
+                <div class="col-md-2">
+                    <p><b>Hình thức thanh toán: </b></p> <span>Tiền mặt</span>
+                </div>
+                <div class="col-md-2">
+                    <p><b>Tình trạng: </b></p> <span id="order__status">' . $status_text . '</span>
+                </div>
+
+            </div>
+            <div class="track">
+                <div class="step ' . $status_line[0] . ' "> <span class="icon"> <i class="fa fa-check"></i> </span> <span
+                        class="text">Xác nhận đơn hàng</span> </div>
+                <div class="step ' . $status_line[1] . '"> <span class="icon"> <i class="fa fa-user"></i> </span> <span
+                        class="text">Đang vận chuyển</span> </div>
+                <div class="step ' . $status_line[2] . '"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span
+                        class="text">Đang giao đến bạn</span> </div>
+                <div class="step ' . $status_line[3] . '"> <span class="icon"> <i class="fa fa-box"></i> </span> <span
+                        class="text">Đã giao hàng</span> </div>
+            </div>
+            <hr>
+            <ul class="row">
+
+        ';
+
+        foreach ($order_details_product as $key => $cus_or_deatails) {
+
+            $output .= '
+            <li class="col-md-4">
+                    <figure class="itemside mb-3">
+                                    <div class="aside"><img src="' . url('/public/uploads/product/' . $cus_or_deatails->product_image . '') . '" alt="" class="img-sm border">
+                                    </div>
+                                    <figcaption class="info align-self-center">
+                                        <p class="title"><span id="product__name">' . $cus_or_deatails->product_name . '</span> <br><b>Số lượng: </b><span
+                                                id="product__qty">' . $cus_or_deatails->product_quantity . '</span><br><b>Size: </b><span id="product__size">' . $cus_or_deatails->product_size . '</span></p>
+                                        <span class="text-muted" id="product__price">' . number_format($cus_or_deatails->product_price, 0, '.', '.') . ' ₫' . '</span>
+                                    </figcaption>
+                        </figure>
+            </li>
+            ';
+        }
+        $output .= ' </ul>';
+        if ($customer_order['status'] == 4) {
+            $output .= '
+        <p class="del__order">Cảm ơn bạn đã mua hàng ở TheShoeShop</p>
+        ';
+        } else {
+            $output .= '
+        <a class="del__order" href="' . url('/account-info') . '">Hủy đơn</a>
+        ';
+        }
+        $output .= '
+        <div class="customer__order">
+            <table style="width:100%">
+                <tr>
+                    <td><b>Tổng tiền hàng: </b></td>
+                    <td>' . number_format($customer_order['total'], 0, '.', '.') . ' ₫' . '</td>
+                </tr>
+                <tr>
+                    <td><b>Phí vận chuyển: </b></td>
+                    <td><span id="order__ship">' . number_format($customer_order['ship'], 0, '.', '.') . ' ₫' . '</span></td>
+                </tr>
+                <tr>
+                    <td><b>Giảm giá: </b></td>
+                    <td><span id="order__coupon">' . number_format($customer_order['coupon'], 0, '.', '.') . ' ₫' . '</span></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <hr>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Tổng hóa đơn: </b></td>
+                    <td><span id="order__total">' . number_format($customer_order['total'] - $customer_order['coupon'] + $customer_order['ship'], 0, '.', '.') . ' ₫'  . '</span></td>
+                </tr>
+            </table>
+        </div>
+
+        ';
+        echo $output;
     }
 }

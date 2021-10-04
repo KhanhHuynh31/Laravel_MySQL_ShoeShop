@@ -223,6 +223,28 @@
         </div>
     </footer>
     <!--/Footer-->
+    {{-- Order Modal --}}
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" style="width:90%; margin: 20px auto" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center" id="exampleModalLabel">HÓA ĐƠN MUA HÀNG - THE SHOE SHOP</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div id="customer_order_show">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
     <!-- Login / Register Modal-->
     <div class="modal fade login-register-form" role="dialog">
         <div class="modal-dialog modal-sm">
@@ -232,10 +254,8 @@
                         <span class="glyphicon glyphicon-remove"></span>
                     </button>
                     <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#login-form"> Đăng nhập
-                                <span class="glyphicon glyphicon-user"></span></a></li>
-                        <li><a data-toggle="tab" href="#registration-form"> Đăng ký <span
-                                    class="glyphicon glyphicon-pencil"></span></a></li>
+                        <li class="active"><a data-toggle="tab" href="#login-form"> Đăng nhập</a></li>
+                        <li><a data-toggle="tab" href="#registration-form"> Đăng ký</a></li>
                     </ul>
                 </div>
                 <div class="modal-body">
@@ -279,11 +299,36 @@
                                 <input type="tel" class="form-control" id="customer_phone"
                                     placeholder="Nhập số điện thoại" name="customer_phone">
                             </div>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-4 form-group city1">
+                                        <label for="exampleInputPassword1">Chọn thành phố</label>
+                                        <select name="city" id="city" class="form-control choose city" required="">
+                                            @foreach($city as $key => $ci)
+                                            <option value="{{$ci->matp}}">{{$ci->name_city}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-4 form-group province1">
+                                        <label for="exampleInputPassword1">Chọn quận huyện</label>
+                                        <select name="province" id="province" class="form-control province choose"
+                                            required="">
+                                        </select>
+                                    </div>
+                                    <div class="col-4 form-group wards1">
+                                        <label for="exampleInputPassword1">Chọn xã phường</label>
+                                        <select name="wards" id="wards" class="form-control wards" required="">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label for="customer_address">Địa chỉ:</label>
                                 <input type="text" class="form-control" id="customer_address" placeholder="Nhập địa chỉ"
                                     name="customer_address">
                             </div>
+
                             <div id="alert-register"></div>
                             <button type="submit" id="submit-register" class="btn btn-default">Đăng ký</button>
                         </div>
@@ -350,63 +395,7 @@
     }
 })
     </script>
-    <script type="text/javascript">
-        function remove_background(product_id)
-         {
-          for(var count = 1; count <= 5; count++)
-          {
-           $('#'+product_id+'-'+count).css('color', '#ccc');
-          }
-        }
-        //hover chuột đánh giá sao
-       $(document).on('mouseenter', '.rating', function(){
-          var index = $(this).data("index");
-          var product_id = $(this).data('product_id');
-        // alert(index);
-        // alert(product_id);
-          remove_background(product_id);
-          for(var count = 1; count<=index; count++)
-          {
-           $('#'+product_id+'-'+count).css('color', '#ffcc00');
-          }
-        });
-       //nhả chuột ko đánh giá
-       $(document).on('mouseleave', '.rating', function(){
-          var index = $(this).data("index");
-          var product_id = $(this).data('product_id');
-          var rating = $(this).data("rating");
-          remove_background(product_id);
-          //alert(rating);
-          for(var count = 1; count<=rating; count++)
-          {
-           $('#'+product_id+'-'+count).css('color', '#ffcc00');
-          }
-         });
 
-        //click đánh giá sao
-        $(document).on('click', '.rating', function(){
-              var index = $(this).data("index");
-              var product_id = $(this).data('product_id');
-                var _token = $('input[name="_token"]').val();
-              $.ajax({
-               url:"{{url('insert-rating')}}",
-               method:"POST",
-               data:{index:index, product_id:product_id,_token:_token},
-               success:function(data)
-               {
-                if(data == 'done')
-                {
-                 alert("Bạn đã đánh giá "+index +" trên 5");
-                }
-                else
-                {
-                 alert("Lỗi đánh giá");
-                }
-               }
-        });
-
-        });
-    </script>
     <script type="text/javascript">
         $(document).ready(function(){
 
@@ -626,7 +615,25 @@
                     });
             });
     </script>
+    {{-- View Order --}}
+    <script type="text/javascript">
+        $('.view-order').click(function(){
+                var id = $(this).attr('class').split(' ')[1];
+                $.ajax({
+                        url:"{{url('/view-customer-order')}}",
+                        method: "POST",
+                        headers:{
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data:{id:id},
+                        success:function(data){
+                            $('#customer_order_show').html(data);
 
+                        }
+                    });
+
+            });
+    </script>
 </body>
 
 </html>

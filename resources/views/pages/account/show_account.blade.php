@@ -39,7 +39,9 @@
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Chọn thành phố</label>
                                     <select name="city" id="city" class="form-control choose city" required="">
-                                        <option value="">Chọn thành phố</option>
+                                        @foreach($selected_address as $key => $cus_add)
+                                        <option selected value="{{$cus_add->matp}}">{{$cus_add->name_city}}</option>
+                                        @endforeach
                                         @foreach($city as $key => $ci)
                                         <option value="{{$ci->matp}}">{{$ci->name_city}}</option>
                                         @endforeach
@@ -49,14 +51,19 @@
                                     <label for="exampleInputPassword1">Chọn quận huyện</label>
                                     <select name="province" id="province" class="form-control province choose"
                                         required="">
-                                        <option value="">Chọn quận huyện</option>
+                                        @foreach($selected_address as $key => $cus_add)
+                                        <option selected value="{{$cus_add->maqh}}">{{$cus_add->name_quanhuyen}}
+                                        </option>
+                                        @endforeach
 
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputPassword1">Chọn xã phường</label>
                                     <select name="wards" id="wards" class="form-control wards" required="">
-                                        <option value="">Chọn xã phường</option>
+                                        @foreach($selected_address as $key => $cus_add)
+                                        <option selected value="{{$cus_add->xaid}}">{{$cus_add->name_xaphuong}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -87,9 +94,29 @@
                                     <tr>
                                         <td>{{$value->order_date}}</td>
                                         <td>{{number_format($value->order_total).' '.'VNĐ'}}</td>
-                                        <td>{{$value->order_status}}</td>
+                                        <?php
+                                        switch ($value->order_status) {
+                                            case 1:
+                                                $status_text="Đã xác nhận";
+                                                break;
+                                            case 2:
+                                                $status_text="Đang vận chuyển";
+                                                break;
+                                            case 3:
+                                                $status_text="Đang giao đến bạn";
+                                                break;
+                                            case 4:
+                                                $status_text="Đã giao hàng";
+                                                break;
+                                            default:
+                                                $status_text="Chờ xác nhận";
+                                        }
+                                        ?>
+                                        <td>{{$status_text}}</td>
                                         <td>
-                                            <a href="">Xem chi tiết</a>
+                                            <a class="view-order {{$value->order_id}}" data-toggle="modal"
+                                                data-target="#exampleModal" href="">Xem chi
+                                                tiết</a>
                                         </td>
                                     </tr>
                                     @endforeach

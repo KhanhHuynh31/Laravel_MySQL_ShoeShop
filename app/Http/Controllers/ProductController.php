@@ -14,6 +14,7 @@ use Auth;
 use App\Models\Comment;
 use App\Models\Product;
 use App\Models\Rating;
+use App\Models\City;
 use Toastr;
 session_start();
 class ProductController extends Controller
@@ -160,6 +161,7 @@ class ProductController extends Controller
             $category_id = $value->category_id;
             $product_name = $value->product_name;
         }
+        $city = City::orderby('matp', 'ASC')->get();
         $product_size =  DB::table('tbl_product')->where('product_name', $product_name)->orderby('product_size', 'asc')->get();
 
         $related_product = DB::table('tbl_product')
@@ -173,7 +175,7 @@ class ProductController extends Controller
             ->get();
         $rating = Rating::where('product_id', $product_id)->avg('rating');
         $rating = round($rating);
-        return view('pages.product.show_details')->with('product_details', $product_details)->with('product_size', $product_size)->with('related', $related_product)->with('rating', $rating);
+        return view('pages.product.show_details')->with('product_details', $product_details)->with('product_size', $product_size)->with('related', $related_product)->with('rating', $rating)->with('city', $city);
     }
     public function search(Request $request)
     {
@@ -293,11 +295,12 @@ class ProductController extends Controller
 
     public function show_favorite_product()
     {
+        $city = City::orderby('matp', 'ASC')->get();
         $customer_id = Session::get('customer_id');
         $fav_product = DB::table('tbl_favorite')
             ->join('tbl_product', 'tbl_product.product_id', '=', 'tbl_favorite.product_id')
             ->where('tbl_favorite.customer_id', '=', $customer_id)
             ->orderby('tbl_favorite.favorite_id', 'desc')->paginate(6);
-        return view('pages.favorite.show_favorite')->with('fav_product', $fav_product);
+        return view('pages.favorite.show_favorite')->with('fav_product', $fav_product)->with('city', $city);
     }
 }

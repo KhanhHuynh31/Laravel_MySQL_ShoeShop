@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\City;
 use DB;
 
 class HomeController extends Controller
@@ -13,8 +14,8 @@ class HomeController extends Controller
         $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
         $hot_product = DB::table('tbl_product')->where('product_status', '0')->groupBy('product_name')->orderby('product_like', 'desc')->limit(6)->get();
         $new_product = DB::table('tbl_product')->where('product_status', '0')->groupBy('product_name')->orderby('product_id', 'desc')->limit(10)->get();
-
-        return view('pages.home')->with('category', $cate_product)->with('brand', $brand_product)->with('hot_product', $hot_product)->with('new_product', $new_product);
+        $city = City::orderby('matp', 'ASC')->get();
+        return view('pages.home')->with('category', $cate_product)->with('brand', $brand_product)->with('hot_product', $hot_product)->with('new_product', $new_product)->with('city', $city);
     }
     public function autocomplete_ajax(Request $request)
     {

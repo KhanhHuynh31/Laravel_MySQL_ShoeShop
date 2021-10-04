@@ -20,22 +20,27 @@
                     <div class="bill-to">
                         <p>Điền thông tin gửi hàng</p>
                         <div class="col-md-7 form-style divCheckout">
+
                             <form action="{{URL::to('/order-place')}}" method="POST">
                                 @csrf
+                                @foreach($customer as $key => $cus)
                                 <input type="text" name="shipping_email" class="form-control form-checkout"
-                                    value="{{$customer->customer_email }}" placeholder="Email" required="">
+                                    value="{{$cus->customer_email }}" placeholder="Email" required="">
                                 <input type="text" name="shipping_name" class="form-control form-checkout"
-                                    value="{{$customer->customer_name }}" placeholder="Họ và tên" required="">
+                                    value="{{$cus->customer_name }}" placeholder="Họ và tên" required="">
                                 <input type="text" name="shipping_phone" class="form-control form-checkout"
-                                    value="{{$customer->customer_phone }}" placeholder="Phone" required="">
+                                    value="{{$cus->customer_phone }}" placeholder="Phone" required="">
                                 <input type="text" name="shipping_address" class="form-control form-checkout"
-                                    value="{{$customer->customer_address }}" placeholder="Địa chỉ" required="">
+                                    value="{{$cus->customer_address }}" placeholder="Địa chỉ" required="">
+                                @endforeach
                                 <input type="hidden" id="order_totalFloat1" value="{{Cart::totalFloat()/1.21}}">
                                 <div class="form-group city1">
                                     <label for="exampleInputPassword1">Chọn thành phố</label>
                                     <select name="city" id="city" class="form-control choose city" required="">
 
-                                        <option value="">Chọn thành phố</option>
+                                        @foreach($selected_address as $key => $cus_add)
+                                        <option selected value="{{$cus_add->matp}}">{{$cus_add->name_city}}</option>
+                                        @endforeach
                                         @foreach($city as $key => $ci)
                                         <option value="{{$ci->matp}}">{{$ci->name_city}}</option>
                                         @endforeach
@@ -46,14 +51,19 @@
                                     <label for="exampleInputPassword1">Chọn quận huyện</label>
                                     <select name="province" id="province" class="form-control province choose"
                                         required="">
-                                        <option value="">Chọn quận huyện</option>
+                                        @foreach($selected_address as $key => $cus_add)
+                                        <option selected value="{{$cus_add->maqh}}">{{$cus_add->name_quanhuyen}}
+                                        </option>
+                                        @endforeach
 
                                     </select>
                                 </div>
                                 <div class="form-group wards1">
                                     <label for="exampleInputPassword1">Chọn xã phường</label>
                                     <select name="wards" id="wards" class="form-control wards" required="">
-                                        <option value="">Chọn xã phường</option>
+                                        @foreach($selected_address as $key => $cus_add)
+                                        <option selected value="{{$cus_add->xaid}}">{{$cus_add->name_xaphuong}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <textarea name="shipping_notes" class="form-control form-checkout"
@@ -116,31 +126,43 @@
                                                             <h5>Số lượng: {{$v_content->qty}}</h5>
                                                             <h5>Size: {{$v_content->weight}}</h5>
                                                     </td>
-                                                    <td>{{number_format($v_content->price).' '.'VNĐ'}}</td>
+                                                    <td>{{number_format($v_content->price).' '.'₫'}}</td>
                                                 </tr>
                                                 @endforeach
                                                 <tr>
                                                     <td class="text-black font-weight-bold"><strong>Tạm tính</strong>
                                                     </td>
                                                     <td class="text-black">
-                                                        {{number_format(Cart::totalFloat()/1.21).' '.'VNĐ'}}</td>
+                                                        {{number_format(Cart::totalFloat()/1.21).' '.'₫'}}</td>
                                                 </tr>
                                                 <tr id>
                                                     <td class="text-black font-weight-bold"><strong>Coupon giảm:
                                                         </strong></td>
-                                                    <td class="text-black" id="coupon-dis">0 VNĐ</td>
+                                                    <td class="text-black" id="coupon-dis">0 ₫</td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-black font-weight-bold"><strong>Phí vận
                                                             chuyển</strong></td>
-                                                    <td class="text-black" id="fee-ship"></td>
+                                                    <td class="text-black" id="fee-ship">
+
+                                                            @if(count($customer_ship)>0)
+                                                                @foreach($customer_ship as $key => $ship)
+                                                                    {{number_format($ship->fee_feeship).' '.'₫'}}
+                                                                @endforeach
+                                                            @else
+                                                            <?php
+                                                            $defaultship =50000;
+                                                            ?>
+                                                            {{number_format($defaultship).' '.'₫'}}
+                                                            @endif
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="text-black font-weight-bold"><strong>Tổng hoá
                                                             đơn</strong>
                                                     </td>
                                                     <td class="text-black font-weight-bold" id="totalOrder">
-                                                        {{number_format(Cart::totalFloat()/1.21).' '.'VNĐ'}}
+                                                        {{number_format(Cart::totalFloat()/1.21+$defaultship).' '.'₫'}}
                                                     </td>
                                                 </tr>
                                             </tbody>

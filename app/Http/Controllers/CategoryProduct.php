@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Redirect;
 use Auth;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\City;
+
 
 session_start();
 
@@ -113,6 +115,7 @@ class CategoryProduct extends Controller
         $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_order', 'asc')->get();
         $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
         $category_name = DB::table('tbl_category')->where('tbl_category.category_id', $category_id)->limit(1)->get();
+        $city = City::orderby('matp', 'ASC')->get();
 
         if (isset($_GET['sort_by'])) {
 
@@ -134,6 +137,6 @@ class CategoryProduct extends Controller
         } else {
             $category_by_id = Product::with('category')->where('category_id', $category_id)->groupBy('product_name')->orderBy('product_id', 'DESC')->paginate(6);
         }
-        return view('pages.category.show_category')->with('category', $cate_product)->with('brand', $brand_product)->with('category_by_id', $category_by_id)->with('category_name', $category_name);
+        return view('pages.category.show_category')->with('category', $cate_product)->with('brand', $brand_product)->with('category_by_id', $category_by_id)->with('category_name', $category_name)->with('city', $city);
     }
 }
