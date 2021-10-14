@@ -31,7 +31,7 @@
     <link href="{{asset('public/frontend/css/main.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/responsive.css')}}" rel="stylesheet">
     <link href="{{asset('public/frontend/css/sweetalert.css')}}" rel="stylesheet">
-    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+    <link href="{{asset('public/frontend/css/toastr.min.css')}}" rel="stylesheet">
 
     <link rel="stylesheet" href="{{asset('public/frontend/owlcarousel/assets/owl.carousel.min.css')}}">
     <link rel="stylesheet" href="{{asset('public/frontend/owlcarousel/assets/owl.theme.default.min.css')}}">
@@ -50,6 +50,8 @@
         href="{{asset('public/frontend/images/ico/apple-touch-icon-72-precomposed.png')}}">
     <link rel="apple-touch-icon-precomposed"
         href="{{asset('public/frontend/images/ico/apple-touch-icon-57-precomposed.png')}}">
+    {{-- toastr --}}
+    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 </head>
 <!--/head-->
 
@@ -349,6 +351,8 @@
     <script src="{{asset('public/frontend/owlcarousel/owl.carousel.min.js')}}"></script>
     <script src="{{asset('public/frontend/fontawesome/js/all.js')}}"></script>
     <script src="//cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
+    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+    {!! Toastr::message() !!}
     <script type="text/javascript">
         $(document).ready( function () {
                 $('#myTable').DataTable({
@@ -634,6 +638,56 @@
 
             });
     </script>
+    <script>
+        $('#cart-submit').click(function () {
+        if ($('input[name=size]:checked').length <= 0) {
+            alert("Bạn chưa chọn size")
+        }
+        });
+    </script>
+    {{-- PayPal --}}
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <script>
+        var total = $('#paypal_total').val();
+        paypal.Button.render({
+        // Configure environment
+        env: 'sandbox',
+        client: {
+          sandbox: 'AZYCC-Kk0L9qh5vBtvD0LcxbIAnHiNeZlPTFE0LO2vu_BojiYS1pgGWM32d7YwM8CsqoRYFAWSSJFq7Q',
+          production: 'demo_production_client_id'
+        },
+        // Customize button (optional)
+        locale: 'en_US',
+        style: {
+          size: 'large',
+          color: 'gold',
+          shape: 'pill',
+        },
+
+        // Enable Pay Now checkout flow (optional)
+        commit: true,
+        // Set up a payment
+        payment: function(data, actions) {
+          return actions.payment.create({
+            transactions: [{
+              amount: {
+                total: `${total}`,
+                currency: 'USD'
+              }
+            }]
+          });
+        },
+        // Execute the payment
+        onAuthorize: function(data, actions) {
+          return actions.payment.execute().then(function() {
+            window.alert('Cảm ơn bạn đã mua hàng!');
+            window.location.href = "{{URL::to('/home')}}"
+          });
+        }
+      }, '#paypal-button');
+
+    </script>
+
 </body>
 
 </html>

@@ -33,7 +33,7 @@
                     <span>{{number_format($value->product_price).' VNĐ'}}</span>
                     <label>Số lượng:</label>
                     <input name="qty" type="number" min="1" value="1" />
-                    <button type="submit" class="btn btn-fefault cart">
+                    <button type="submit" id="cart-submit" class="btn btn-fefault cart">
                         <i class="fa fa-shopping-cart"></i>
                         Thêm giỏ hàng
                     </button>
@@ -54,7 +54,7 @@
                         <label class="radio-dis">{{$size->product_size}}</label>
                         @else
                         <input type="radio" id="{{$size->product_id}}" name="size" value="{{$size->product_id}}"
-                            required="">
+                            required>
                         <label class="size-label" for="{{$size->product_id}}">{{$size->product_size}}</label>
                         @endif
                         @endforeach

@@ -7,6 +7,7 @@ use DB;
 use Session;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\City;
+use Toastr;
 
 class CustomerController extends Controller
 {
@@ -76,6 +77,7 @@ class CustomerController extends Controller
         $selected_data['customer_email'] = $request->customer_email;
         Session::put('customer_name', $selected_data['customer_name']);
         DB::table('tbl_customer')->where('customer_id', $customer_id)->update($selected_data);
+        Toastr::success('Thay đổi thông tin thành công', 'Thành công');
         return Redirect::to('/account-info');
     }
     public function view_customer_order(Request $request)
@@ -98,6 +100,17 @@ class CustomerController extends Controller
             $customer_order['phone'] = $cus_ship->shipping_phone;
             $customer_order['note'] = $cus_ship->shipping_notes;
             $customer_order['address'] = $cus_ship->shipping_address;
+        }
+        $getpayment = DB::table('tbl_order')->join('tbl_payment', 'tbl_payment.payment_id', '=', 'tbl_order.payment_id')->where('tbl_order.order_id', $orderId)->get();
+        foreach ($getpayment as $key => $pay) {
+            $customer_order['payment_method'] = $pay->payment_method;
+            if( $customer_order['payment_method'] ==2 )
+            {
+                $customer_order['payment_method']="Tiền mặt";
+            }
+            else{
+                $customer_order['payment_method']="PayPal";
+            }
         }
         $order_details_product = DB::table('tbl_order_details')->join('tbl_product', 'tbl_product.product_id', '=', 'tbl_order_details.product_id')->where('order_id', $orderId)->get();
         $status_text = "";
@@ -141,7 +154,7 @@ class CustomerController extends Controller
                     <p><b>Số điện thoại: </b></p> <span id="shipping__phone">' . $customer_order['phone'] . '</span>
                 </div>
                 <div class="col-md-2">
-                    <p><b>Hình thức thanh toán: </b></p> <span>Tiền mặt</span>
+                    <p><b>Hình thức thanh toán: </b></p> <span>' . $customer_order['payment_method'] . '</span>
                 </div>
                 <div class="col-md-2">
                     <p><b>Tình trạng: </b></p> <span id="order__status">' . $status_text . '</span>

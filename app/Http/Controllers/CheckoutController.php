@@ -14,6 +14,9 @@ use App\Models\Wards;
 use App\Models\Feeship;
 use PDF;
 use Auth;
+use Toastr;
+use Omnipay\Omnipay;
+
 
 session_start();
 
@@ -41,7 +44,7 @@ class CheckoutController extends Controller
         $selected_address = DB::table('tbl_tinhthanhpho')->join('tbl_quanhuyen', 'tbl_quanhuyen.matp', '=', 'tbl_tinhthanhpho.matp')->join('tbl_xaphuongthitran', 'tbl_xaphuongthitran.maqh', '=', 'tbl_quanhuyen.maqh')->where('tbl_tinhthanhpho.matp', $customer_city)->where('tbl_quanhuyen.maqh', $customer_province)->where('tbl_xaphuongthitran.xaid', $customer_wards)->get();
         $customer_ship = Feeship::where('fee_matp', $customer_city)->where('fee_maqh', $customer_province)->where('fee_xaph', $customer_wards)->get();
         $city = City::orderby('matp', 'ASC')->get();
-        return view('pages.checkout.show_checkout')->with('customer', $customer)->with('selected_address', $selected_address)->with('city', $city)->with('customer_ship',$customer_ship);
+        return view('pages.checkout.show_checkout')->with('customer', $customer)->with('selected_address', $selected_address)->with('city', $city)->with('customer_ship', $customer_ship);
     }
 
     public function payment()
@@ -139,16 +142,18 @@ class CheckoutController extends Controller
             DB::table('tbl_order_details')->insert($order_d_data);
         }
         if ($data['payment_method'] == 1) {
-
-            echo 'Thanh toán thẻ ATM';
+            $order_total_paypal =  $order_data['order_total'] - $order_data['coupon_total'] + $order_data['order_fee'];
+            Cart::destroy();
+            Session::forget('total_shipping');
+            Session::forget('total_coupon');
+            $city = City::orderby('matp', 'ASC')->get();
+            return view('pages.checkout.checkout_paypal')->with('order_total_paypal', $order_total_paypal)->with('city', $city);
         } elseif ($data['payment_method'] == 2) {
             Cart::destroy();
             Session::forget('total_shipping');
             Session::forget('total_coupon');
-            $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_order', 'asc')->get();
-            $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
-            $city = City::orderby('matp', 'ASC')->get();
-            return view('pages.checkout.thankyou')->with('category', $cate_product)->with('brand', $brand_product)->with('city', $city);
+            Toastr::success('Đặt hàng thành công', 'Thành công');
+            return Redirect::to('home');
         } else {
             echo 'Thẻ ghi nợ';
         }

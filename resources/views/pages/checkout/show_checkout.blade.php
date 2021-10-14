@@ -75,7 +75,7 @@
                                     <input class="form-check-input" type="radio" name="payment_option" value="1"
                                         id="flexRadioDefault1">
                                     <label class="form-check-label" for="flexRadioDefault1">
-                                        ATM
+                                        PapPal
                                     </label>
                                 </div>
                                 <div class="form-check">
@@ -145,16 +145,16 @@
                                                             chuyển</strong></td>
                                                     <td class="text-black" id="fee-ship">
 
-                                                            @if(count($customer_ship)>0)
-                                                                @foreach($customer_ship as $key => $ship)
-                                                                    {{number_format($ship->fee_feeship).' '.'₫'}}
-                                                                @endforeach
-                                                            @else
-                                                            <?php
+                                                        @if(count($customer_ship)>0)
+                                                        @foreach($customer_ship as $key => $ship)
+                                                        {{number_format($ship->fee_feeship).' '.'₫'}}
+                                                        @endforeach
+                                                        @else
+                                                        <?php
                                                             $defaultship =50000;
                                                             ?>
-                                                            {{number_format($defaultship).' '.'₫'}}
-                                                            @endif
+                                                        {{number_format($defaultship).' '.'₫'}}
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 <tr>
