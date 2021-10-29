@@ -49,6 +49,7 @@
         </a>
     </div>
     @endforeach
+    <div style="clear: both"></div>
     <ul class="pagination pagination-sm m-t-none m-b-none">
         {{$category_by_id->links("pagination::bootstrap-4")}}
     </ul>

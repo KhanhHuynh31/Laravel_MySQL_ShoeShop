@@ -76,21 +76,20 @@
                     <div class="col-sm-8">
                         <div class="shop-menu pull-right">
                             <ul class="nav navbar-nav">
-                                <li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a></li>
-
+                                <li><a href="{{URL::to('/show-cart')}}"><i class="fa fa-shopping-cart"></i> Giỏ hàng</a>
+                                </li>
                                 <?php
-                                $customer_id = Session::get('customer_id');
-                                if($customer_id!=NULL){
-                                    $customer_name= Session::get('customer_name');
-
-                              ?>
+                                    $customer_id = Session::get('customer_id');
+                                    if($customer_id!=NULL){
+                                        $customer_name= Session::get('customer_name');
+                                        ?>
                                 <li class="dropdown">
                                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                         <i class="fa fa-user"></i>
                                         <span class="username">
                                             <?php
-                                             echo $customer_name;
-                                             ?>
+                                                    echo $customer_name;
+                                                    ?>
                                         </span>
                                     </a>
                                     <ul class="dropdown-menu extended logout">
@@ -109,13 +108,9 @@
                                          ?>
                                 <li><a href="#" data-toggle="modal" data-target=".login-register-form"><i
                                             class="fa fa-lock"></i> Đăng nhập</a></li>
-
                                 <?php
                                      }
-                                         ?>
-
-
-
+                                ?>
                             </ul>
                         </div>
                     </div>
@@ -278,7 +273,8 @@
                                 </label>
                             </div>
                             <div id="alert-login"></div>
-                            <button id="submit-login" class="btn btn-default">Đăng nhập</button>
+                            <button id="submit-login" class="btn btn-default" onclick="validateLogin()">Đăng
+                                nhập</button>
                         </div>
                         <div id="registration-form" class="tab-pane fade">
                             <div class="form-group">
@@ -332,7 +328,8 @@
                             </div>
 
                             <div id="alert-register"></div>
-                            <button type="submit" id="submit-register" class="btn btn-default">Đăng ký</button>
+                            <button type="submit" id="submit-register" class="btn btn-default"
+                                onclick="validateRegister()">Đăng ký</button>
                         </div>
 
                     </div>
@@ -359,6 +356,7 @@
                     searching: false,
                     lengthChange: false,
                     pageLength: 5,
+                    "order": [[ 0, "desc" ]],
                     info:false,
                     language: {
                         paginate: {
@@ -568,6 +566,51 @@
             });
 
     </script>
+    {{-- CHANGE PASSWORD --}}
+    <script type="text/javascript">
+        $('#submit-password').click(function(){
+            var password = $('#customer_current_password').val();
+            var newPassword = $('#customer_new_password').val();
+            var rePassword = $('#customer_re_password').val();
+            if(password == ""){
+                alert("Bạn chưa nhập mật khẩu");
+                return false;
+            }
+            else if(newPassword == ""){
+                alert("Bạn chưa nhập mật khẩu mới");
+                return false;
+            }
+            else if(rePassword == ""){
+                alert("Bạn chưa nhập lại mật khẩu mới");
+                return false;
+            }
+            else if(newPassword != rePassword){
+                alert("Nhập lại mật khẩu không khớp");
+                return false;
+            }
+            else{
+                    $.ajax({
+                        url:"{{url('/change-password')}}",
+                        method: "POST",
+                        headers:{
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data:{customer_current_password:password, customer_new_password:newPassword},
+                        success:function(data){
+                            if(data == 1)
+                            {
+                                location.reload();
+                                window.alert('Thay đổi mật khẩu thành công');
+
+                            }
+                            else{
+                                $('#alert-password').html('<span class="text text-danger">*Mật khẩu hiện tại không đúng</span>');
+                            }
+                        }
+                    });
+            }
+        });
+    </script>
     {{-- Login --}}
     <script type="text/javascript">
         $('#submit-login').click(function(){
@@ -586,7 +629,7 @@
                                 location.reload();
                             }
                             else{
-                                $('#alert-login').html('<span class="text text-alert">Sai tài khoản hoặc mật khẩu</span>');
+                                $('#alert-login').html('<span class="text text-danger">*Sai tài khoản hoặc mật khẩu</span>');
                             }
                         }
                     });
@@ -613,7 +656,7 @@
                                 location.reload();
                             }
                             else{
-                                $('#alert-register').html('<span class="text text-alert">Email đã được sử dụng</span>');
+                                $('#alert-register').html('<span class="text text-danger">*Email đã được sử dụng</span>');
                             }
                         }
                     });
@@ -687,7 +730,58 @@
       }, '#paypal-button');
 
     </script>
-
+    <script>
+        function validateRegister() {
+            var name = $('#customer_name').val();
+            var email = $('#customer_email').val();
+            var password = $('#customer_password').val();
+            if (name == "") {
+                alert("Bạn chưa nhập tên");
+                return false;
+            }
+            else if(email == ""){
+                alert("Bạn chưa nhập Email");
+                return false;
+            }
+            else if(password == ""){
+                alert("Bạn chưa nhập mật khẩu");
+                return false;
+            }
+        }
+        function validateLogin() {
+            var email = $('#email_account').val();
+            var password = $('#password_account').val();
+            if(email == ""){
+                alert("Bạn chưa nhập Email");
+                return false;
+            }
+            else if(password == ""){
+                alert("Bạn chưa nhập mật khẩu");
+                return false;
+            }
+        }
+        function validatePassword() {
+            var password = $('#customer_password').val();
+            var newPassword = $('#customer_new_password').val();
+            var rePassword = $('#customer_re_password').val();
+            if(password == ""){
+                alert("Bạn chưa nhập mật khẩu");
+                return false;
+            }
+            else if(newPassword == ""){
+                alert("Bạn chưa nhập mật khẩu mới");
+                return false;
+            }
+            else if(rePassword == ""){
+                alert("Bạn chưa nhập lại mật khẩu mới");
+                return false;
+            }
+            else if(newPassword != rePassword){
+                alert("Nhập lại mật khẩu không khớp");
+                return false;
+            }
+        }
+    </script>
 </body>
 
 </html>

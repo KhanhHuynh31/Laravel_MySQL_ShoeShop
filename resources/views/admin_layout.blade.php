@@ -181,11 +181,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <li class="sub-menu">
                             <a href="javascript:;">
                                 <i class="fa fa-book"></i>
-                                <span>Users</span>
+                                <span>Tài khoản adnmin</span>
                             </a>
                             <ul class="sub">
-                                <li><a href="{{URL::to('/add-users')}}">Thêm user</a></li>
-                                <li><a href="{{URL::to('/users')}}">Liệt kê user</a></li>
+                                <li><a href="{{URL::to('/add-users')}}">Thêm tài khoản</a></li>
+                                <li><a href="{{URL::to('/users')}}">Liệt kê tài khoản</a></li>
 
                             </ul>
                         </li>
@@ -216,7 +216,18 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <script src="//cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript">
         $(document).ready( function () {
-                $('#myTable').DataTable();
+                $('#myTable').DataTable({
+                    searching: true,
+                    lengthChange: false,
+                    pageLength: 5,
+                    info:false,
+                    language: {
+                        paginate: {
+                            previous: '<',
+                            next:     '>',
+                        },
+                    }
+                });
             } );
     </script>
     <script type="text/javascript">

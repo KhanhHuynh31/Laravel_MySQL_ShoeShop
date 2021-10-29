@@ -127,6 +127,7 @@ class CheckoutController extends Controller
         $order_data['order_total'] = Cart::totalFloat() / 1.21;
         $order_data['coupon_total'] = Session::get('total_coupon', 0);
         $order_data['order_fee'] = Session::get('total_shipping', 0);
+        date_default_timezone_set("Asia/Ho_Chi_Minh");
         $date_now = date('Y-m-d H:i:s');
         $order_data['order_date'] = $date_now;
         $order_data['order_status'] = 'Đang chờ xử lý';

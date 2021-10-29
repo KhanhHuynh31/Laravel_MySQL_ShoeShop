@@ -12,11 +12,15 @@
                     <div class="product-image-wrapper">
                         <div class="single-products">
                             <div class="productinfo text-center">
-                                <img class="favorite_products" src="{{URL::to('public/uploads/product/'.$product->product_image)}}"
+                                <img class="favorite_products"
+                                    src="{{URL::to('public/uploads/product/'.$product->product_image)}}"
                                     alt="shoe picture" width="400px" height="350px" />
-                                    <button type="button" id="delFavorite" value="{{$product->product_id}}">
+                                <form action="">
+                                    <input type="hidden" name="product_id" value="{{$product->product_id}}">
+                                    <button type="button" id="delFavorite">
                                         <i class="fa fa-times"></i>
                                     </button>
+                                </form>
                                 <h2>{{number_format($product->product_price).' '.'VNĐ'}}</h2>
                                 <p class="tensp">{{$product->product_name}}</p>
                             </div>

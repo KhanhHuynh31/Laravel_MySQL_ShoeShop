@@ -40,7 +40,7 @@
                         <th>Danh mục</th>
                         <th>Thương hiệu</th>
                         <th>Giá</th>
-                        <th>Hiển thị</th>
+                        <th>Nổi bật</th>
                         <th>Xử lí</th>
                     </tr>
                 </thead>

@@ -18,8 +18,8 @@ class CartController extends Controller
     public function save_cart(Request $request)
     {
         $quantity = $request->qty;
-        $size_id = $request->size;
-        $product_info = DB::table('tbl_product')->where('product_id', $size_id)->first();
+        $product_size = $request->size;
+        $product_info = DB::table('tbl_product')->where('product_id', $product_size)->first();
         $data['id'] = $product_info->product_id;
         $data['qty'] = $quantity;
         $data['name'] = $product_info->product_name;

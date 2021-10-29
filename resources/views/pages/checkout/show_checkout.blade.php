@@ -75,14 +75,14 @@
                                     <input class="form-check-input" type="radio" name="payment_option" value="1"
                                         id="flexRadioDefault1">
                                     <label class="form-check-label" for="flexRadioDefault1">
-                                        PapPal
+                                        PayPal
                                     </label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="payment_option" value="2"
                                         id="flexRadioDefault2" checked>
                                     <label class="form-check-label" for="flexRadioDefault2">
-                                        Trả tiền khi nhận hàng
+                                        Thanh toán khi nhận hàng
                                     </label>
                                 </div>
 

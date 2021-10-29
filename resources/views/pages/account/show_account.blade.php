@@ -6,10 +6,9 @@
             <div class="left__menu">
                 <ul>
                     <li><a class="item__menu active" href="#customerInfo" data-toggle="tab">THÔNG TIN TÀI KHOẢN</a></li>
+                    <li><a class="item__menu" href="#customerPassword" data-toggle="tab">ĐỔI MẬT KHẨU</a></li>
                     <li><a class="item__menu" href="#customerOrder" data-toggle="tab">ĐƠN HÀNG CỦA TÔI</a></li>
-                    <li><a class="item__menu" href="">ĐIỂM TÍCH LŨY</a></li>
-                    <li><a class="item__menu" href="">ĐỔI MẬT KHẨU</a></li>
-                    <li><a class="item__menu" href="">ĐĂNG XUẤT</a></li>
+                    <li><a class="item__menu" href="{{URL::to('/logout-customer')}}">ĐĂNG XUẤT</a></li>
                 </ul>
             </div>
         </div>
@@ -23,17 +22,17 @@
                             <div class="form-group">
                                 <label for="name">Họ tên:</label>
                                 <input type="text" class="form-control" name="customer_name" id="name"
-                                    value="{{$value->customer_name}}">
+                                    value="{{$value->customer_name}}" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email:</label>
                                 <input type="email" class="form-control" name="customer_email" id="email"
-                                    value="{{$value->customer_email}}">
+                                    value="{{$value->customer_email}}" required>
                             </div>
                             <div class="form-group">
                                 <label for="phone">Điện thoại:</label>
                                 <input type="tel" class="form-control" name="customer_phone" id="phone"
-                                    value="{{$value->customer_phone}}">
+                                    value="{{$value->customer_phone}}" required>
                             </div>
                             <div class="chose__address">
                                 <div class="form-group">
@@ -71,7 +70,7 @@
                             <div class="form-group">
                                 <label for="address">Số nhà:</label>
                                 <input type="text" class="form-control" name="customer_address" id="address"
-                                    value="{{$value->customer_address}}">
+                                    value="{{$value->customer_address}} " required>
                             </div>
                             <div class="text-center">
                                 <button type="submit" class="btn btn-default">Cập nhật</button>
@@ -126,6 +125,28 @@
 
                         </div>
 
+                    </div>
+                    <div id="customerPassword" class="tab-pane fade">
+                        <div id="alert-password"></div>
+                            <div class="form-group">
+                                <label for="customer_current_password">Mật khẩu hiện tại:</label>
+                                <input type="password" class="form-control" name="customer_current_password"
+                                    id="customer_current_password">
+                            </div>
+                            <div class="form-group">
+                                <label for="customer_new_password">Mật khẩu mới:</label>
+                                <input type="password" class="form-control" name="customer_new_password"
+                                    id="customer_new_password">
+                            </div>
+                            <div class="form-group">
+                                <label for="customer_re_password">Nhập lại mật khẩu mới:</label>
+                                <input type="password" class="form-control" name="customer_re_password"
+                                    id="customer_re_password">
+                            </div>
+                            <div style="clear: both"></div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-default" id="submit-password">Cập nhật</button>
+                            </div>
                     </div>
                 </div>
             </div>

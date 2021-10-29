@@ -8,7 +8,7 @@
 </div>
 <div class="features_items">
     <!--features_items-->
-    <h2 class="title text-center">Sản phẩm nổi bật</h2>
+    <h2 class="title text-center">Tìm kiếm</h2>
     @foreach($product_details as $key => $product)
     <div class="col-sm-4">
         <a href="{{URL::to('/product-detail/'.$product->product_id)}}">
@@ -25,5 +25,9 @@
         </a>
     </div>
     @endforeach
+    <div style="clear: both"></div>
+    <ul class="pagination pagination-sm m-t-none m-b-none">
+        {{$product_details->links("pagination::bootstrap-4")}}
+    </ul>
 </div>
 @endsection

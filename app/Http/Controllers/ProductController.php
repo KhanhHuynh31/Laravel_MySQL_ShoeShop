@@ -182,10 +182,43 @@ class ProductController extends Controller
         $name = $request->searchbox;
         $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_order', 'asc')->get();
         $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
+        $size_product = DB::table('tbl_product')->select('product_size')->groupBy('product_size')->orderby('product_size', 'asc')->get();
+        $city = City::orderby('matp', 'ASC')->get();
 
-        $product_details = DB::table('tbl_product')->where('product_name', 'like', '%' . $name . '%')->get();
+        $product_details = DB::table('tbl_product')->where('product_name', 'like', '%' . $name . '%')->groupBy('product_name')->paginate(6);
 
-        return view('pages.product.search')->with('category', $cate_product)->with('brand', $brand_product)->with('product_details', $product_details);
+        return view('pages.product.search')->with('category', $cate_product)->with('brand', $brand_product)->with('size', $size_product)->with('city', $city)->with('product_details', $product_details);
+    }
+
+    public function show_product_by_size(Request $request)
+    {
+        $size = $request->size_value;
+        $size_product = DB::table('tbl_product')->select('product_size')->groupBy('product_size')->orderby('product_size', 'asc')->get();
+        $cate_product = DB::table('tbl_category')->where('category_status', '0')->orderby('category_order', 'asc')->get();
+        $brand_product = DB::table('tbl_brand')->where('brand_status', '0')->orderby('brand_id', 'desc')->get();
+        $city = City::orderby('matp', 'ASC')->get();
+        if (isset($_GET['sort_by'])) {
+
+            $sort_by = $_GET['sort_by'];
+
+            if ($sort_by == 'giam_dan') {
+
+                $product_by_size = DB::table('tbl_product')->where('product_size', 'like', '%' . $size . '%')->orderBy('product_price', 'DESC')->paginate(6)->appends(request()->query());
+            } elseif ($sort_by == 'tang_dan') {
+
+                $product_by_size = DB::table('tbl_product')->where('product_size', 'like', '%' . $size . '%')->orderBy('product_price', 'ASC')->paginate(6)->appends(request()->query());
+            } elseif ($sort_by == 'kytu_za') {
+
+                $product_by_size = DB::table('tbl_product')->where('product_size', 'like', '%' . $size . '%')->orderBy('product_name', 'DESC')->paginate(6)->appends(request()->query());
+            } elseif ($sort_by == 'kytu_az') {
+
+                $product_by_size = DB::table('tbl_product')->where('product_size', 'like', '%' . $size . '%')->orderBy('product_name', 'ASC')->paginate(6)->appends(request()->query());
+            }
+        } else {
+            $product_by_size = DB::table('tbl_product')->where('product_size', 'like', '%' . $size . '%')->paginate(6);
+
+        }
+        return view('pages.size.show_size')->with('category', $cate_product)->with('brand', $brand_product)->with('city', $city)->with('product_by_size', $product_by_size)->with('size_name', $size)->with('size', $size_product);
     }
     public function reply_comment(Request $request)
     {

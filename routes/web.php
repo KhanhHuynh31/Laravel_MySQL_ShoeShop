@@ -63,6 +63,7 @@ Route::get('/active-product/{product_id}', 'ProductController@active_product');
 
 Route::post('/save-product', 'ProductController@save_product');
 Route::post('/update-product/{product_id}', 'ProductController@update_product');
+Route::get('/size-detail/{size_value}', 'ProductController@show_product_by_size');
 
 Route::post('/export-csv', 'ProductController@export_csv');
 Route::post('/import-csv', 'ProductController@import_csv');
@@ -72,6 +73,7 @@ Route::post('/login-customer', 'CustomerController@login_customer');
 Route::post('/add-customer', 'CustomerController@add_customer');
 Route::get('/account-info', 'CustomerController@show_account');
 Route::post('/change-info', 'CustomerController@change_info');
+Route::post('/change-password', 'CustomerController@change_password');
 Route::post('/view-customer-order', 'CustomerController@view_customer_order');
 
 //Favorite product
@@ -81,6 +83,7 @@ Route::get('/show-favorite-product', 'ProductController@show_favorite_product');
 
 //User
 Route::get('users', 'UserController@index')->middleware('auth.roles');
+Route::get('add-users', 'UserController@add_users')->middleware('auth.roles');
 Route::post('/update-users/{admin_id}', 'UserController@update_users')->middleware('auth.roles');
 Route::post('assign-roles', 'UserController@assign_roles')->middleware('auth.roles');
 Route::get('delete-user-roles/{admin_id}', 'UserController@delete_user_roles')->middleware('auth.roles');

@@ -80,6 +80,20 @@ class CustomerController extends Controller
         Toastr::success('Thay đổi thông tin thành công', 'Thành công');
         return Redirect::to('/account-info');
     }
+    public function change_password(Request $request)
+    {
+        $customer_id = Session::get('customer_id');
+        $selected_data = array();
+        $selected_data['customer_current_password'] = md5($request->customer_current_password);
+        $selected_data['customer_new_password'] = md5($request->customer_new_password);
+        $check_pass = DB::table('tbl_customer')->where('customer_password', $selected_data['customer_current_password'])->first();
+        if (!$check_pass && $selected_data['customer_current_password'] != "") {
+            echo 0;
+        } else {
+            DB::table('tbl_customer')->where('customer_id', $customer_id)->update(['customer_password' => $selected_data['customer_new_password']]);
+            echo 1;
+        }
+    }
     public function view_customer_order(Request $request)
     {
         $data = $request->all();
@@ -104,12 +118,10 @@ class CustomerController extends Controller
         $getpayment = DB::table('tbl_order')->join('tbl_payment', 'tbl_payment.payment_id', '=', 'tbl_order.payment_id')->where('tbl_order.order_id', $orderId)->get();
         foreach ($getpayment as $key => $pay) {
             $customer_order['payment_method'] = $pay->payment_method;
-            if( $customer_order['payment_method'] ==2 )
-            {
-                $customer_order['payment_method']="Tiền mặt";
-            }
-            else{
-                $customer_order['payment_method']="PayPal";
+            if ($customer_order['payment_method'] == 2) {
+                $customer_order['payment_method'] = "Tiền mặt";
+            } else {
+                $customer_order['payment_method'] = "PayPal";
             }
         }
         $order_details_product = DB::table('tbl_order_details')->join('tbl_product', 'tbl_product.product_id', '=', 'tbl_order_details.product_id')->where('order_id', $orderId)->get();

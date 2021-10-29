@@ -7,8 +7,8 @@
     @endsection
     @yield('attribute')
 </div>
+
 <div class="features_items">
-    <!--features_items-->
     <div class="row">
 
         <div class="col-md-4">
@@ -30,10 +30,8 @@
         </div>
 
     </div>
-    @foreach($brand_name as $key => $br)
-    <h2 class="title text-center">{{$br->brand_name}}</h2>
-    @endforeach
-    @foreach($brand_by_id as $key => $product)
+    <h2 class="title text-center">Size {{$size_name}}</h2>
+    @foreach($product_by_size as $key => $product)
     <div class="col-sm-4">
         <a href="{{URL::to('/product-detail/'.$product->product_id)}}">
             <div class="product-image-wrapper">
@@ -51,7 +49,7 @@
     @endforeach
     <div style="clear: both"></div>
     <ul class="pagination pagination-sm m-t-none m-b-none">
-        {{$brand_by_id->links("pagination::bootstrap-4")}}
+        {{$product_by_size->links("pagination::bootstrap-4")}}
     </ul>
 </div>
 
