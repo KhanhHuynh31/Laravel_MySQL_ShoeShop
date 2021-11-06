@@ -12,6 +12,11 @@ Route::get('/product-detail/{product_id}', 'ProductController@show_product_detai
 //====BACKEND====
 Route::get('/admin', 'AuthController@login_auth');
 Route::get('/dashboard', 'AuthController@show_dashboard');
+
+Route::post('/filter-by-date','AuthController@filter_by_date');
+Route::post('/days-order','AuthController@days_order');
+Route::post('/dashboard-filter','AuthController@dashboard_filter');
+
 //Category Product
 Route::get('/add-category-product', 'CategoryProduct@add_category_product');
 Route::get('/edit-category-product/{category_product_id}', 'CategoryProduct@edit_category_product');

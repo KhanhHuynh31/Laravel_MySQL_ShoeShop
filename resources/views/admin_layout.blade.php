@@ -14,9 +14,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <!-- bootstrap-css -->
     <link rel="stylesheet" href="{{asset('public/backend/css/bootstrap.min.css')}}">
     <!-- //bootstrap-css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Custom CSS -->
     <link href="{{asset('public/backend/css/style.css')}}" rel='stylesheet' type='text/css' />
     <link href="{{asset('public/backend/css/style-responsive.css')}}" rel="stylesheet" />
+
     <!-- font CSS -->
     <link
         href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic'
@@ -36,7 +38,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <script src="{{asset('public/backend/js/raphael-min.js')}}"></script>
     <script src="{{asset('public/backend/js/morris.js')}}"></script>
     <script src="{{asset('public/backend/ckeditor/ckeditor.js')}}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 </head>
 
@@ -58,13 +60,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             <div class="top-nav clearfix">
                 <!--search & user info start-->
                 <ul class="nav pull-right top-menu">
-                    <li>
-                        <input type="text" class="form-control search" placeholder=" Search">
-                    </li>
                     <!-- user login dropdown start-->
                     <li class="dropdown">
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                            <img alt="" src="{{asset('public/backend/images/2.png')}}">
+                            <i class="fa fa-user"></i>
                             <span class="username">
                                 <?php
 
@@ -210,10 +209,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <script src="{{asset('public/backend/js/scripts.js')}}"></script>
     <script src="{{asset('public/backend/js/jquery.slimscroll.js')}}"></script>
     <script src="{{asset('public/backend/js/jquery.nicescroll.js')}}"></script>
-    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot-chart/excanvas.min.js"></script><![endif]-->
-    <script src="{{asset('public/backend/js/jquery.scrollTo.js')}}"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot-chart/excanvas.min.js"></script><![endif]-->
+<script src="{{asset('public/backend/js/jquery.scrollTo.js')}}"></script>
     <!-- morris JavaScript -->
     <script src="//cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
+
     <script type="text/javascript">
         $(document).ready( function () {
                 $('#myTable').DataTable({
@@ -229,6 +231,113 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     }
                 });
             } );
+    </script>
+    <script type="text/javascript">
+        $( function() {
+          $( "#datepicker" ).datepicker({
+              prevText:"Tháng trước",
+              nextText:"Tháng sau",
+              dateFormat:"yy-mm-dd",
+              dayNamesMin: [ "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật" ],
+              duration: "slow"
+          });
+          $( "#datepicker2" ).datepicker({
+              prevText:"Tháng trước",
+              nextText:"Tháng sau",
+              dateFormat:"yy-mm-dd",
+              dayNamesMin: [ "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật" ],
+              duration: "slow"
+          });
+        } );
+
+    </script>
+    <script type="text/javascript">
+        $( function() {
+          $( "#start_coupon" ).datepicker({
+              prevText:"Tháng trước",
+              nextText:"Tháng sau",
+              dateFormat:"dd/mm/yy",
+              dayNamesMin: [ "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật" ],
+              duration: "slow"
+          });
+          $( "#end_coupon" ).datepicker({
+              prevText:"Tháng trước",
+              nextText:"Tháng sau",
+              dateFormat:"dd/mm/yy",
+              dayNamesMin: [ "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật" ],
+              duration: "slow"
+          });
+        } );
+
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+                chart60daysorder(); //gọi hàm load 60 ngày khi vừa mở trang
+                //Cấu hình màu sắc, text, chiều cao trục x theo ngày thàng, chiều cao trục y theo giá tiền
+                var chart = new Morris.Bar({
+                      element: 'chart',
+                      //option chart
+                      lineColors: ['#819C79', '#fc8710','#FF6541', '#A4ADD3', '#766B56'],
+                        parseTime: false,
+                        hideHover: 'auto',
+                        xkey: 'period',
+                        ykeys: ['order'],
+                        labels: ['doanh số']
+
+                    });
+                    //hàm load 60 ngày
+                function chart60daysorder(){
+                    var _token = $('input[name="_token"]').val();
+                    $.ajax({
+                        url:"{{url('/days-order')}}",
+                        method:"POST",
+                        dataType:"JSON",
+                        data:{_token:_token},
+
+                        success:function(data)
+                            {
+                                chart.setData(data);
+                            }
+                    });
+                }
+               //nút lọc chọn sẵn như demo, k làm cũng được, cứ để đây không ảnh hưởng j
+            $('.dashboard-filter').change(function(){
+                var dashboard_value = $(this).val();
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:"{{url('/dashboard-filter')}}",
+                    method:"POST",
+                    dataType:"JSON",
+                    data:{dashboard_value:dashboard_value,_token:_token},
+
+                    success:function(data)
+                        {
+                            chart.setData(data);
+                        }
+                    });
+
+            });
+            //Khi nhấn vào nút lọc sau khi chọn khoảng ngày, sẽ thực hiện load
+            $('#btn-dashboard-filter').click(function(){
+                var _token = $('input[name="_token"]').val();
+                var from_date = $('#datepicker').val();
+                var to_date = $('#datepicker2').val();
+
+                 $.ajax({
+                    url:"{{url('/filter-by-date')}}",   //url gửi tới file web.php
+                    method:"POST",
+                    dataType:"JSON",
+                    data:{from_date:from_date,to_date:to_date,_token:_token},   //dữ liệu truyền theo
+
+                    success:function(data)
+                        {
+                            chart.setData(data);    //thực hiện load trên biểu đồ
+                        }
+                });
+
+            });
+
+        });
     </script>
     <script type="text/javascript">
         $(document).ready(function(){

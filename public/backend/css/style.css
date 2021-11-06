@@ -21,8 +21,7 @@ html, body {
     font-family: 'Roboto', sans-serif;
     font-size: 100%;
     overflow-x: hidden;
-    background: url(../images/adminbackground.jpg) no-repeat 0px 0px;
-    background-size: cover;
+
 }
 
 body a {
@@ -57,7 +56,7 @@ body a:hover {
     width: 240px;
     height: 100%;
     position: fixed;
-    background: rgba(52, 48, 48, 0.78);
+    background: rgba(30, 63, 134, 0.78);
     -webkit-transition: all .3s ease-in-out;
     -moz-transition: all .3s ease-in-out;
     -o-transition: all .3s ease-in-out;
@@ -344,15 +343,11 @@ ul.top-menu>li>a {
 }
 
 ul.top-menu>li>a:hover, ul.top-menu>li>a:focus {
-    background: #fa9fa4;
-    text-decoration: none;
-    color: #fff !important;
-    padding-right: 8px !important;
+    background: none !important;
 }
 
 .nav .open>a, .nav .open>a:focus, .nav .open>a:hover {
-    background: #fa9fa4 !important;
-    color: #fff !important;
+    background: none !important;
 }
 
 .notify-row .badge {
@@ -519,7 +514,8 @@ ul.top-menu>li>a:hover, ul.top-menu>li>a:focus {
 }
 
 .top-nav {
-    margin-top: 20px;
+    padding-top: 20px;
+    background-color: rgba(30, 63, 134, 1);
 }
 
 .top-nav img {
@@ -610,8 +606,7 @@ ul.top-menu>li>a:hover, ul.top-menu>li>a:focus {
     padding: 0px;
     background: none;
     margin-right: 0;
-    border: 1px solid #8b5c7e;
-    background: #8b5c7e;
+
 }
 
 .top-nav ul.top-menu>li.language>a {
@@ -637,10 +632,8 @@ ul.top-menu>li>a:hover, ul.top-menu>li>a:focus {
 }
 
 .top-nav ul.top-menu>li>a:hover, .top-nav ul.top-menu>li>a:focus {
-    border: 1px solid #fa9fa4;
-    background: #fa9fa4 !important;
-    border-radius: 100px;
-    -webkit-border-radius: 100px;
+
+
 }
 
 .top-nav .dropdown-menu.extended.logout {

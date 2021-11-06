@@ -25,7 +25,7 @@ class CustomerController extends Controller
 
         $customer_order = DB::table('tbl_order')->where('customer_id', $customer_id)->get();
 
-        return view('pages.account.show_account')->with('customer_info', $customer_info)->with('city', $city)->with('selected_address', $selected_address)->with('customer_order', $customer_order);
+        return view('pages.account.show_account')->with('customer_info', $customer_info)->with('customer_order', $customer_order)->with('city', $city)->with('selected_address', $selected_address);
     }
 
     public function login_customer(Request $request)
